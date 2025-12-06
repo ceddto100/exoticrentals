@@ -16,7 +16,7 @@ export const getCarRecommendation = async (userPrompt: string): Promise<string> 
         ).join('\n');
 
         const systemInstruction = `
-        You are a helpful car rental concierge for 'Velocita Rentals'.
+        You are a helpful car rental concierge for 'Exotic Rentals'.
         Your goal is to recommend the best vehicle from our inventory based on the user's request.
         
         Our Current Inventory:

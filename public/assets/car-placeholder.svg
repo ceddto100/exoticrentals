@@ -1,0 +1,43 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title>Exotic Rentals vehicle placeholder</title>
+  <desc>Placeholder illustration for Exotic Rentals vehicle imagery.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b0b0f" />
+      <stop offset="50%" stop-color="#111827" />
+      <stop offset="100%" stop-color="#0b0b0f" />
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.85" />
+      <stop offset="100%" stop-color="#f97316" stop-opacity="0.85" />
+    </linearGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="35" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="1200" height="800" fill="url(#bg)" />
+  <circle cx="200" cy="180" r="150" fill="#fbbf2415" />
+  <circle cx="1050" cy="120" r="200" fill="#f9731612" />
+  <g filter="url(#glow)" opacity="0.32">
+    <ellipse cx="600" cy="680" rx="440" ry="100" fill="#fbbf2426" />
+  </g>
+  <g transform="translate(140 260)" fill="none" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M80 240h640c80 0 140-60 140-140 0-46-22-88-58-114-28-20-62-30-96-30H340c-48 0-92 24-118 64L134 202a110 110 0 0 1-92 38H60" stroke="#fbbf24" />
+    <path d="M94 202c28-2 52-18 66-42l74-122c20-32 54-52 92-52h326c32 0 62 9 88 26" stroke="#f97316" />
+    <path d="M156 178h350" stroke="#fbbf24" opacity="0.85" />
+    <circle cx="220" cy="240" r="74" fill="#0f172a" stroke="#fbbf24" />
+    <circle cx="220" cy="240" r="32" fill="#0b0b0f" stroke="#f97316" />
+    <circle cx="680" cy="240" r="74" fill="#0f172a" stroke="#fbbf24" />
+    <circle cx="680" cy="240" r="32" fill="#0b0b0f" stroke="#f97316" />
+  </g>
+  <text x="600" y="470" text-anchor="middle" font-family="'Inter', 'Segoe UI', system-ui" font-size="64" fill="#fbbf24" letter-spacing="4">
+    EXOTIC RENTALS
+  </text>
+  <text x="600" y="520" text-anchor="middle" font-family="'Inter', 'Segoe UI', system-ui" font-size="24" fill="#d1d5db" letter-spacing="2">
+    PREMIUM VEHICLES · CONCIERGE SUPPORT
+  </text>
+</svg>
