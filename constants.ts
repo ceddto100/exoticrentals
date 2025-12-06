@@ -125,7 +125,7 @@ export const MOCK_USER: User = {
   name: 'Alex Driver',
   email: 'alex@example.com',
   role: 'customer',
-  avatarUrl: 'javaquez_copeland.jpg'
+  avatarUrl: '/cars/javaquez_copeland.jpg'
 };
 
 export const MOCK_ADMIN: User = {
@@ -133,5 +133,5 @@ export const MOCK_ADMIN: User = {
   name: 'Admin User',
   email: 'admin@velocita.com',
   role: 'admin',
-  avatarUrl: 'javaquez_copeland.jpg'
+  avatarUrl: '/cars/javaquez_copeland.jpg'
 };
