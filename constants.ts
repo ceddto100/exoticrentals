@@ -122,8 +122,8 @@ export const ADD_ONS: AddOn[] = [
 
 export const MOCK_USER: User = {
   id: 'u1',
-  name: 'Alex Driver',
-  email: 'alex@example.com',
+  name: 'Darealquezoo',
+  email: 'quezx@exotics.com',
   role: 'customer',
   avatarUrl: '/cars/javaquez_copeland.jpg'
 };
@@ -131,7 +131,7 @@ export const MOCK_USER: User = {
 export const MOCK_ADMIN: User = {
   id: 'a1',
   name: 'Admin User',
-  email: 'admin@velocita.com',
+  email: 'admin@exotics.com',
   role: 'admin',
   avatarUrl: '/cars/javaquez_copeland.jpg'
 };
