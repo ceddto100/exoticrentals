@@ -2,19 +2,31 @@
 <img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
 </div>
 
-# Run and deploy your AI Studio app
+# Exotic Rentals Monorepo
 
-This contains everything you need to run your app locally.
+The project is now split into dedicated **frontend** and **backend** folders so the React UI and Express API can evolve independently and deploy cleanly to services like Render + MongoDB Atlas.
 
-View your app in AI Studio: https://ai.studio/apps/drive/10Yais2zCd70yVkRVhtNyfeBQXzvWm_jE
+## Project layout
+- `frontend/` – Vite + React client experience.
+- `backend/` – Express API with MongoDB models, Google OAuth, and admin/fleet/customer/rental endpoints.
 
-## Run Locally
+## Run locally
+### Frontend
+1. `cd frontend`
+2. `npm install`
+3. Create a `.env.local` with `GEMINI_API_KEY` and optional `VITE_API_URL` pointing at your backend (defaults to `http://localhost:5000`).
+4. `npm run dev`
 
-**Prerequisites:**  Node.js
+### Backend
+1. `cd backend`
+2. `npm install`
+3. Copy `.env.example` to `.env` and fill in MongoDB + Google OAuth credentials.
+4. `npm run dev`
 
+### Env vars (summary)
+- `MONGODB_URI`, `MONGODB_DB_NAME`, `JWT_SECRET`
+- `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_CALLBACK_URL`
+- `FRONTEND_URL` (comma-separated list for CORS), `PORT`
+- `ALLOW_DEMO_AUTH` (optional helper for local testing without Google tokens)
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+The frontend consumes the backend at `VITE_API_URL`, and the backend exposes health at `/health` plus routes under `/auth`, `/vehicles`, `/schedules`, `/customers`, `/rental-history`, and `/admin`.
