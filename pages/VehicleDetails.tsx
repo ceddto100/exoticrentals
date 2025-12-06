@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Calendar, Shield, MapPin, Gauge, Check, Info } from 'lucide-react';
-import { MOCK_CARS } from '../constants';
+import { FALLBACK_CAR_IMAGE, MOCK_CARS } from '../constants';
 import { User } from '../types';
 
 interface VehicleDetailsProps {
@@ -55,7 +55,15 @@ export const VehicleDetails: React.FC<VehicleDetailsProps> = ({ user }) => {
     <div className="bg-gray-950 text-gray-100 min-h-screen pb-12">
       {/* Hero Image */}
       <div className="h-[400px] md:h-[60vh] relative w-full overflow-hidden">
-        <img src={car.imageUrl} alt={car.model} className="w-full h-full object-cover" />
+        <img
+          src={car.imageUrl}
+          alt={car.model}
+          onError={(e) => {
+            e.currentTarget.onerror = null;
+            e.currentTarget.src = FALLBACK_CAR_IMAGE;
+          }}
+          className="w-full h-full object-cover"
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 p-8 max-w-7xl mx-auto">
           <div className="bg-white/10 backdrop-blur-md inline-block px-4 py-1 rounded-full text-white text-sm font-semibold mb-4 border border-white/20">

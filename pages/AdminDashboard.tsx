@@ -1,6 +1,6 @@
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
-import { MOCK_CARS } from '../constants';
+import { FALLBACK_CAR_IMAGE, MOCK_CARS } from '../constants';
 import { DollarSign, Calendar, AlertCircle, Car as CarIcon, TrendingUp } from 'lucide-react';
 
 const revenueData = [
@@ -131,7 +131,15 @@ export const AdminDashboard: React.FC = () => {
                   <tr key={car.id} className="hover:bg-gray-800/60 transition">
                     <td className="px-6 py-4">
                       <div className="flex items-center">
-                        <img src={car.imageUrl} alt="" className="w-10 h-10 rounded-md object-cover mr-3" />
+                        <img
+                          src={car.imageUrl}
+                          alt=""
+                          onError={(e) => {
+                            e.currentTarget.onerror = null;
+                            e.currentTarget.src = FALLBACK_CAR_IMAGE;
+                          }}
+                          className="w-10 h-10 rounded-md object-cover mr-3"
+                        />
                         <div>
                           <div className="font-medium text-white">{car.make} {car.model}</div>
                           <div className="text-xs text-gray-400">{car.year} • {car.tripCount} trips</div>

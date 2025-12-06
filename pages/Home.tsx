@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Filter, Star, Fuel, Settings, Users } from 'lucide-react';
-import { MOCK_CARS } from '../constants';
+import { FALLBACK_CAR_IMAGE, MOCK_CARS } from '../constants';
 import { CarCategory, FuelType } from '../types';
 
 export const Home: React.FC = () => {
@@ -99,6 +99,10 @@ export const Home: React.FC = () => {
                   <img
                     src={car.imageUrl}
                     alt={`${car.make} ${car.model}`}
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = FALLBACK_CAR_IMAGE;
+                    }}
                     className="w-full h-full object-cover transition duration-500 group-hover:scale-105"
                   />
                   <div className="absolute top-4 right-4 bg-black/70 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-amber-300 shadow-sm border border-amber-300/40">

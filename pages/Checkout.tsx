@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Car, AddOn } from '../types';
-import { ADD_ONS } from '../constants';
+import { ADD_ONS, FALLBACK_CAR_IMAGE } from '../constants';
 import { CreditCard, Lock, FileText, CheckCircle } from 'lucide-react';
 
 interface LocationState {
@@ -208,7 +208,15 @@ export const Checkout: React.FC<{ user: any }> = ({ user }) => {
              <div className="bg-gray-900 rounded-xl shadow-lg border border-gray-800 p-6 sticky top-24">
                 <h3 className="text-lg font-bold text-white mb-4">Booking Summary</h3>
                 <div className="flex items-center gap-4 mb-4 pb-4 border-b border-gray-800">
-                  <img src={car.imageUrl} alt="Car" className="w-20 h-14 object-cover rounded-md" />
+                  <img
+                    src={car.imageUrl}
+                    alt="Car"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = FALLBACK_CAR_IMAGE;
+                    }}
+                    className="w-20 h-14 object-cover rounded-md"
+                  />
                   <div>
                     <p className="font-bold text-white">{car.make} {car.model}</p>
                     <p className="text-xs text-gray-400">{car.year} • {car.category}</p>

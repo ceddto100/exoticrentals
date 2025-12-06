@@ -1,5 +1,7 @@
 import { Car, CarCategory, FuelType, Transmission, AddOn, User } from './types';
 
+export const FALLBACK_CAR_IMAGE = '/assets/car-placeholder.svg';
+
 export const MOCK_CARS: Car[] = [
   {
     id: '1',
