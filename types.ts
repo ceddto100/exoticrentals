@@ -1,0 +1,64 @@
+export enum Transmission {
+  Automatic = 'Automatic',
+  Manual = 'Manual'
+}
+
+export enum FuelType {
+  Petrol = 'Petrol',
+  Diesel = 'Diesel',
+  Electric = 'Electric',
+  Hybrid = 'Hybrid'
+}
+
+export enum CarCategory {
+  Sedan = 'Sedan',
+  SUV = 'SUV',
+  Luxury = 'Luxury',
+  Sports = 'Sports',
+  Van = 'Van'
+}
+
+export interface Car {
+  id: string;
+  make: string;
+  model: string;
+  year: number;
+  category: CarCategory;
+  pricePerDay: number;
+  deposit: number;
+  transmission: Transmission;
+  fuelType: FuelType;
+  seats: number;
+  mpg: string; // or range for EV
+  imageUrl: string;
+  features: string[];
+  isAvailable: boolean;
+  rating: number;
+  tripCount: number;
+}
+
+export interface Booking {
+  id: string;
+  carId: string;
+  userId: string;
+  pickupDate: string;
+  returnDate: string;
+  totalCost: number;
+  status: 'pending' | 'confirmed' | 'completed' | 'cancelled';
+  addOns: string[];
+}
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: 'admin' | 'customer';
+  avatarUrl?: string;
+}
+
+export interface AddOn {
+  id: string;
+  name: string;
+  price: number;
+  description: string;
+}
