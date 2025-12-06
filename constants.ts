@@ -51,7 +51,7 @@ export const MOCK_CARS: Car[] = [
     fuelType: FuelType.Hybrid,
     seats: 5,
     mpg: '41/38 mpg',
-    imageUrl: 'https://images.unsplash.com/photo-1621007947382-bb3c3968e3bb?auto=format&fit=crop&q=80&w=1000',
+    imageUrl: 'Toyota .png',
     features: ['AWD', 'Apple CarPlay', 'Lane Keep Assist', 'Spacious Trunk'],
     isAvailable: true,
     rating: 4.7,
@@ -69,7 +69,7 @@ export const MOCK_CARS: Car[] = [
     fuelType: FuelType.Petrol,
     seats: 5,
     mpg: '13/17 mpg',
-    imageUrl: 'https://images.unsplash.com/photo-1520031441872-265149a9e690?auto=format&fit=crop&q=80&w=1000',
+    imageUrl: 'Mercedes .png',
     features: ['Massage Seats', 'Off-road capability', 'Burmester Audio', 'Sunroof'],
     isAvailable: false,
     rating: 4.8,
@@ -87,7 +87,7 @@ export const MOCK_CARS: Car[] = [
     fuelType: FuelType.Petrol,
     seats: 8,
     mpg: '19/28 mpg',
-    imageUrl: 'https://images.unsplash.com/photo-1599388164741-9c878e178553?auto=format&fit=crop&q=80&w=1000',
+    imageUrl: 'Honda .png',
     features: ['Magic Slide Seats', 'Rear Entertainment', 'Vacuum', 'Honda Sensing'],
     isAvailable: true,
     rating: 4.6,
@@ -125,7 +125,7 @@ export const MOCK_USER: User = {
   name: 'Alex Driver',
   email: 'alex@example.com',
   role: 'customer',
-  avatarUrl: 'https://picsum.photos/id/64/100/100'
+  avatarUrl: 'javaquez_copeland.jpg'
 };
 
 export const MOCK_ADMIN: User = {
@@ -133,5 +133,5 @@ export const MOCK_ADMIN: User = {
   name: 'Admin User',
   email: 'admin@velocita.com',
   role: 'admin',
-  avatarUrl: 'https://picsum.photos/id/2/100/100'
+  avatarUrl: 'javaquez_copeland.jpg'
 };
