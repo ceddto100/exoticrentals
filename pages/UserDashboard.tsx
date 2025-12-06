@@ -5,15 +5,25 @@ import { Clock, CheckCircle, FileText, CreditCard, RefreshCcw, XCircle, ShieldCh
 export const UserDashboard: React.FC<{ user: User }> = ({ user }) => {
   const [reservationStatus, setReservationStatus] = useState<'scheduled' | 'rescheduled' | 'canceled'>('scheduled');
   const [statusNote, setStatusNote] = useState('Pickup: Nov 24, 10:00 AM');
+  const [showReschedulePicker, setShowReschedulePicker] = useState(false);
+  const [rescheduleAt, setRescheduleAt] = useState('2024-11-24T10:00');
 
   const handleCancel = () => {
     setReservationStatus('canceled');
     setStatusNote('Reservation canceled. Refund processing to original payment method.');
+    setShowReschedulePicker(false);
   };
 
   const handleReschedule = () => {
+    setShowReschedulePicker((prev) => !prev);
+  };
+
+  const handleRescheduleConfirm = () => {
     setReservationStatus('rescheduled');
-    setStatusNote('Reschedule requested. Concierge will confirm the new time window.');
+    const chosenDate = new Date(rescheduleAt);
+    const formatted = `${chosenDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}, ${chosenDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+    setStatusNote(`Rescheduled to ${formatted}`);
+    setShowReschedulePicker(false);
   };
 
   const pastBookings = [
@@ -75,13 +85,52 @@ export const UserDashboard: React.FC<{ user: User }> = ({ user }) => {
                   </div>
                   <p className="text-gray-400 flex items-center text-sm"><Clock className="w-4 h-4 mr-1"/> {statusNote}</p>
                 </div>
-                <div className="flex gap-3">
-                  <button onClick={handleReschedule} className="flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-amber-200 border border-gray-700">
+                <div className="flex gap-3 relative">
+                  <button onClick={handleReschedule} className="flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-amber-200 border border-gray-700 transition">
                     <RefreshCcw className="w-4 h-4" /> Reschedule
                   </button>
-                  <button onClick={handleCancel} className="flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-lg bg-red-900/60 hover:bg-red-800 text-red-100 border border-red-800">
+                  <button onClick={handleCancel} className="flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-lg bg-red-900/60 hover:bg-red-800 text-red-100 border border-red-800 transition">
                     <XCircle className="w-4 h-4" /> Cancel
                   </button>
+
+                  {showReschedulePicker && (
+                    <div className="absolute right-0 top-12 w-full md:w-96 bg-gray-950 border border-gray-800 rounded-xl shadow-2xl p-4 z-20 animate-fade-up">
+                      <div className="flex items-center gap-2 mb-3">
+                        <RefreshCcw className="w-4 h-4 text-amber-300" />
+                        <p className="text-sm font-semibold text-white">Pick a new date & time</p>
+                      </div>
+                      <label className="text-xs text-gray-400">Date & time</label>
+                      <input
+                        type="datetime-local"
+                        value={rescheduleAt}
+                        onChange={(e) => setRescheduleAt(e.target.value)}
+                        className="w-full mt-2 bg-black border border-gray-800 rounded-lg px-3 py-2 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-400"
+                      />
+                      <div className="flex gap-2 mt-3">
+                        {['+1 day', '+3 days', '+1 week'].map((label, idx) => {
+                          const days = [1, 3, 7][idx];
+                          return (
+                            <button
+                              key={label}
+                              onClick={() => {
+                                const base = new Date();
+                                base.setDate(base.getDate() + days);
+                                base.setHours(10, 0, 0, 0);
+                                setRescheduleAt(base.toISOString().slice(0, 16));
+                              }}
+                              className="flex-1 text-xs px-2 py-2 rounded-lg border border-gray-800 text-gray-200 hover:bg-gray-900"
+                            >
+                              {label}
+                            </button>
+                          );
+                        })}
+                      </div>
+                      <div className="flex justify-end gap-2 mt-4">
+                        <button onClick={() => setShowReschedulePicker(false)} className="text-sm px-3 py-2 rounded-lg border border-gray-800 text-gray-200 hover:bg-gray-900">Close</button>
+                        <button onClick={handleRescheduleConfirm} className="text-sm px-3 py-2 rounded-lg bg-amber-400 text-black font-semibold hover:bg-amber-300 button-glow">Confirm</button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
               {reservationStatus !== 'scheduled' && (

@@ -7,6 +7,7 @@ import { Checkout } from './pages/Checkout';
 import { AdminDashboard } from './pages/AdminDashboard';
 import { UserDashboard } from './pages/UserDashboard';
 import { Login } from './pages/Login';
+import { HowItWorks } from './pages/HowItWorks';
 import { User } from './types';
 import { MOCK_USER } from './constants';
 
@@ -41,6 +42,7 @@ export default function App() {
       <Layout user={user} onLogout={handleLogout}>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/how-it-works" element={<HowItWorks />} />
           <Route path="/vehicle/:id" element={<VehicleDetails user={user} />} />
           <Route path="/checkout" element={user ? <Checkout user={user} /> : <Navigate to="/login" replace />} />
           <Route 

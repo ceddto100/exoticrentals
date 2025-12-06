@@ -42,8 +42,8 @@ export const AdminDashboard: React.FC = () => {
           <div className="bg-gray-900 p-6 rounded-xl shadow-lg border border-gray-800">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-gray-400 font-medium">Active Bookings</h3>
-              <div className="p-2 bg-blue-900/40 rounded-lg">
-                <Calendar className="w-5 h-5 text-blue-300" />
+              <div className="p-2 bg-black/70 border border-gray-800 rounded-lg">
+                <Calendar className="w-5 h-5 text-amber-300" />
               </div>
             </div>
             <p className="text-2xl font-bold text-white">42</p>
@@ -53,8 +53,8 @@ export const AdminDashboard: React.FC = () => {
           <div className="bg-gray-900 p-6 rounded-xl shadow-lg border border-gray-800">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-gray-400 font-medium">Fleet Status</h3>
-              <div className="p-2 bg-indigo-900/40 rounded-lg">
-                <CarIcon className="w-5 h-5 text-indigo-300" />
+              <div className="p-2 bg-black/70 border border-gray-800 rounded-lg">
+                <CarIcon className="w-5 h-5 text-amber-300" />
               </div>
             </div>
             <p className="text-2xl font-bold text-white">85%</p>

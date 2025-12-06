@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Car, User as UserIcon, LogOut, Menu, X, Shield, Phone, Mail, Bot } from 'lucide-react';
 import { User } from '../types';
@@ -15,6 +15,21 @@ export const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
   const [isAIChatOpen, setIsAIChatOpen] = useState(false);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const revealElements = document.querySelectorAll('.reveal-on-scroll');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.2 });
+
+    revealElements.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950 text-gray-100">
       {/* Navbar */}
@@ -29,7 +44,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
             {/* Desktop Nav */}
             <nav className="hidden md:flex items-center space-x-8">
               <Link to="/" className="text-gray-200 hover:text-amber-300 font-medium transition">Inventory</Link>
-              <a href="#how-it-works" className="text-gray-200 hover:text-amber-300 font-medium transition">How it Works</a>
+              <Link to="/how-it-works" className="text-gray-200 hover:text-amber-300 font-medium transition">How it Works</Link>
               
               {user ? (
                 <div className="flex items-center space-x-4">
@@ -75,6 +90,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
           <div className="md:hidden bg-gray-900 border-b border-gray-800">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
               <Link to="/" className="block px-3 py-2 rounded-md text-base font-medium text-gray-200 hover:text-amber-300 hover:bg-gray-800" onClick={() => setIsMobileMenuOpen(false)}>Inventory</Link>
+              <Link to="/how-it-works" className="block px-3 py-2 rounded-md text-base font-medium text-gray-200 hover:text-amber-300 hover:bg-gray-800" onClick={() => setIsMobileMenuOpen(false)}>How it Works</Link>
               {user ? (
                 <>
                   <Link to="/dashboard" className="block px-3 py-2 rounded-md text-base font-medium text-gray-200 hover:text-amber-300 hover:bg-gray-800" onClick={() => setIsMobileMenuOpen(false)}>My Dashboard</Link>

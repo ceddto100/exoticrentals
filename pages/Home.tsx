@@ -26,17 +26,20 @@ export const Home: React.FC = () => {
           className="absolute inset-0 w-full h-full object-cover opacity-60"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-center">
-          <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-6 tracking-tight">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-center reveal-on-scroll">
+          <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-6 tracking-tight animate-fade-up">
             Drive Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-orange-400 to-red-400">Dream</span>
           </h1>
-          <p className="text-xl text-gray-200 max-w-2xl mb-8">
+          <p className="text-xl text-gray-200 max-w-2xl mb-8 animate-fade-up" style={{ animationDelay: '0.08s', opacity: 0 }}>
             Experience the thrill of the open road with our premium fleet. Flexible booking, transparent pricing, and unforgettable journeys.
           </p>
-          <div className="flex gap-4">
-             <button onClick={() => document.getElementById('inventory')?.scrollIntoView({ behavior: 'smooth' })} className="bg-amber-400 text-gray-900 px-8 py-3 rounded-full font-semibold hover:bg-amber-300 transition shadow-lg hover:shadow-amber-500/30">
+          <div className="flex gap-4 animate-fade-up" style={{ animationDelay: '0.16s', opacity: 0 }}>
+             <button onClick={() => document.getElementById('inventory')?.scrollIntoView({ behavior: 'smooth' })} className="bg-amber-400 text-gray-900 px-8 py-3 rounded-full font-semibold hover:bg-amber-300 transition shadow-lg hover:shadow-amber-500/30 button-glow">
                Browse Fleet
              </button>
+             <Link to="/how-it-works" className="px-8 py-3 rounded-full border border-gray-800 text-white hover:bg-gray-900 transition">
+               How it Works
+             </Link>
           </div>
         </div>
       </div>
@@ -82,7 +85,7 @@ export const Home: React.FC = () => {
       </div>
 
       {/* Grid */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 reveal-on-scroll">
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-3xl font-bold text-white">Available Vehicles</h2>
           <span className="text-gray-400 font-medium">{filteredCars.length} results found</span>
@@ -91,7 +94,7 @@ export const Home: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredCars.map((car) => (
             <Link to={`/vehicle/${car.id}`} key={car.id} className="group">
-              <div className="bg-gray-900 rounded-2xl overflow-hidden border border-gray-800 shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-1 h-full flex flex-col">
+              <div className="bg-gray-900 rounded-2xl overflow-hidden border border-gray-800 shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-1 h-full flex flex-col reveal-on-scroll">
                 <div className="relative h-56 overflow-hidden">
                   <img
                     src={car.imageUrl}
