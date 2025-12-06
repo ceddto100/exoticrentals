@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Car, User as UserIcon, LogOut, Menu, X, Shield, Phone, Mail, Bot } from 'lucide-react';
 import { User } from '../types';
 import { AIChatModal } from './AIChatModal';
@@ -14,6 +14,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAIChatOpen, setIsAIChatOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const revealElements = document.querySelectorAll('.reveal-on-scroll');
@@ -21,14 +22,21 @@ export const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
         }
       });
     }, { threshold: 0.2 });
 
-    revealElements.forEach((el) => observer.observe(el));
+    revealElements.forEach((el) => {
+      observer.observe(el);
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight * 0.9) {
+        el.classList.add('visible');
+      }
+    });
 
     return () => observer.disconnect();
-  }, []);
+  }, [location.pathname]);
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950 text-gray-100">
