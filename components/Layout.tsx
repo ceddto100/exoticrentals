@@ -25,7 +25,10 @@ export const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
           observer.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.2 });
+    }, {
+      threshold: 0.05,
+      rootMargin: '150px 0px',
+    });
 
     revealElements.forEach((el) => {
       observer.observe(el);
