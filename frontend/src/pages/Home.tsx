@@ -1,20 +1,47 @@
-import React, { useState, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Filter, Star, Fuel, Settings, Users } from 'lucide-react';
 import { FALLBACK_CAR_IMAGE, MOCK_CARS } from '../constants';
 import { CarCategory, FuelType } from '../types';
+import { fetchVehicles } from '../services/apiClient';
 
 export const Home: React.FC = () => {
+  const [cars, setCars] = useState(MOCK_CARS);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [priceRange, setPriceRange] = useState<number>(300);
 
+  useEffect(() => {
+    const loadVehicles = async () => {
+      try {
+        setLoading(true);
+        const response = await fetchVehicles();
+        const normalized = response.map((vehicle: any) => ({
+          ...vehicle,
+          id: vehicle.id || vehicle._id,
+        }));
+        setCars(normalized);
+        setError(null);
+      } catch (err) {
+        console.warn('Falling back to mock vehicles', err);
+        setError('Live vehicle feed unavailable. Showing demo data.');
+        setCars(MOCK_CARS);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadVehicles();
+  }, []);
+
   const filteredCars = useMemo(() => {
-    return MOCK_CARS.filter(car => {
+    return cars.filter(car => {
       const categoryMatch = selectedCategory === 'All' || car.category === selectedCategory;
       const priceMatch = car.pricePerDay <= priceRange;
       return categoryMatch && priceMatch;
     });
-  }, [selectedCategory, priceRange]);
+  }, [selectedCategory, priceRange, cars]);
 
   return (
     <div className="bg-gray-950 text-gray-100 min-h-screen pb-12">
@@ -81,6 +108,11 @@ export const Home: React.FC = () => {
               />
             </div>
           </div>
+          {error && (
+            <div className="mt-4 text-sm text-amber-300 bg-amber-500/10 border border-amber-500/30 rounded-lg p-3">
+              {error}
+            </div>
+          )}
         </div>
       </div>
 
@@ -88,7 +120,7 @@ export const Home: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 reveal-on-scroll">
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-3xl font-bold text-white">Available Vehicles</h2>
-          <span className="text-gray-400 font-medium">{filteredCars.length} results found</span>
+          <span className="text-gray-400 font-medium">{filteredCars.length} results found {loading && '(loading...)'}</span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
