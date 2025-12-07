@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Calendar, Shield, MapPin, Gauge, Check, Info } from 'lucide-react';
 import { FALLBACK_CAR_IMAGE, MOCK_CARS } from '../constants';
-import { User } from '../types';
+import { Car, User } from '../types';
+import { fetchVehicle } from '../services/apiClient';
 
 interface VehicleDetailsProps {
   user: User | null;
@@ -11,11 +12,33 @@ interface VehicleDetailsProps {
 export const VehicleDetails: React.FC<VehicleDetailsProps> = ({ user }) => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const car = MOCK_CARS.find(c => c.id === id);
+  const [car, setCar] = useState<Car | undefined>(undefined);
+  const [loading, setLoading] = useState(true);
 
   const [pickupDate, setPickupDate] = useState('');
   const [returnDate, setReturnDate] = useState('');
   const [totalPrice, setTotalPrice] = useState(0);
+
+  useEffect(() => {
+    const loadVehicle = async () => {
+      if (!id) return;
+      try {
+        const response = await fetchVehicle(id);
+        const normalized: Car = {
+          ...response,
+          id: (response as any).id || (response as any)._id || id,
+        };
+        setCar(normalized);
+      } catch (err) {
+        console.warn('Unable to fetch vehicle from API, falling back to mock data', err);
+        setCar(MOCK_CARS.find((c) => c.id === id));
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadVehicle();
+  }, [id]);
 
   useEffect(() => {
     if (pickupDate && returnDate && car) {
@@ -28,6 +51,10 @@ export const VehicleDetails: React.FC<VehicleDetailsProps> = ({ user }) => {
       setTotalPrice(days * car.pricePerDay);
     }
   }, [pickupDate, returnDate, car]);
+
+  if (loading) {
+    return <div className="p-12 text-center">Loading vehicle...</div>;
+  }
 
   if (!car) {
     return <div className="p-12 text-center">Vehicle not found</div>;

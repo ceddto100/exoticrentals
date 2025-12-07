@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
 import { FALLBACK_CAR_IMAGE, MOCK_CARS } from '../constants';
 import { DollarSign, Calendar, AlertCircle, Car as CarIcon, TrendingUp } from 'lucide-react';
+import { fetchAdminDashboard, fetchVehicles } from '../services/apiClient';
+import { Car } from '../types';
 
 const revenueData = [
   { name: 'Mon', revenue: 4000 },
@@ -21,6 +23,33 @@ const availabilityData = [
 ];
 
 export const AdminDashboard: React.FC = () => {
+  const [fleet, setFleet] = useState<Car[]>(MOCK_CARS);
+  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState({
+    userCount: 0,
+    vehicleCount: MOCK_CARS.length,
+    activeRentals: 0,
+    historyCount: 0,
+  });
+
+  useEffect(() => {
+    const loadDashboard = async () => {
+      try {
+        const [dashboard, vehicles] = await Promise.all([fetchAdminDashboard(), fetchVehicles()]);
+        const normalized = vehicles.map((vehicle: any) => ({ ...vehicle, id: vehicle.id || vehicle._id }));
+        setStats(dashboard);
+        setFleet(normalized);
+      } catch (error) {
+        console.warn('Admin API unavailable, using mock dashboard data', error);
+        setFleet(MOCK_CARS);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadDashboard();
+  }, []);
+
   return (
     <div className="bg-gray-950 text-gray-100 min-h-screen p-8">
       <div className="max-w-7xl mx-auto">
@@ -29,37 +58,39 @@ export const AdminDashboard: React.FC = () => {
         {/* Stats Row */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <div className="bg-gray-900 p-6 rounded-xl shadow-lg border border-gray-800">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-gray-400 font-medium">Total Revenue</h3>
-              <div className="p-2 bg-green-900/40 rounded-lg">
-                <DollarSign className="w-5 h-5 text-green-300" />
-              </div>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-gray-400 font-medium">Total Revenue</h3>
+            <div className="p-2 bg-green-900/40 rounded-lg">
+              <DollarSign className="w-5 h-5 text-green-300" />
             </div>
-            <p className="text-2xl font-bold text-white">$24,500</p>
-            <p className="text-xs text-green-300 flex items-center mt-1"><TrendingUp className="w-3 h-3 mr-1"/> +12% from last week</p>
           </div>
+          <p className="text-2xl font-bold text-white">${(stats.historyCount * 120).toLocaleString()}</p>
+          <p className="text-xs text-green-300 flex items-center mt-1">
+            <TrendingUp className="w-3 h-3 mr-1"/> +12% from last week
+          </p>
+        </div>
           
           <div className="bg-gray-900 p-6 rounded-xl shadow-lg border border-gray-800">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-gray-400 font-medium">Active Bookings</h3>
-              <div className="p-2 bg-black/70 border border-gray-800 rounded-lg">
-                <Calendar className="w-5 h-5 text-amber-300" />
-              </div>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-gray-400 font-medium">Active Bookings</h3>
+            <div className="p-2 bg-black/70 border border-gray-800 rounded-lg">
+              <Calendar className="w-5 h-5 text-amber-300" />
             </div>
-            <p className="text-2xl font-bold text-white">42</p>
-             <p className="text-xs text-gray-400 mt-1">8 pending approval</p>
           </div>
+          <p className="text-2xl font-bold text-white">{stats.activeRentals}</p>
+           <p className="text-xs text-gray-400 mt-1">{loading ? 'Syncing...' : 'Up to date'}</p>
+        </div>
 
           <div className="bg-gray-900 p-6 rounded-xl shadow-lg border border-gray-800">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-gray-400 font-medium">Fleet Status</h3>
-              <div className="p-2 bg-black/70 border border-gray-800 rounded-lg">
-                <CarIcon className="w-5 h-5 text-amber-300" />
-              </div>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-gray-400 font-medium">Fleet Status</h3>
+            <div className="p-2 bg-black/70 border border-gray-800 rounded-lg">
+              <CarIcon className="w-5 h-5 text-amber-300" />
             </div>
-            <p className="text-2xl font-bold text-white">85%</p>
-            <p className="text-xs text-gray-400 mt-1">Utilization Rate</p>
           </div>
+          <p className="text-2xl font-bold text-white">{stats.vehicleCount} vehicles</p>
+            <p className="text-xs text-gray-400 mt-1">Utilization Rate</p>
+        </div>
 
           <div className="bg-gray-900 p-6 rounded-xl shadow-lg border border-gray-800">
             <div className="flex items-center justify-between mb-4">
@@ -127,7 +158,7 @@ export const AdminDashboard: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-800">
-                {MOCK_CARS.map((car) => (
+                {fleet.map((car) => (
                   <tr key={car.id} className="hover:bg-gray-800/60 transition">
                     <td className="px-6 py-4">
                       <div className="flex items-center">
