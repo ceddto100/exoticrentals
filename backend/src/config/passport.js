@@ -1,5 +1,6 @@
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 import Admin from '../models/Admin.js';
 
@@ -30,19 +31,29 @@ const configurePassport = () => {
             avatarUrl: _json.picture,
           });
         }
-        
-        // Check if user is an admin
+
         const adminRecord = await Admin.findOne({ email });
         user.role = adminRecord ? 'admin' : 'customer';
 
         user.lastLogin = new Date();
         await user.save();
 
-        // If the user is an admin, ensure the admin record is up to date
-        if (user.role === 'admin') {
+        if (user.role === 'admin' && adminRecord) {
           adminRecord.user = user._id;
           await adminRecord.save();
         }
+
+        const token = jwt.sign(
+          {
+            id: user._id,
+            email: user.email,
+            role: user.role,
+          },
+          process.env.JWT_SECRET,
+          { expiresIn: '7d' }
+        );
+
+        user.token = token;
 
         return done(null, user);
       } catch (error) {
