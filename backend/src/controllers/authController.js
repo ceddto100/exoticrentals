@@ -9,8 +9,20 @@ export const googleCallback = (req, res) => {
     { expiresIn: '7d' }
   );
 
-  // CORRECT REDIRECT URL — ONLY THIS WORKS
   const redirectUrl = `${process.env.FRONTEND_URL}/auth/success?token=${token}`;
-
   return res.redirect(redirectUrl);
 };
+
+// REQUIRED BY authRoutes.js — THIS FIXES THE CRASH
+export const getMe = (req, res) => {
+  if (!req.user) {
+    return res.status(401).json({ message: 'Not authorized' });
+  }
+
+  return res.json({
+    id: req.user._id,
+    email: req.user.email,
+    role: req.user.role,
+  });
+};
+
