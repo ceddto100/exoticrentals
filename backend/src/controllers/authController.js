@@ -3,17 +3,26 @@ import jwt from 'jsonwebtoken';
 export const googleCallback = (req, res) => {
   const user = req.user;
 
-  const token = jwt.sign(
-    { id: user._id, email: user.email, role: user.role },
-    process.env.JWT_SECRET,
-    { expiresIn: '7d' }
-  );
+  // Build a SAFE JWT payload — no undefined values
+  const payload = {
+    id: user._id,
+    email: user.email,
+    role: user.role,
+    avatarUrl: user.avatarUrl || null,   // Prevents React crash
+    name: user.name || null              // Optional: helps frontend
+  };
 
+  // Sign the JWT
+  const token = jwt.sign(payload, process.env.JWT_SECRET, {
+    expiresIn: '7d'
+  });
+
+  // Redirect back to frontend
   const redirectUrl = `${process.env.FRONTEND_URL}/auth/success?token=${token}`;
   return res.redirect(redirectUrl);
 };
 
-// REQUIRED BY authRoutes.js — THIS FIXES THE CRASH
+// REQUIRED for authRoutes.js
 export const getMe = (req, res) => {
   if (!req.user) {
     return res.status(401).json({ message: 'Not authorized' });
@@ -23,6 +32,7 @@ export const getMe = (req, res) => {
     id: req.user._id,
     email: req.user.email,
     role: req.user.role,
+    avatarUrl: req.user.avatarUrl || null,
+    name: req.user.name || null
   });
 };
-
