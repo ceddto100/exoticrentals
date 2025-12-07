@@ -1,20 +1,16 @@
-import jwt from "jsonwebtoken";
+import jwt from 'jsonwebtoken';
 
 export const googleCallback = (req, res) => {
-  const token = req.user?.token;
+  const user = req.user;
 
-  if (!token) {
-    console.error("Google callback: No token found on user.");
-    return res.redirect(`${process.env.FRONTEND_URL}/login?error=no-token`);
-  }
+  const token = jwt.sign(
+    { id: user._id, email: user.email, role: user.role },
+    process.env.JWT_SECRET,
+    { expiresIn: '7d' }
+  );
 
-  return res.redirect(`${process.env.FRONTEND_URL}/auth/success?token=${token}`);
-};
+  // CORRECT REDIRECT URL — ONLY THIS WORKS
+  const redirectUrl = `${process.env.FRONTEND_URL}/auth/success?token=${token}`;
 
-export const getMe = (req, res) => {
-  res.json({
-    id: req.user._id,
-    email: req.user.email,
-    role: req.user.role,
-  });
+  return res.redirect(redirectUrl);
 };
