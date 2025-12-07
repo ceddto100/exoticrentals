@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Calendar, Shield, MapPin, Gauge, Check, Info } from 'lucide-react';
-import { FALLBACK_CAR_IMAGE, MOCK_CARS } from '../constants';
+import { FALLBACK_CAR_IMAGE } from '../constants';
 import { Car, User } from '../types';
 import { fetchVehicle } from '../services/apiClient';
 
@@ -14,6 +14,7 @@ export const VehicleDetails: React.FC<VehicleDetailsProps> = ({ user }) => {
   const navigate = useNavigate();
   const [car, setCar] = useState<Car | undefined>(undefined);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const [pickupDate, setPickupDate] = useState('');
   const [returnDate, setReturnDate] = useState('');
@@ -29,9 +30,10 @@ export const VehicleDetails: React.FC<VehicleDetailsProps> = ({ user }) => {
           id: (response as any).id || (response as any)._id || id,
         };
         setCar(normalized);
+        setError(null);
       } catch (err) {
-        console.warn('Unable to fetch vehicle from API, falling back to mock data', err);
-        setCar(MOCK_CARS.find((c) => c.id === id));
+        console.error('Unable to fetch vehicle from API', err);
+        setError('Vehicle not found');
       } finally {
         setLoading(false);
       }
@@ -57,7 +59,7 @@ export const VehicleDetails: React.FC<VehicleDetailsProps> = ({ user }) => {
   }
 
   if (!car) {
-    return <div className="p-12 text-center">Vehicle not found</div>;
+    return <div className="p-12 text-center">{error || 'Vehicle not found'}</div>;
   }
 
   const handleBookNow = () => {
