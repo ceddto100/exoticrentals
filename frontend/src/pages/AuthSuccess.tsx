@@ -1,17 +1,16 @@
-import React, { useEffect, useContext } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { AuthContext } from '../App'; // Assuming you have an AuthContext in App.tsx
+import React, { useEffect, useContext } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { AuthContext } from "../App";
 
-// A simple utility to decode JWTs
 const decodeJwt = (token: string) => {
   try {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
     const jsonPayload = decodeURIComponent(
       atob(base64)
-        .split('')
+        .split("")
         .map((c) => `%${`00${c.charCodeAt(0).toString(16)}`.slice(-2)}`)
-        .join('')
+        .join("")
     );
     return JSON.parse(jsonPayload);
   } catch (e) {
@@ -26,25 +25,22 @@ export const AuthSuccess: React.FC = () => {
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    const token = params.get('token');
+    const token = params.get("token");
 
     if (token) {
-      localStorage.setItem('jwt', token);
+      localStorage.setItem("jwt", token);
       const decoded = decodeJwt(token);
 
       if (decoded && setAuth) {
-        setAuth({ token, user: decoded }); // Update auth context
-        // Redirect based on role
-        if (decoded.role === 'admin') {
-          navigate('/admin');
-        } else {
-          navigate('/dashboard');
-        }
+        setAuth({ token, user: decoded });
+
+        if (decoded.role === "admin") navigate("/admin");
+        else navigate("/dashboard");
       } else {
-        navigate('/login'); // Fallback if token is invalid
+        navigate("/login");
       }
     } else {
-      navigate('/login'); // Redirect if no token is found
+      navigate("/login");
     }
   }, [location, navigate, setAuth]);
 
@@ -54,3 +50,4 @@ export const AuthSuccess: React.FC = () => {
     </div>
   );
 };
+
