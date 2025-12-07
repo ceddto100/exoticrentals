@@ -3,63 +3,66 @@ import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import User from '../models/User.js';
 import Admin from '../models/Admin.js';
 
-const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_CALLBACK_URL } = process.env;
+const configurePassport = () => {
+  const googleOptions = {
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: process.env.GOOGLE_CALLBACK_URL,
+  };
 
-if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET && GOOGLE_CALLBACK_URL) {
   passport.use(
-    new GoogleStrategy(
-      {
-        clientID: GOOGLE_CLIENT_ID,
-        clientSecret: GOOGLE_CLIENT_SECRET,
-        callbackURL: GOOGLE_CALLBACK_URL,
-      },
-      async (_accessToken, _refreshToken, profile, done) => {
-        try {
-          const email = profile.emails?.[0]?.value;
-          const googleId = profile.id;
-          if (!email) {
-            return done(new Error('No email returned from Google'));
-          }
+    new GoogleStrategy(googleOptions, async (accessToken, refreshToken, profile, done) => {
+      try {
+        const { id, emails, displayName, _json } = profile;
+        const email = emails?.[0]?.value;
 
-          let user = await User.findOne({ googleId });
-          if (!user) {
-            user = await User.create({
-              googleId,
-              email,
-              name: profile.displayName,
-              avatarUrl: profile.photos?.[0]?.value,
-              role: 'customer',
-            });
-          }
-
-          if (user.role === 'admin') {
-            await Admin.findOneAndUpdate(
-              { user: user._id },
-              { user: user._id, permissions: ['manage_users', 'manage_fleet'] },
-              { upsert: true, new: true }
-            );
-          }
-
-          return done(null, user);
-        } catch (err) {
-          return done(err, undefined);
+        if (!email) {
+          return done(new Error('Google profile did not return an email'), null);
         }
+
+        let user = await User.findOne({ $or: [{ googleId: id }, { email }] });
+
+        if (!user) {
+          user = new User({
+            googleId: id,
+            email,
+            name: displayName,
+            avatarUrl: _json.picture,
+          });
+        }
+        
+        // Check if user is an admin
+        const adminRecord = await Admin.findOne({ email });
+        user.role = adminRecord ? 'admin' : 'customer';
+
+        user.lastLogin = new Date();
+        await user.save();
+
+        // If the user is an admin, ensure the admin record is up to date
+        if (user.role === 'admin') {
+          adminRecord.user = user._id;
+          await adminRecord.save();
+        }
+
+        return done(null, user);
+      } catch (error) {
+        return done(error, null);
       }
-    )
+    })
   );
-}
 
-passport.serializeUser((user, done) => {
-  done(null, user.id);
-});
+  passport.serializeUser((user, done) => {
+    done(null, user.id);
+  });
 
-passport.deserializeUser(async (id, done) => {
-  try {
-    const user = await User.findById(id);
-    done(null, user);
-  } catch (err) {
-    done(err, null);
-  }
-});
+  passport.deserializeUser(async (id, done) => {
+    try {
+      const user = await User.findById(id);
+      done(null, user);
+    } catch (error) {
+      done(error, null);
+    }
+  });
+};
 
-export default passport;
+export default configurePassport;

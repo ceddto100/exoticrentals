@@ -6,11 +6,15 @@ interface LoginProps {
   onLogin: (role: 'admin' | 'customer') => void;
 }
 
+// The base URL for your backend API
+const API_URL = 'https://exoticrentals.onrender.com';
+
 export const Login: React.FC<LoginProps> = ({ onLogin }) => {
   const navigate = useNavigate();
 
   const handleGoogleSignIn = () => {
-    window.open('https://accounts.google.com/AccountChooser?service=mail', '_blank', 'noopener,noreferrer');
+    // Redirect to the backend's Google authentication endpoint
+    window.location.href = `${API_URL}/auth/google`;
   };
 
   const handleSimulatedLogin = (role: 'admin' | 'customer') => {

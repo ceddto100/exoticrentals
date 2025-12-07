@@ -2,7 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
-import passport from './config/passport.js';
+import passport from 'passport';
+import configurePassport from './config/passport.js';
 import authRoutes from './routes/authRoutes.js';
 import vehicleRoutes from './routes/vehicleRoutes.js';
 import scheduleRoutes from './routes/scheduleRoutes.js';
@@ -12,6 +13,9 @@ import adminRoutes from './routes/adminRoutes.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
 
 const app = express();
+
+// Initialize and configure passport
+configurePassport(passport);
 
 const allowedOrigins = (process.env.FRONTEND_URL || 'http://localhost:3000,http://localhost:5173')
   .split(',')
