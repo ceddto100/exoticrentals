@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
-import { FALLBACK_CAR_IMAGE, MOCK_CARS } from '../constants';
+import { FALLBACK_CAR_IMAGE } from '../constants';
 import { DollarSign, Calendar, AlertCircle, Car as CarIcon, TrendingUp } from 'lucide-react';
 import { fetchAdminDashboard, fetchVehicles } from '../services/apiClient';
 import { Car } from '../types';
@@ -23,14 +23,15 @@ const availabilityData = [
 ];
 
 export const AdminDashboard: React.FC = () => {
-  const [fleet, setFleet] = useState<Car[]>(MOCK_CARS);
+  const [fleet, setFleet] = useState<Car[]>([]);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
     userCount: 0,
-    vehicleCount: MOCK_CARS.length,
+    vehicleCount: 0,
     activeRentals: 0,
     historyCount: 0,
   });
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const loadDashboard = async () => {
@@ -39,9 +40,10 @@ export const AdminDashboard: React.FC = () => {
         const normalized = vehicles.map((vehicle: any) => ({ ...vehicle, id: vehicle.id || vehicle._id }));
         setStats(dashboard);
         setFleet(normalized);
+        setError(null);
       } catch (error) {
-        console.warn('Admin API unavailable, using mock dashboard data', error);
-        setFleet(MOCK_CARS);
+        console.error('Admin API unavailable', error);
+        setError('Unable to load admin dashboard data.');
       } finally {
         setLoading(false);
       }
@@ -54,6 +56,12 @@ export const AdminDashboard: React.FC = () => {
     <div className="bg-gray-950 text-gray-100 min-h-screen p-8">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-3xl font-bold text-white mb-8">Admin Dashboard</h1>
+
+        {error && (
+          <div className="mb-6 p-4 rounded-lg border border-red-800 bg-red-900/20 text-red-200">
+            {error}
+          </div>
+        )}
 
         {/* Stats Row */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">

@@ -1,12 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Filter, Star, Fuel, Settings, Users } from 'lucide-react';
-import { FALLBACK_CAR_IMAGE, MOCK_CARS } from '../constants';
-import { CarCategory, FuelType } from '../types';
+import { FALLBACK_CAR_IMAGE } from '../constants';
+import { Car, CarCategory, FuelType } from '../types';
 import { fetchVehicles } from '../services/apiClient';
 
 export const Home: React.FC = () => {
-  const [cars, setCars] = useState(MOCK_CARS);
+  const [cars, setCars] = useState<Car[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
@@ -24,9 +24,8 @@ export const Home: React.FC = () => {
         setCars(normalized);
         setError(null);
       } catch (err) {
-        console.warn('Falling back to mock vehicles', err);
-        setError('Live vehicle feed unavailable. Showing demo data.');
-        setCars(MOCK_CARS);
+        console.error('Unable to load vehicles', err);
+        setError('Live vehicle feed unavailable.');
       } finally {
         setLoading(false);
       }

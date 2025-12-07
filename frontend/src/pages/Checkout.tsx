@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Car, AddOn } from '../types';
-import { ADD_ONS, FALLBACK_CAR_IMAGE } from '../constants';
+import { FALLBACK_CAR_IMAGE } from '../constants';
 import { CreditCard, Lock, FileText, CheckCircle } from 'lucide-react';
 
 interface LocationState {
@@ -15,6 +15,7 @@ export const Checkout: React.FC<{ user: any }> = ({ user }) => {
   const { state } = useLocation();
   const navigate = useNavigate();
   const [selectedAddOns, setSelectedAddOns] = useState<string[]>([]);
+  const [availableAddOns] = useState<AddOn[]>([]);
   const [agreed, setAgreed] = useState(false);
   const [signature, setSignature] = useState('');
   const [processing, setProcessing] = useState(false);
@@ -34,7 +35,7 @@ export const Checkout: React.FC<{ user: any }> = ({ user }) => {
   };
 
   const addOnsTotal = selectedAddOns.reduce((sum, id) => {
-    const addon = ADD_ONS.find(a => a.id === id);
+    const addon = availableAddOns.find(a => a.id === id);
     return sum + (addon ? addon.price : 0);
   }, 0);
 
@@ -73,7 +74,10 @@ export const Checkout: React.FC<{ user: any }> = ({ user }) => {
                 Optional Add-ons
               </h2>
               <div className="space-y-3">
-                {ADD_ONS.map(addon => (
+                {availableAddOns.length === 0 && (
+                  <p className="text-sm text-gray-400">Optional add-ons are currently unavailable.</p>
+                )}
+                {availableAddOns.map(addon => (
                   <div
                     key={addon.id}
                     onClick={() => handleToggleAddOn(addon.id)}

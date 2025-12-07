@@ -9,7 +9,6 @@ import { UserDashboard } from './pages/UserDashboard';
 import { Login } from './pages/Login';
 import { HowItWorks } from './pages/HowItWorks';
 import { User } from './types';
-import { MOCK_USER } from './constants';
 import { authWithGoogle, clearSession, fetchCurrentUser, storeSession } from './services/apiClient';
 
 function ScrollToTop() {
@@ -51,8 +50,8 @@ export default function App() {
       storeSession(response.token);
       setUser(response.user);
     } catch (error) {
-      console.error('Authentication failed, falling back to mock user', error);
-      setUser(role === 'admin' ? { ...MOCK_USER, role: 'admin', name: 'Admin Manager' } : MOCK_USER);
+      console.error('Authentication failed', error);
+      throw error;
     }
   };
 

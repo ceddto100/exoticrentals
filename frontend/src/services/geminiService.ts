@@ -1,5 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
-import { MOCK_CARS } from "../constants";
+import { fetchVehicles } from "./apiClient";
 
 const getGeminiClient = () => {
     const apiKey = process.env.API_KEY || ''; 
@@ -9,11 +9,11 @@ const getGeminiClient = () => {
 export const getCarRecommendation = async (userPrompt: string): Promise<string> => {
     try {
         const ai = getGeminiClient();
-        
-        // Prepare context about inventory
-        const inventoryContext = MOCK_CARS.map(c => 
-            `${c.year} ${c.make} ${c.model} (${c.category}, $${c.pricePerDay}/day, ${c.seats} seats)`
-        ).join('\n');
+
+        const liveVehicles = await fetchVehicles();
+        const inventoryContext = liveVehicles
+            .map((c: any) => `${c.year} ${c.make} ${c.model} (${c.category}, $${c.pricePerDay}/day, ${c.seats} seats)`)
+            .join('\n');
 
         const systemInstruction = `
         You are a helpful car rental concierge for 'Exotic Rentals'.
