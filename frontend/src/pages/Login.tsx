@@ -9,6 +9,10 @@ interface LoginProps {
 export const Login: React.FC<LoginProps> = ({ onLogin }) => {
   const navigate = useNavigate();
 
+  const handleGoogleSignIn = () => {
+    window.open('https://accounts.google.com/signin', '_blank', 'noopener,noreferrer');
+  };
+
   const handleSimulatedLogin = (role: 'admin' | 'customer') => {
     onLogin(role);
     navigate(role === 'admin' ? '/admin' : '/dashboard');
@@ -28,22 +32,33 @@ export const Login: React.FC<LoginProps> = ({ onLogin }) => {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-gray-900/90 border border-gray-800 py-8 px-4 shadow-xl sm:rounded-lg sm:px-10">
-          <div className="space-y-6">
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-200">Email address</label>
-              <div className="mt-1">
-                <input id="email" name="email" type="email" autoComplete="email" className="appearance-none block w-full px-3 py-2 border border-gray-700 bg-gray-950 rounded-md shadow-sm placeholder-gray-500 focus:outline-none focus:ring-amber-400 focus:border-amber-400 sm:text-sm text-gray-100" placeholder="demo@exoticrentals.com" />
+          <div className="space-y-8">
+            <div className="bg-gray-950 border border-gray-800 rounded-lg p-4 flex gap-4 items-center">
+              <div className="h-12 w-12 rounded-full bg-white flex items-center justify-center shadow-inner">
+                <span className="text-xl font-black text-blue-500">G</span>
               </div>
-            </div>
-
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-200">Password</label>
-              <div className="mt-1">
-                <input id="password" name="password" type="password" autoComplete="current-password" className="appearance-none block w-full px-3 py-2 border border-gray-700 bg-gray-950 rounded-md shadow-sm placeholder-gray-500 focus:outline-none focus:ring-amber-400 focus:border-amber-400 sm:text-sm text-gray-100" placeholder="••••••••" />
+              <div className="space-y-1">
+                <p className="text-lg font-semibold text-white">Sign in with Google</p>
+                <p className="text-sm text-gray-400">Use your Google account to continue, or create one in seconds.</p>
               </div>
             </div>
 
             <div className="space-y-3">
+              <button
+                onClick={handleGoogleSignIn}
+                className="w-full flex items-center justify-center gap-3 py-2 px-4 border border-white/30 rounded-md shadow-sm text-sm font-medium text-gray-900 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-300 focus:ring-offset-gray-900"
+              >
+                <span className="text-lg">🔒</span>
+                Continue with Google
+              </button>
+              <a
+                href="https://accounts.google.com/signup"
+                target="_blank"
+                rel="noreferrer"
+                className="block text-center text-xs font-medium text-amber-300 hover:text-amber-200"
+              >
+                Create a Google account
+              </a>
               <button
                 onClick={() => handleSimulatedLogin('customer')}
                 className="w-full flex justify-center py-2 px-4 border border-amber-400/60 rounded-md shadow-sm text-sm font-medium text-gray-900 bg-amber-300 hover:bg-amber-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-300 focus:ring-offset-gray-900"
