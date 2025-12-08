@@ -15,7 +15,7 @@ export const createRental = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
-    const { vehicle: vehicleId, startDate, endDate, totalCost, addOns = [], notes } = req.body;
+    const { vehicle: vehicleId, startDate, endDate, totalCost, depositAmount = 0, balanceDue = 0, addOns = [], notes } = req.body;
     const userId = req.user?._id;
 
     if (!userId) {
@@ -37,6 +37,8 @@ export const createRental = async (req, res) => {
       startDate,
       endDate,
       totalCost,
+      depositAmount,
+      balanceDue,
       addOns,
       notes,
     });
@@ -47,10 +49,12 @@ export const createRental = async (req, res) => {
       startDate,
       endDate,
       totalCost,
+      depositAmount,
+      balanceDue,
+      notes,
       rental: rental._id,
       type: 'reservation',
       status: 'booked',
-      notes,
     });
 
     await RentalHistory.create({

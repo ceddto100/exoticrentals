@@ -132,6 +132,8 @@ export const createRental = (payload: {
   startDate: string;
   endDate: string;
   totalCost: number;
+  depositAmount?: number;
+  balanceDue?: number;
   addOns?: string[];
   notes?: string;
 }) => request(`${API_PREFIX}/rentals`, { method: 'POST', body: JSON.stringify(payload) });

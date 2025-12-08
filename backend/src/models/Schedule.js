@@ -22,6 +22,8 @@ const ScheduleSchema = new mongoose.Schema(
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     rental: { type: mongoose.Schema.Types.ObjectId, ref: 'Rental' },
     totalCost: { type: Number },
+    depositAmount: { type: Number, default: 0 },
+    balanceDue: { type: Number, default: 0 },
     status: { type: String, enum: ['booked', 'completed', 'cancelled', 'pending'], default: 'booked' },
     notes: String,
   },

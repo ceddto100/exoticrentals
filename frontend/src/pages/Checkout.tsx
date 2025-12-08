@@ -113,7 +113,9 @@ export const Checkout: React.FC = () => {
   }, 0);
 
   const securityDeposit = vehicle?.deposit ?? 0;
-  const finalTotal = baseTotal + securityDeposit + addOnsTotal;
+  const tripTotal = baseTotal + addOnsTotal + securityDeposit;
+  const balanceDueAtPickup = Math.max(baseTotal + addOnsTotal, 0);
+  const dueToday = Math.max(securityDeposit, 0);
 
   const handlePayment = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -148,7 +150,9 @@ export const Checkout: React.FC = () => {
         vehicle: vehicle?._id || vehicle?.id || '',
         startDate: pickupDate,
         endDate: returnDate,
-        totalCost: finalTotal,
+        totalCost: tripTotal,
+        depositAmount: dueToday,
+        balanceDue: balanceDueAtPickup,
         addOns: selectedAddOns,
         notes: `Signed by ${signature}`,
       });
@@ -227,8 +231,12 @@ export const Checkout: React.FC = () => {
                 </div>
               </div>
               <div className="mt-4">
-                <label className="block text-sm font-medium text-gray-700">License Number</label>
-                <input type="text" placeholder="DL-XXXX-XXXX" className="mt-1 block w-full border border-gray-300 rounded-md py-2 px-3 focus:ring-indigo-500 focus:border-indigo-500" />
+                <label className="block text-sm font-medium text-gray-200">License Number</label>
+                <input
+                  type="text"
+                  placeholder="DL-XXXX-XXXX"
+                  className="mt-1 block w-full border border-gray-800 rounded-md py-2 px-3 focus:ring-amber-400 focus:border-amber-400 bg-gray-950 text-gray-100 placeholder-gray-500"
+                />
               </div>
             </div>
 
@@ -268,7 +276,7 @@ export const Checkout: React.FC = () => {
             <div className="bg-gray-900 rounded-xl shadow-xl border border-gray-800 p-6">
               <h2 className="text-xl font-bold text-white mb-4 flex items-center">
                 <span className="bg-amber-300 text-gray-900 w-8 h-8 rounded-full flex items-center justify-center text-sm mr-3">4</span>
-                Payment
+                Payment (Deposit Only)
               </h2>
               <form onSubmit={handlePayment}>
                 {error && (
@@ -282,6 +290,9 @@ export const Checkout: React.FC = () => {
                   </div>
                 )}
                 <div className="space-y-4">
+                  <p className="text-sm text-gray-400 mb-3">
+                    You are paying the refundable security deposit today. The remaining balance is due at vehicle pickup.
+                  </p>
                   <div className="relative">
                      <label className="block text-sm font-medium text-gray-200 mb-1">Card Number</label>
                      <div className="relative">
@@ -310,7 +321,7 @@ export const Checkout: React.FC = () => {
                     <>Processing...</>
                   ) : (
                     <>
-                      <Lock className="w-5 h-5" /> Pay ${finalTotal}
+                      <Lock className="w-5 h-5" /> Pay Deposit ${dueToday}
                     </>
                   )}
                 </button>
@@ -360,9 +371,13 @@ export const Checkout: React.FC = () => {
                     <span>Security Deposit</span>
                     <span>${securityDeposit}</span>
                   </div>
+                  <div className="flex justify-between">
+                    <span>Balance Due at Pickup</span>
+                    <span>${balanceDueAtPickup}</span>
+                  </div>
                   <div className="pt-4 border-t border-gray-800 flex justify-between items-center">
-                    <span className="font-bold text-white text-lg">Total</span>
-                    <span className="font-bold text-amber-300 text-xl">${finalTotal}</span>
+                    <span className="font-bold text-white text-lg">Trip Total</span>
+                    <span className="font-bold text-amber-300 text-xl">${tripTotal}</span>
                   </div>
                 </div>
              </div>

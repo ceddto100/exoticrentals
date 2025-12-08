@@ -2,7 +2,7 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react';
 import { AuthContext } from '../App'; // Import the auth context
 import { Clock, FileText, CreditCard, ShieldCheck } from 'lucide-react';
-import { fetchRentals } from '../services/apiClient';
+import { fetchRentals, fetchSchedules } from '../services/apiClient';
 
 // A default avatar to prevent crashes if the user's avatar is missing.
 const DEFAULT_AVATAR = '/assets/car-placeholder.svg';
@@ -19,6 +19,8 @@ interface RentalRecord {
   endDate: string;
   status?: string;
   totalCost?: number;
+  depositAmount?: number;
+  balanceDue?: number;
 }
 
 export const UserDashboard: React.FC = () => {
@@ -30,8 +32,28 @@ export const UserDashboard: React.FC = () => {
   useEffect(() => {
     const loadRentals = async () => {
       try {
-        const data = await fetchRentals();
-        setRentals(Array.isArray(data) ? data : []);
+        const [rentalData, scheduleData] = await Promise.all([
+          fetchRentals().catch(() => []),
+          fetchSchedules().catch(() => []),
+        ]);
+
+        const normalizedSchedules: RentalRecord[] = Array.isArray(scheduleData)
+          ? scheduleData.map((schedule: any) => ({
+              _id: schedule._id,
+              vehicle: schedule.vehicle,
+              startDate: schedule.startDate,
+              endDate: schedule.endDate,
+              status: schedule.status,
+              totalCost: schedule.totalCost,
+              depositAmount: schedule.depositAmount,
+              balanceDue: schedule.balanceDue,
+            }))
+          : [];
+
+        const normalizedRentals: RentalRecord[] = Array.isArray(rentalData) ? rentalData : [];
+
+        const combined = [...normalizedRentals, ...normalizedSchedules];
+        setRentals(combined);
       } catch (err) {
         const message = err instanceof Error ? err.message : 'Unable to load rentals';
         setError(message);
@@ -113,7 +135,10 @@ export const UserDashboard: React.FC = () => {
                     </div>
                     <div className="text-right">
                       <span className="text-xs text-gray-400 block capitalize">{reservation.status || 'booked'}</span>
-                      {reservation.totalCost && <span className="text-sm font-semibold">${reservation.totalCost.toFixed(2)}</span>}
+                      {reservation.depositAmount ? (
+                        <span className="text-xs text-gray-400 block">Deposit: ${reservation.depositAmount.toFixed(2)}</span>
+                      ) : null}
+                      {reservation.totalCost && <span className="text-sm font-semibold">Total: ${reservation.totalCost.toFixed(2)}</span>}
                     </div>
                   </div>
                 ))}

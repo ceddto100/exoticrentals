@@ -24,7 +24,7 @@ export const createReservationSchedule = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
-    const { vehicle: vehicleId, startDate, endDate, totalCost, notes, rentalId } = req.body;
+    const { vehicle: vehicleId, startDate, endDate, totalCost, depositAmount = 0, balanceDue = 0, notes, rentalId } = req.body;
     const userId = req.user?._id;
 
     if (!userId) {
@@ -46,6 +46,8 @@ export const createReservationSchedule = async (req, res) => {
       startDate,
       endDate,
       totalCost,
+      depositAmount,
+      balanceDue,
       rental: rentalId,
       type: 'reservation',
       status: 'booked',
@@ -71,9 +73,12 @@ export const updateSchedule = async (req, res) => {
   }
 };
 
-export const getSchedules = async (_req, res) => {
+export const getSchedules = async (req, res) => {
   try {
-    const schedules = await Schedule.find().populate('vehicle user rental');
+    const query = req.user?.role === 'admin' ? {} : { user: req.user?._id };
+    const schedules = await Schedule.find(query)
+      .populate('vehicle user rental')
+      .sort({ createdAt: -1 });
     res.json(schedules);
   } catch (err) {
     res.status(500).json({ message: 'Unable to fetch schedules', error: err.message });
