@@ -75,11 +75,13 @@ export const Layout: React.FC<LayoutProps> = ({ onLogout, children }) => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between h-16">
               <div className="flex items-center cursor-pointer" onClick={() => navigate('/')}>
-                <img
-                  src="/exotic_rentals.png"
-                  alt="Exotic Rentals logo"
-                  className="h-10 w-auto drop-shadow-[0_0_12px_rgba(248,113,113,0.5)]"
-                />
+                <div className="relative flex h-12 w-12 items-center justify-center rounded-full bg-white/95 shadow-[0_0_20px_rgba(248,113,113,0.65)] ring-2 ring-red-400/70 overflow-hidden">
+                  <img
+                    src="/exotic_rentals.png"
+                    alt="Exotic Rentals logo"
+                    className="h-8 w-8 object-contain drop-shadow-[0_0_10px_rgba(248,113,113,0.35)]"
+                  />
+                </div>
                 <span className="ml-2 text-xl font-bold text-white tracking-tight">Exotic Rentals</span>
               </div>
 
@@ -162,11 +164,13 @@ export const Layout: React.FC<LayoutProps> = ({ onLogout, children }) => {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
               <div className="col-span-1 md:col-span-1">
                 <div className="flex items-center mb-4">
-                  <img
-                    src="/exotic_rentals.png"
-                    alt="Exotic Rentals logo"
-                    className="h-10 w-auto drop-shadow-[0_0_12px_rgba(248,113,113,0.5)]"
-                  />
+                  <div className="relative flex h-12 w-12 items-center justify-center rounded-full bg-white/95 shadow-[0_0_20px_rgba(248,113,113,0.65)] ring-2 ring-red-400/70 overflow-hidden">
+                    <img
+                      src="/exotic_rentals.png"
+                      alt="Exotic Rentals logo"
+                      className="h-8 w-8 object-contain drop-shadow-[0_0_10px_rgba(248,113,113,0.35)]"
+                    />
+                  </div>
                   <span className="ml-2 text-xl font-bold">Exotic Rentals</span>
                 </div>
                 <p className="text-gray-400 text-sm">
