@@ -7,6 +7,8 @@ const RentalSchema = new mongoose.Schema(
     startDate: { type: Date, required: true },
     endDate: { type: Date, required: true },
     totalCost: Number,
+    depositAmount: { type: Number, default: 0 },
+    balanceDue: { type: Number, default: 0 },
     status: { type: String, enum: ['pending', 'active', 'completed', 'cancelled'], default: 'pending' },
     paymentStatus: { type: String, enum: ['pending', 'paid', 'failed'], default: 'pending' },
     addOns: [{ type: String }],

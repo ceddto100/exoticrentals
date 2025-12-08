@@ -1,19 +1,69 @@
 
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect, useMemo } from 'react';
 import { AuthContext } from '../App'; // Import the auth context
-import { Clock, CheckCircle, FileText, CreditCard, RefreshCcw, XCircle, ShieldCheck } from 'lucide-react';
+import { Clock, FileText, CreditCard, ShieldCheck } from 'lucide-react';
+import { fetchRentals, fetchSchedules } from '../services/apiClient';
 
 // A default avatar to prevent crashes if the user's avatar is missing.
 const DEFAULT_AVATAR = '/assets/car-placeholder.svg';
 
+interface RentalRecord {
+  _id: string;
+  vehicle?: {
+    make?: string;
+    model?: string;
+    year?: number;
+    imageUrl?: string;
+  };
+  startDate: string;
+  endDate: string;
+  status?: string;
+  totalCost?: number;
+  depositAmount?: number;
+  balanceDue?: number;
+}
+
 export const UserDashboard: React.FC = () => {
   const { auth } = useContext(AuthContext); // Get auth state from context
+  const [rentals, setRentals] = useState<RentalRecord[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  // State for managing UI elements
-  const [reservationStatus, setReservationStatus] = useState<'scheduled' | 'rescheduled' | 'canceled'>('scheduled');
-  const [statusNote, setStatusNote] = useState('Pickup: Nov 24, 10:00 AM');
-  const [showReschedulePicker, setShowReschedulePicker] = useState(false);
-  const [rescheduleAt, setRescheduleAt] = useState('2024-11-24T10:00');
+  useEffect(() => {
+    const loadRentals = async () => {
+      try {
+        const [rentalData, scheduleData] = await Promise.all([
+          fetchRentals().catch(() => []),
+          fetchSchedules().catch(() => []),
+        ]);
+
+        const normalizedSchedules: RentalRecord[] = Array.isArray(scheduleData)
+          ? scheduleData.map((schedule: any) => ({
+              _id: schedule._id,
+              vehicle: schedule.vehicle,
+              startDate: schedule.startDate,
+              endDate: schedule.endDate,
+              status: schedule.status,
+              totalCost: schedule.totalCost,
+              depositAmount: schedule.depositAmount,
+              balanceDue: schedule.balanceDue,
+            }))
+          : [];
+
+        const normalizedRentals: RentalRecord[] = Array.isArray(rentalData) ? rentalData : [];
+
+        const combined = [...normalizedRentals, ...normalizedSchedules];
+        setRentals(combined);
+      } catch (err) {
+        const message = err instanceof Error ? err.message : 'Unable to load rentals';
+        setError(message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadRentals();
+  }, []);
 
   // Early exit if auth or user is not available. This prevents crashes.
   if (!auth.user) {
@@ -24,27 +74,17 @@ export const UserDashboard: React.FC = () => {
     );
   }
 
-  // Safely access user properties.
   const { name, email, avatarUrl } = auth.user;
 
-  const handleCancel = () => {
-    setReservationStatus('canceled');
-    setStatusNote('Reservation canceled. Refund processing to original payment method.');
-    setShowReschedulePicker(false);
-  };
+  const upcoming = useMemo(() => {
+    const now = new Date();
+    return rentals.filter(rental => new Date(rental.endDate) >= now);
+  }, [rentals]);
 
-  const handleRescheduleConfirm = () => {
-    setReservationStatus('rescheduled');
-    const chosenDate = new Date(rescheduleAt);
-    const formatted = `${chosenDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}, ${chosenDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
-    setStatusNote(`Rescheduled to ${formatted}`);
-    setShowReschedulePicker(false);
-  };
-
-  const pastBookings = [
-    { id: 'b123', car: 'Tesla Model S', date: 'Oct 12 - Oct 15, 2024', status: 'Completed', cost: 567 },
-    { id: 'b124', car: 'Porsche 911', date: 'Sep 01 - Sep 03, 2024', status: 'Completed', cost: 498 },
-  ];
+  const history = useMemo(() => {
+    const now = new Date();
+    return rentals.filter(rental => new Date(rental.endDate) < now);
+  }, [rentals]);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 min-h-screen text-gray-100">
@@ -52,9 +92,9 @@ export const UserDashboard: React.FC = () => {
         <div className="w-full md:w-1/4">
           <div className="bg-gray-900 rounded-xl shadow-lg border border-gray-800 p-6 text-center">
             {/* Use optional chaining and a fallback for the avatar URL */}
-            <img 
-              src={avatarUrl || DEFAULT_AVATAR} 
-              alt={name || 'User'} 
+            <img
+              src={avatarUrl || DEFAULT_AVATAR}
+              alt={name || 'User'}
               className="w-24 h-24 rounded-full mx-auto mb-4 border-4 border-amber-200/40"
             />
             <h2 className="text-xl font-bold text-white">{name || 'Customer'}</h2>
@@ -68,7 +108,86 @@ export const UserDashboard: React.FC = () => {
         </div>
 
         <div className="flex-1 space-y-8">
-           {/* ... rest of the dashboard UI ... */}
+          <div className="bg-gray-900 rounded-xl shadow-lg border border-gray-800 p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-white flex items-center gap-2">
+                <Clock className="w-4 h-4 text-amber-300" /> Upcoming Reservations
+              </h3>
+              {loading && <span className="text-xs text-gray-500">Loading...</span>}
+            </div>
+            {error && <p className="text-sm text-red-400 mb-3">{error}</p>}
+            {upcoming.length === 0 && !loading ? (
+              <div className="text-sm text-gray-400">No upcoming reservations yet. Book your next ride to see it here.</div>
+            ) : (
+              <div className="space-y-3">
+                {upcoming.map(reservation => (
+                  <div
+                    key={reservation._id}
+                    className="p-4 rounded-lg border border-gray-800 bg-gray-950 flex items-center justify-between"
+                  >
+                    <div>
+                      <p className="font-semibold text-white">
+                        {reservation.vehicle?.make} {reservation.vehicle?.model}
+                      </p>
+                      <p className="text-sm text-gray-400">
+                        {new Date(reservation.startDate).toLocaleDateString()} - {new Date(reservation.endDate).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-xs text-gray-400 block capitalize">{reservation.status || 'booked'}</span>
+                      {reservation.depositAmount ? (
+                        <span className="text-xs text-gray-400 block">Deposit: ${reservation.depositAmount.toFixed(2)}</span>
+                      ) : null}
+                      {reservation.totalCost && <span className="text-sm font-semibold">Total: ${reservation.totalCost.toFixed(2)}</span>}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="bg-gray-900 rounded-xl shadow-lg border border-gray-800 p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-white flex items-center gap-2">
+                <CreditCard className="w-4 h-4 text-amber-300" /> Payment Methods
+              </h3>
+            </div>
+            <div className="text-sm text-gray-400">
+              No payment methods added yet. Save a card during checkout to speed up future bookings.
+            </div>
+          </div>
+
+          <div className="bg-gray-900 rounded-xl shadow-lg border border-gray-800 p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-white flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-amber-300" /> Rental History
+              </h3>
+            </div>
+            {history.length === 0 && !loading ? (
+              <div className="text-sm text-gray-400">You have no rental history yet. Completed trips will show here.</div>
+            ) : (
+              <div className="space-y-3">
+                {history.map(item => (
+                  <div key={item._id} className="p-4 rounded-lg border border-gray-800 bg-gray-950">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="font-semibold text-white">
+                          {item.vehicle?.make} {item.vehicle?.model} ({item.vehicle?.year || ''})
+                        </p>
+                        <p className="text-sm text-gray-400">
+                          {new Date(item.startDate).toLocaleDateString()} - {new Date(item.endDate).toLocaleDateString()}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-xs text-gray-400 block capitalize">{item.status || 'completed'}</span>
+                        {item.totalCost && <span className="text-sm font-semibold">${item.totalCost.toFixed(2)}</span>}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
