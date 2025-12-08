@@ -168,7 +168,12 @@ export const AdminDashboard: React.FC = () => {
         <div className="bg-gray-900 rounded-xl shadow-lg border border-gray-800 overflow-hidden">
           <div className="p-6 border-b border-gray-800 flex justify-between items-center">
             <h3 className="text-lg font-bold text-white">Fleet Management</h3>
-            <button className="bg-amber-300 text-gray-900 px-4 py-2 rounded-lg text-sm font-medium hover:bg-amber-200">Add New Vehicle</button>
+            <button
+              className="bg-amber-300 text-gray-900 px-4 py-2 rounded-lg text-sm font-medium hover:bg-amber-200"
+              onClick={() => navigate('/admin/vehicles/add')}
+            >
+              Add New Vehicle
+            </button>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-left">
