@@ -2,6 +2,7 @@ import { validationResult, body } from 'express-validator';
 import Rental from '../models/Rental.js';
 import RentalHistory from '../models/RentalHistory.js';
 import Vehicle from '../models/Vehicle.js';
+import Schedule from '../models/Schedule.js';
 
 export const rentalValidators = [
   body('vehicle').notEmpty().withMessage('Vehicle is required'),
@@ -26,6 +27,10 @@ export const createRental = async (req, res) => {
       return res.status(404).json({ message: 'Vehicle not found' });
     }
 
+    if (new Date(startDate) > new Date(endDate)) {
+      return res.status(400).json({ message: 'Start date must be before end date' });
+    }
+
     const rental = await Rental.create({
       user: userId,
       vehicle: vehicleId,
@@ -33,6 +38,18 @@ export const createRental = async (req, res) => {
       endDate,
       totalCost,
       addOns,
+      notes,
+    });
+
+    await Schedule.create({
+      vehicle: vehicleId,
+      user: userId,
+      startDate,
+      endDate,
+      totalCost,
+      rental: rental._id,
+      type: 'reservation',
+      status: 'booked',
       notes,
     });
 

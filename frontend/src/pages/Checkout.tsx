@@ -154,7 +154,7 @@ export const Checkout: React.FC = () => {
       });
 
       setSuccess('Booking confirmed!');
-      setTimeout(() => navigate('/'), 1500);
+      setTimeout(() => navigate('/dashboard'), 1200);
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Unable to process booking';
       setError(message);
