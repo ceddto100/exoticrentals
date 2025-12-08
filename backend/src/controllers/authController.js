@@ -1,52 +1,81 @@
-
 import jwt from 'jsonwebtoken';
+import Admin from '../models/Admin.js';
+import User from '../models/User.js';
 
-// This function is called after successful Google authentication.
-export const googleCallback = (req, res) => {
-  // Passport attaches the authenticated user to req.user.
-  const user = req.user;
-
-  // 1. Create a "safe" JWT payload.
-  // We ensure no fields are undefined to prevent issues on the frontend.
-  const payload = {
-    id: user._id,
-    email: user.email,
-    role: user.role || 'customer', // Default role if not provided
-    name: user.name || 'User',
-    avatarUrl: user.avatarUrl || null, // Use null as a fallback
-  };
-
-  // 2. Sign the JWT.
-  // This token will be sent to the frontend to manage the session.
-  const token = jwt.sign(
-    payload,
-    process.env.JWT_SECRET,
-    { expiresIn: '7d' } // Token expires in 7 days
-  );
-
-  // 3. Construct the final redirect URL.
-  // This sends the user back to the frontend with the token in the URL.
-  const redirectUrl = `${process.env.FRONTEND_URL}/auth/success?token=${token}`;
-
-  // 4. Redirect the user.
-  res.redirect(redirectUrl);
+const buildFrontendUrl = () => {
+  if (!process.env.FRONTEND_URL) {
+    throw new Error('FRONTEND_URL environment variable is required for OAuth redirects');
+  }
+  return process.env.FRONTEND_URL.replace(/\/$/, '');
 };
 
-// This function retrieves the current user's data based on a valid JWT.
-// It's used by the frontend to verify the session.
-export const getMe = (req, res) => {
-  // The 'protect' middleware (not shown here) should have already verified
-  // the JWT and attached the user data to req.user.
+const getJwtSecret = () => {
+  if (!process.env.JWT_SECRET) {
+    throw new Error('JWT_SECRET environment variable is not configured');
+  }
+  return process.env.JWT_SECRET;
+};
+
+const signToken = (user) => {
+  const payload = {
+    id: user._id?.toString(),
+    email: user.email,
+    role: user.role || 'customer',
+    name: user.name || 'User',
+    avatarUrl: user.avatarUrl || null,
+  };
+
+  return jwt.sign(payload, getJwtSecret(), { expiresIn: '7d' });
+};
+
+// Google OAuth callback
+export const googleCallback = async (req, res, next) => {
+  try {
+    const userFromPassport = req.user;
+
+    if (!userFromPassport) {
+      return res.redirect(`${buildFrontendUrl()}/login?error=missing_user`);
+    }
+
+    // Ensure role is accurate based on Admin collection
+    const adminRecord = await Admin.findOne({ email: userFromPassport.email });
+    if (adminRecord) {
+      userFromPassport.role = 'admin';
+      if (!adminRecord.user || adminRecord.user.toString() !== userFromPassport._id.toString()) {
+        adminRecord.user = userFromPassport._id;
+        await adminRecord.save();
+      }
+    } else {
+      userFromPassport.role = 'customer';
+    }
+
+    // Persist any role/avatar changes
+    await User.findByIdAndUpdate(
+      userFromPassport._id,
+      { role: userFromPassport.role, avatarUrl: userFromPassport.avatarUrl },
+      { new: true }
+    );
+
+    const token = signToken(userFromPassport);
+    const redirectUrl = `${buildFrontendUrl()}/auth/success?token=${token}`;
+
+    return res.redirect(redirectUrl);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+// Current user endpoint
+export const getMe = async (req, res) => {
   if (!req.user) {
     return res.status(401).json({ message: 'Not authorized' });
   }
 
-  // Return the user data stored in the token.
-  res.status(200).json({
-    id: req.user.id,
+  return res.status(200).json({
+    id: req.user._id?.toString(),
     email: req.user.email,
     role: req.user.role,
     name: req.user.name,
-    avatarUrl: req.user.avatarUrl,
+    avatarUrl: req.user.avatarUrl || null,
   });
 };

@@ -7,6 +7,13 @@ import User from '../models/User.js';
 
 const router = express.Router();
 
+const getJwtSecret = () => {
+  if (!process.env.JWT_SECRET) {
+    throw new Error('JWT_SECRET environment variable is not configured');
+  }
+  return process.env.JWT_SECRET;
+};
+
 const loginValidators = [
   body('email').isEmail().withMessage('Valid email is required'),
   body('password').notEmpty().withMessage('Password is required'),
@@ -66,8 +73,8 @@ router.post('/login', loginValidators, async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: user._id, email: user.email, role: 'admin' },
-      process.env.JWT_SECRET || 'development-secret',
+      { id: user._id, email: user.email, role: 'admin', name: user.name || 'Admin', avatarUrl: user.avatarUrl || null },
+      getJwtSecret(),
       { expiresIn: '7d' }
     );
 

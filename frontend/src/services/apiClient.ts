@@ -1,6 +1,7 @@
+export const AUTH_TOKEN_KEY = 'auth_token';
 const API_BASE_URL = (import.meta.env.VITE_API_URL as string) || 'http://localhost:5000';
 
-const getToken = () => localStorage.getItem('auth_token');
+const getToken = () => localStorage.getItem(AUTH_TOKEN_KEY);
 
 const request = async (path: string, options: RequestInit = {}) => {
   const headers: HeadersInit = {
@@ -42,6 +43,6 @@ export const fetchCustomers = () => request('/customers');
 export const fetchAdminDashboard = () => request('/admin/dashboard');
 export const fetchRentalHistory = () => request('/rental-history');
 
-export const clearSession = () => localStorage.removeItem('auth_token');
-export const storeSession = (token: string) => localStorage.setItem('auth_token', token);
+export const clearSession = () => localStorage.removeItem(AUTH_TOKEN_KEY);
+export const storeSession = (token: string) => localStorage.setItem(AUTH_TOKEN_KEY, token);
 export { API_BASE_URL };
