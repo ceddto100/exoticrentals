@@ -1,14 +1,26 @@
-
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import User from '../models/User.js';
 import Admin from '../models/Admin.js';
 
+const requireEnv = (key, fallback) => {
+  const value = process.env[key] || fallback;
+  if (!value) {
+    throw new Error(`Missing required environment variable: ${key}`);
+  }
+  return value;
+};
+
 const configurePassport = () => {
+  const callbackURL = requireEnv(
+    'GOOGLE_CALLBACK_URL',
+    `${process.env.BACKEND_URL || 'http://localhost:5000'}/auth/google/callback`
+  );
+
   const googleOptions = {
-    clientID: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: process.env.GOOGLE_CALLBACK_URL,
+    clientID: requireEnv('GOOGLE_CLIENT_ID'),
+    clientSecret: requireEnv('GOOGLE_CLIENT_SECRET'),
+    callbackURL,
   };
 
   passport.use(
@@ -21,44 +33,36 @@ const configurePassport = () => {
           return done(new Error('Google profile did not return an email'), null);
         }
 
-        // Find an existing user by Google ID or email
         let user = await User.findOne({ $or: [{ googleId: id }, { email }] });
 
-        // If no user exists, create a new one
         if (!user) {
           user = new User({
             googleId: id,
             email,
-            name: displayName,
-            avatarUrl: _json.picture, // Get avatar from Google profile
+            name: displayName || email,
+            avatarUrl: _json?.picture || null,
           });
-        }
-
-        // --- ADMIN ROLE VERIFICATION ---
-        // This is the critical security check. It verifies if the user's email
-        // is registered in the separate 'Admin' collection.
-        const adminRecord = await Admin.findOne({ email });
-        
-        if (adminRecord) {
-          user.role = 'admin';
         } else {
-          user.role = 'customer';
+          user.googleId = user.googleId || id;
+          if (!_json?.picture && !user.avatarUrl) {
+            user.avatarUrl = null;
+          } else if (_json?.picture) {
+            user.avatarUrl = _json.picture;
+          }
         }
-        // --- END OF SECURITY CHECK ---
 
+        const adminRecord = await Admin.findOne({ email });
+
+        user.role = adminRecord ? 'admin' : 'customer';
         user.lastLogin = new Date();
         await user.save();
 
-        // For data consistency, link the Admin record to the User record if they are an admin.
-        if (user.role === 'admin' && adminRecord && adminRecord.user !== user._id) {
+        if (user.role === 'admin' && adminRecord && (!adminRecord.user || adminRecord.user.toString() !== user._id.toString())) {
           adminRecord.user = user._id;
           await adminRecord.save();
         }
 
-        // Pass the hydrated user object to the googleCallback controller.
-        // The controller is responsible for generating the JWT.
         return done(null, user);
-
       } catch (error) {
         console.error('Error in Google OAuth Strategy:', error);
         return done(error, null);
@@ -66,8 +70,6 @@ const configurePassport = () => {
     })
   );
 
-  // Serialization/deserialization is not strictly necessary for stateless JWT sessions
-  // but is included for completeness and potential future use cases.
   passport.serializeUser((user, done) => {
     done(null, user.id);
   });

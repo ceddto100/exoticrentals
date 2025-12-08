@@ -1,69 +1,28 @@
-
-import React, { useState, useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Car, Shield, Mail, Key } from 'lucide-react';
-import { AuthContext, AuthUser } from '../App'; // Import context and types
+import { Car, Shield } from 'lucide-react';
+import { AuthContext } from '../App';
+import { API_BASE_URL } from '../services/apiClient';
 
-// The base URL for your backend API
-const API_URL = 'https://exoticrentals.onrender.com';
+interface LoginProps {
+  tokenKey: string;
+}
 
-// Helper to decode JWT.
-const decodeJwt = (token: string): AuthUser | null => {
-  try {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    return JSON.parse(atob(base64)) as AuthUser;
-  } catch (e) {
-    return null;
-  }
-};
-
-export const Login: React.FC = () => {
+export const Login: React.FC<LoginProps> = ({ tokenKey }) => {
   const navigate = useNavigate();
-  const { setAuth } = useContext(AuthContext);
+  const { auth } = useContext(AuthContext);
 
-  // State for the admin login form
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState<string | null>(null);
-
-  // Handler for Google Sign-In
-  const handleGoogleSignIn = () => {
-    window.location.href = `${API_URL}/auth/google`;
-  };
-
-  // Handler for Admin Form Submission
-  const handleAdminSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setError(null);
-
-    try {
-      const response = await fetch(`${API_URL}/auth/admin/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Login failed');
-      }
-      
-      const { token } = data;
-      const user = decodeJwt(token);
-
-      if (token && user) {
-        localStorage.setItem('jwt', token);
-        setAuth({ token, user });
-        navigate('/admin'); // Redirect to admin dashboard
-      } else {
-        throw new Error('Invalid token received');
-      }
-
-    } catch (err: any) {
-      setError(err.message);
+  useEffect(() => {
+    if (auth.user?.role === 'admin') {
+      navigate('/admin');
+    } else if (auth.user?.role === 'customer') {
+      navigate('/dashboard');
     }
+  }, [auth.user, navigate]);
+
+  const handleGoogleSignIn = () => {
+    localStorage.removeItem(tokenKey);
+    window.location.href = `${API_BASE_URL}/auth/google`;
   };
 
   return (
@@ -75,57 +34,12 @@ export const Login: React.FC = () => {
           <p className="text-gray-400">Sign in to continue to Exotic Rentals</p>
         </div>
 
-        {/* Admin Login Form */}
-        <form onSubmit={handleAdminSubmit} className="space-y-6">
-          {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-          
-          <div className="relative">
-            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500" />
-            <input
-              type="email"
-              placeholder="Admin Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-gray-900 border border-gray-700 rounded-lg py-3 pl-10 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-amber-400"
-              required
-            />
-          </div>
-          <div className="relative">
-            <Key className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500" />
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-gray-900 border border-gray-700 rounded-lg py-3 pl-10 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-amber-400"
-              required
-            />
-          </div>
-          <button
-            type="submit"
-            className="w-full flex justify-center items-center gap-2 bg-amber-400 text-gray-900 font-semibold py-3 rounded-lg hover:bg-amber-300 transition-all duration-300"
-          >
-            <Shield className="h-5 w-5" />
-            Sign In as Admin
-          </button>
-        </form>
-
-        <div className="relative my-6">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-700" />
-          </div>
-          <div className="relative flex justify-center text-sm">
-            <span className="bg-gray-950 px-2 text-gray-500">Or continue with</span>
-          </div>
-        </div>
-
-        {/* Google Sign-In Button */}
         <button
           onClick={handleGoogleSignIn}
           className="w-full flex items-center justify-center gap-3 py-3 border border-gray-700 rounded-lg hover:bg-gray-800 transition-colors"
         >
           <img src="/google-logo.svg" alt="Google" className="h-6 w-6" />
-          <span className="text-white font-medium">Sign In with Google</span>
+          <span className="text-white font-medium">Sign in with Google</span>
         </button>
       </div>
     </div>

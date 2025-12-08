@@ -1,20 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Car, User as UserIcon, LogOut, Menu, X, Shield, Phone, Mail, Bot } from 'lucide-react';
-import { User } from '../types';
+import { Car, LogOut, Menu, X, Shield, Phone, Mail, Bot } from 'lucide-react';
 import { AIChatModal } from './AIChatModal';
+import { AuthContext } from '../App';
 
 interface LayoutProps {
-  children: React.ReactNode;
-  user: User | null;
   onLogout: () => void;
+  children?: React.ReactNode;
 }
 
-export const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
+const FALLBACK_AVATAR = '/assets/car-placeholder.svg';
+
+export const Layout: React.FC<LayoutProps> = ({ onLogout, children }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAIChatOpen, setIsAIChatOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const { auth } = useContext(AuthContext);
+  const user = auth.user;
 
   useEffect(() => {
     const revealElements = document.querySelectorAll('.reveal-on-scroll');
@@ -34,16 +37,21 @@ export const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
       observer.observe(el);
       const rect = el.getBoundingClientRect();
       if (rect.top < window.innerHeight * 0.9) {
-        el.classList.add('visible');
+        (el as HTMLElement).classList.add('visible');
       }
     });
 
     return () => observer.disconnect();
   }, [location.pathname]);
 
+  const handleLogout = () => {
+    onLogout();
+    setIsMobileMenuOpen(false);
+    navigate('/');
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950 text-gray-100">
-      {/* Navbar */}
       <header className="bg-gray-950/90 backdrop-blur-md border-b border-gray-800 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
@@ -51,43 +59,33 @@ export const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
               <Car className="h-8 w-8 text-amber-400" />
               <span className="ml-2 text-xl font-bold text-white tracking-tight">Exotic Rentals</span>
             </div>
-            
-            {/* Desktop Nav */}
+
             <nav className="hidden md:flex items-center space-x-8">
               <Link to="/" className="text-gray-200 hover:text-amber-300 font-medium transition">Inventory</Link>
               <Link to="/how-it-works" className="text-gray-200 hover:text-amber-300 font-medium transition">How it Works</Link>
-              
+
               {user ? (
-                <div className="flex items-center space-x-4">
-                  {user.role === 'admin' && (
-                    <Link to="/admin" className="text-amber-300 font-medium hover:text-amber-200">Admin Portal</Link>
+                <div className="flex items-center space-x-6">
+                  {user.role === 'admin' ? (
+                    <Link to="/admin" className="text-amber-300 font-medium hover:text-amber-200">Admin Dashboard</Link>
+                  ) : (
+                    <Link to="/dashboard" className="text-amber-300 font-medium hover:text-amber-200">My Dashboard</Link>
                   )}
-                  <div className="relative group">
-                    <button className="flex items-center space-x-2 text-gray-100 hover:text-amber-300 focus:outline-none">
-                      <img src={user.avatarUrl} alt="User" className="h-8 w-8 rounded-full border border-gray-700" />
-                      <span className="font-medium">{user.name}</span>
+                  <div className="flex items-center space-x-3">
+                    <img src={user.avatarUrl || FALLBACK_AVATAR} alt="User" className="h-8 w-8 rounded-full border border-gray-700 object-cover" />
+                    <span className="font-medium text-gray-100">{user.name}</span>
+                    <button onClick={handleLogout} className="flex items-center gap-2 text-red-400 hover:text-red-300 font-medium">
+                      <LogOut className="h-4 w-4" /> Logout
                     </button>
-                    <div className="absolute right-0 w-48 mt-2 origin-top-right bg-gray-900 border border-gray-800 rounded-md shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                      <div className="py-1">
-                        <Link to="/dashboard" className="block px-4 py-2 text-sm text-gray-200 hover:bg-gray-800">My Bookings</Link>
-                        <button onClick={onLogout} className="w-full text-left px-4 py-2 text-sm text-gray-200 hover:bg-gray-800 flex items-center">
-                          <LogOut className="h-4 w-4 mr-2" /> Sign out
-                        </button>
-                      </div>
-                    </div>
                   </div>
                 </div>
               ) : (
                 <div className="flex items-center space-x-4">
-                  <Link to="/login" className="text-gray-200 hover:text-amber-300 font-medium">Log in</Link>
-                  <Link to="/login" className="bg-amber-400 text-gray-900 px-4 py-2 rounded-lg font-medium hover:bg-amber-300 transition shadow-sm">
-                    Sign Up
-                  </Link>
+                  <Link to="/login" className="text-gray-200 hover:text-amber-300 font-medium">Login</Link>
                 </div>
               )}
             </nav>
 
-            {/* Mobile menu button */}
             <div className="flex items-center md:hidden">
               <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-gray-300 hover:text-white">
                 {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -96,7 +94,6 @@ export const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
           </div>
         </div>
 
-        {/* Mobile Menu */}
         {isMobileMenuOpen && (
           <div className="md:hidden bg-gray-900 border-b border-gray-800">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
@@ -104,24 +101,25 @@ export const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
               <Link to="/how-it-works" className="block px-3 py-2 rounded-md text-base font-medium text-gray-200 hover:text-amber-300 hover:bg-gray-800" onClick={() => setIsMobileMenuOpen(false)}>How it Works</Link>
               {user ? (
                 <>
-                  <Link to="/dashboard" className="block px-3 py-2 rounded-md text-base font-medium text-gray-200 hover:text-amber-300 hover:bg-gray-800" onClick={() => setIsMobileMenuOpen(false)}>My Dashboard</Link>
-                  {user.role === 'admin' && <Link to="/admin" className="block px-3 py-2 rounded-md text-base font-medium text-amber-300 hover:bg-gray-800" onClick={() => setIsMobileMenuOpen(false)}>Admin Portal</Link>}
-                  <button onClick={() => { onLogout(); setIsMobileMenuOpen(false); }} className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-red-400 hover:bg-gray-800">Sign Out</button>
+                  {user.role === 'admin' ? (
+                    <Link to="/admin" className="block px-3 py-2 rounded-md text-base font-medium text-amber-300 hover:bg-gray-800" onClick={() => setIsMobileMenuOpen(false)}>Admin Dashboard</Link>
+                  ) : (
+                    <Link to="/dashboard" className="block px-3 py-2 rounded-md text-base font-medium text-gray-200 hover:text-amber-300 hover:bg-gray-800" onClick={() => setIsMobileMenuOpen(false)}>My Dashboard</Link>
+                  )}
+                  <button onClick={handleLogout} className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-red-400 hover:bg-gray-800">Logout</button>
                 </>
               ) : (
-                <Link to="/login" className="block px-3 py-2 rounded-md text-base font-medium text-amber-300 hover:bg-gray-800" onClick={() => setIsMobileMenuOpen(false)}>Log In / Sign Up</Link>
+                <Link to="/login" className="block px-3 py-2 rounded-md text-base font-medium text-amber-300 hover:bg-gray-800" onClick={() => setIsMobileMenuOpen(false)}>Login</Link>
               )}
             </div>
           </div>
         )}
       </header>
 
-      {/* Main Content */}
       <main className="flex-grow">
         {children}
       </main>
 
-      {/* AI Assistant FAB */}
       <button
         onClick={() => setIsAIChatOpen(true)}
         className="fixed bottom-6 right-6 bg-amber-400 text-gray-900 p-4 rounded-full shadow-xl hover:bg-amber-300 transition transform hover:scale-105 z-50 flex items-center gap-2"
@@ -131,10 +129,8 @@ export const Layout: React.FC<LayoutProps> = ({ children, user, onLogout }) => {
         <span className="font-medium hidden sm:inline">AI Concierge</span>
       </button>
 
-      {/* AI Modal */}
       <AIChatModal isOpen={isAIChatOpen} onClose={() => setIsAIChatOpen(false)} />
 
-      {/* Footer */}
       <footer className="bg-black text-white border-t border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
