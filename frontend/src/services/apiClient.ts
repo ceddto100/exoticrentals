@@ -123,20 +123,20 @@ export const deleteVehicle = (id: string) =>
   request(`${API_PREFIX}/vehicles/${id}`, { method: 'DELETE' });
 
 export const fetchSchedules = () => request(`${API_PREFIX}/schedules`);
+export const fetchCustomerSchedules = (customerId: string) => request(`${API_PREFIX}/schedules/customer/${customerId}`);
+export const createSchedule = (payload: {
+  vehicleId: string;
+  customerId: string;
+  startDate: string;
+  endDate: string;
+  depositAmount: number;
+  totalPrice: number;
+  status: string;
+}) => request(`${API_PREFIX}/schedules`, { method: 'POST', body: JSON.stringify(payload) });
+
 export const fetchCustomers = () => request(`${API_PREFIX}/customers`);
 export const fetchAdminDashboard = () => request(`${API_PREFIX}/admin/dashboard`);
 export const fetchRentalHistory = () => request(`${API_PREFIX}/rental-history`);
-export const fetchRentals = () => request(`${API_PREFIX}/rentals`);
-export const createRental = (payload: {
-  vehicle: string;
-  startDate: string;
-  endDate: string;
-  totalCost: number;
-  depositAmount?: number;
-  balanceDue?: number;
-  addOns?: string[];
-  notes?: string;
-}) => request(`${API_PREFIX}/rentals`, { method: 'POST', body: JSON.stringify(payload) });
 
 export const clearSession = () => localStorage.removeItem(AUTH_TOKEN_KEY);
 export const storeSession = (token: string) => localStorage.setItem(AUTH_TOKEN_KEY, token);

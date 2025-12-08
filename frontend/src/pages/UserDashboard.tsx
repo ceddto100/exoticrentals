@@ -1,71 +1,53 @@
 
 import React, { useState, useContext, useEffect, useMemo } from 'react';
-import { AuthContext } from '../App'; // Import the auth context
+import { AuthContext } from '../App';
 import { Clock, FileText, CreditCard, ShieldCheck } from 'lucide-react';
-import { fetchRentals, fetchSchedules } from '../services/apiClient';
+import { fetchCustomerSchedules } from '../services/apiClient';
 
-// A default avatar to prevent crashes if the user's avatar is missing.
 const DEFAULT_AVATAR = '/assets/car-placeholder.svg';
 
-interface RentalRecord {
+interface ScheduleRecord {
   _id: string;
-  vehicle?: {
-    make?: string;
-    model?: string;
-    year?: number;
-    imageUrl?: string;
+  vehicleId: {
+    _id: string;
+    make: string;
+    model: string;
+    year: number;
+    images: string[];
+    dailyRate: number;
   };
   startDate: string;
   endDate: string;
-  status?: string;
-  totalCost?: number;
-  depositAmount?: number;
-  balanceDue?: number;
+  status: string;
+  totalPrice: number;
+  depositAmount: number;
 }
 
 export const UserDashboard: React.FC = () => {
-  const { auth } = useContext(AuthContext); // Get auth state from context
-  const [rentals, setRentals] = useState<RentalRecord[]>([]);
+  const { auth } = useContext(AuthContext);
+  const [schedules, setSchedules] = useState<ScheduleRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    const loadRentals = async () => {
+    if (!auth.user?._id) return;
+
+    const loadSchedules = async () => {
+      setLoading(true);
       try {
-        const [rentalData, scheduleData] = await Promise.all([
-          fetchRentals().catch(() => []),
-          fetchSchedules().catch(() => []),
-        ]);
-
-        const normalizedSchedules: RentalRecord[] = Array.isArray(scheduleData)
-          ? scheduleData.map((schedule: any) => ({
-              _id: schedule._id,
-              vehicle: schedule.vehicle,
-              startDate: schedule.startDate,
-              endDate: schedule.endDate,
-              status: schedule.status,
-              totalCost: schedule.totalCost,
-              depositAmount: schedule.depositAmount,
-              balanceDue: schedule.balanceDue,
-            }))
-          : [];
-
-        const normalizedRentals: RentalRecord[] = Array.isArray(rentalData) ? rentalData : [];
-
-        const combined = [...normalizedRentals, ...normalizedSchedules];
-        setRentals(combined);
+        const data = await fetchCustomerSchedules(auth.user._id);
+        setSchedules(data || []);
       } catch (err) {
-        const message = err instanceof Error ? err.message : 'Unable to load rentals';
+        const message = err instanceof Error ? err.message : 'Unable to load your reservations';
         setError(message);
       } finally {
         setLoading(false);
       }
     };
 
-    loadRentals();
-  }, []);
+    loadSchedules();
+  }, [auth.user?._id]);
 
-  // Early exit if auth or user is not available. This prevents crashes.
   if (!auth.user) {
     return (
       <div className="min-h-screen flex items-center justify-center text-white">
@@ -78,20 +60,19 @@ export const UserDashboard: React.FC = () => {
 
   const upcoming = useMemo(() => {
     const now = new Date();
-    return rentals.filter(rental => new Date(rental.endDate) >= now);
-  }, [rentals]);
+    return schedules.filter(schedule => new Date(schedule.endDate) >= now);
+  }, [schedules]);
 
   const history = useMemo(() => {
     const now = new Date();
-    return rentals.filter(rental => new Date(rental.endDate) < now);
-  }, [rentals]);
+    return schedules.filter(schedule => new Date(schedule.endDate) < now);
+  }, [schedules]);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 min-h-screen text-gray-100">
       <div className="flex flex-col md:flex-row gap-8">
         <div className="w-full md:w-1/4">
           <div className="bg-gray-900 rounded-xl shadow-lg border border-gray-800 p-6 text-center">
-            {/* Use optional chaining and a fallback for the avatar URL */}
             <img
               src={avatarUrl || DEFAULT_AVATAR}
               alt={name || 'User'}
@@ -120,25 +101,25 @@ export const UserDashboard: React.FC = () => {
               <div className="text-sm text-gray-400">No upcoming reservations yet. Book your next ride to see it here.</div>
             ) : (
               <div className="space-y-3">
-                {upcoming.map(reservation => (
+                {upcoming.map(schedule => (
                   <div
-                    key={reservation._id}
+                    key={schedule._id}
                     className="p-4 rounded-lg border border-gray-800 bg-gray-950 flex items-center justify-between"
                   >
                     <div>
                       <p className="font-semibold text-white">
-                        {reservation.vehicle?.make} {reservation.vehicle?.model}
+                        {schedule.vehicleId?.make} {schedule.vehicleId?.model}
                       </p>
                       <p className="text-sm text-gray-400">
-                        {new Date(reservation.startDate).toLocaleDateString()} - {new Date(reservation.endDate).toLocaleDateString()}
+                        {new Date(schedule.startDate).toLocaleDateString()} - {new Date(schedule.endDate).toLocaleDateString()}
                       </p>
                     </div>
                     <div className="text-right">
-                      <span className="text-xs text-gray-400 block capitalize">{reservation.status || 'booked'}</span>
-                      {reservation.depositAmount ? (
-                        <span className="text-xs text-gray-400 block">Deposit: ${reservation.depositAmount.toFixed(2)}</span>
+                      <span className="text-xs text-gray-400 block capitalize">{schedule.status || 'booked'}</span>
+                      {schedule.depositAmount ? (
+                        <span className="text-xs text-gray-400 block">Deposit: ${schedule.depositAmount.toFixed(2)}</span>
                       ) : null}
-                      {reservation.totalCost && <span className="text-sm font-semibold">Total: ${reservation.totalCost.toFixed(2)}</span>}
+                      {schedule.totalPrice && <span className="text-sm font-semibold">Total: ${schedule.totalPrice.toFixed(2)}</span>}
                     </div>
                   </div>
                 ))}
@@ -172,7 +153,7 @@ export const UserDashboard: React.FC = () => {
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="font-semibold text-white">
-                          {item.vehicle?.make} {item.vehicle?.model} ({item.vehicle?.year || ''})
+                          {item.vehicleId?.make} {item.vehicleId?.model} ({item.vehicleId?.year || ''})
                         </p>
                         <p className="text-sm text-gray-400">
                           {new Date(item.startDate).toLocaleDateString()} - {new Date(item.endDate).toLocaleDateString()}
@@ -180,7 +161,7 @@ export const UserDashboard: React.FC = () => {
                       </div>
                       <div className="text-right">
                         <span className="text-xs text-gray-400 block capitalize">{item.status || 'completed'}</span>
-                        {item.totalCost && <span className="text-sm font-semibold">${item.totalCost.toFixed(2)}</span>}
+                        {item.totalPrice && <span className="text-sm font-semibold">${item.totalPrice.toFixed(2)}</span>}
                       </div>
                     </div>
                   </div>

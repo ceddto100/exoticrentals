@@ -3,7 +3,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Car, AddOn } from '../types';
 import { FALLBACK_CAR_IMAGE } from '../constants';
 import { CreditCard, Lock, CheckCircle } from 'lucide-react';
-import { createRental, fetchVehicle } from '../services/apiClient';
+import { createSchedule, fetchVehicle } from '../services/apiClient';
 import { AuthContext } from '../App';
 
 interface LocationState {
@@ -146,15 +146,14 @@ export const Checkout: React.FC = () => {
     setProcessing(true);
 
     try {
-      await createRental({
-        vehicle: vehicle?._id || vehicle?.id || '',
+      await createSchedule({
+        vehicleId: vehicle._id,
+        customerId: user._id,
         startDate: pickupDate,
         endDate: returnDate,
-        totalCost: tripTotal,
         depositAmount: dueToday,
-        balanceDue: balanceDueAtPickup,
-        addOns: selectedAddOns,
-        notes: `Signed by ${signature}`,
+        totalPrice: tripTotal,
+        status: 'pending',
       });
 
       setSuccess('Booking confirmed!');
