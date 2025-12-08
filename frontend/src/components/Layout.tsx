@@ -66,8 +66,11 @@ export const Layout: React.FC<LayoutProps> = ({ onLogout, children }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center cursor-pointer" onClick={() => navigate('/')}>
-              <Car className="h-8 w-8 text-amber-400" />
-              <span className="ml-2 text-xl font-bold text-white tracking-tight">Exotic Rentals</span>
+              <img
+                src="/exotic_rentals.png"
+                alt="Exotic Rentals logo"
+                className="h-10 w-auto drop-shadow-sm"
+              />
             </div>
 
             <nav className="hidden md:flex items-center space-x-8">
