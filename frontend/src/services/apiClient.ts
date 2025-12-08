@@ -126,6 +126,15 @@ export const fetchSchedules = () => request(`${API_PREFIX}/schedules`);
 export const fetchCustomers = () => request(`${API_PREFIX}/customers`);
 export const fetchAdminDashboard = () => request(`${API_PREFIX}/admin/dashboard`);
 export const fetchRentalHistory = () => request(`${API_PREFIX}/rental-history`);
+export const fetchRentals = () => request(`${API_PREFIX}/rentals`);
+export const createRental = (payload: {
+  vehicle: string;
+  startDate: string;
+  endDate: string;
+  totalCost: number;
+  addOns?: string[];
+  notes?: string;
+}) => request(`${API_PREFIX}/rentals`, { method: 'POST', body: JSON.stringify(payload) });
 
 export const clearSession = () => localStorage.removeItem(AUTH_TOKEN_KEY);
 export const storeSession = (token: string) => localStorage.setItem(AUTH_TOKEN_KEY, token);

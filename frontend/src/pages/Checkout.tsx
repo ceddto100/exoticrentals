@@ -3,7 +3,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Car, AddOn } from '../types';
 import { FALLBACK_CAR_IMAGE } from '../constants';
 import { CreditCard, Lock, CheckCircle } from 'lucide-react';
-import { fetchVehicle } from '../services/apiClient';
+import { createRental, fetchVehicle } from '../services/apiClient';
 import { AuthContext } from '../App';
 
 interface LocationState {
@@ -41,6 +41,8 @@ export const Checkout: React.FC = () => {
   const [signature, setSignature] = useState('');
   const [processing, setProcessing] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
   useEffect(() => {
     if (!resolvedVehicleId) {
@@ -113,20 +115,52 @@ export const Checkout: React.FC = () => {
   const securityDeposit = vehicle?.deposit ?? 0;
   const finalTotal = baseTotal + securityDeposit + addOnsTotal;
 
-  const handlePayment = (e: React.FormEvent) => {
+  const handlePayment = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
+    setSuccess('');
+
     if (!agreed || !signature) {
-      alert("Please sign the rental agreement.");
+      setError('Please sign the rental agreement before continuing.');
       return;
     }
-    
+
+    if (!pickupDate || !returnDate) {
+      setError('Pickup and return dates are required.');
+      return;
+    }
+
+    if (!vehicle) {
+      setError('Unable to process booking without a vehicle.');
+      return;
+    }
+
+    if (!user?._id) {
+      setError('You must be logged in to book a vehicle.');
+      navigate('/login', { replace: true });
+      return;
+    }
+
     setProcessing(true);
-    // Simulate API call
-    setTimeout(() => {
+
+    try {
+      await createRental({
+        vehicle: vehicle?._id || vehicle?.id || '',
+        startDate: pickupDate,
+        endDate: returnDate,
+        totalCost: finalTotal,
+        addOns: selectedAddOns,
+        notes: `Signed by ${signature}`,
+      });
+
+      setSuccess('Booking confirmed!');
+      setTimeout(() => navigate('/'), 1500);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Unable to process booking';
+      setError(message);
+    } finally {
       setProcessing(false);
-      alert("Booking Confirmed! Check your dashboard.");
-      navigate('/dashboard');
-    }, 2000);
+    }
   };
 
   return (
@@ -237,6 +271,16 @@ export const Checkout: React.FC = () => {
                 Payment
               </h2>
               <form onSubmit={handlePayment}>
+                {error && (
+                  <div className="mb-4 rounded-lg border border-red-500 bg-red-900/40 text-red-200 px-3 py-2 text-sm">
+                    {error}
+                  </div>
+                )}
+                {success && (
+                  <div className="mb-4 rounded-lg border border-green-500 bg-green-900/40 text-green-200 px-3 py-2 text-sm">
+                    {success}
+                  </div>
+                )}
                 <div className="space-y-4">
                   <div className="relative">
                      <label className="block text-sm font-medium text-gray-200 mb-1">Card Number</label>

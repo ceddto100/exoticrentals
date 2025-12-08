@@ -10,6 +10,7 @@ import scheduleRoutes from './routes/scheduleRoutes.js';
 import customerRoutes from './routes/customerRoutes.js';
 import rentalHistoryRoutes from './routes/rentalHistoryRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
+import rentalRoutes from './routes/rentalRoutes.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
 
 const app = express();
@@ -41,6 +42,7 @@ app.use('/api/vehicles', vehicleRoutes);
 app.use('/api/schedules', scheduleRoutes);
 app.use('/api/customers', customerRoutes);
 app.use('/api/rental-history', rentalHistoryRoutes);
+app.use('/api/rentals', rentalRoutes);
 app.use('/api/admin', adminRoutes);
 
 // Legacy paths kept for backward compatibility
@@ -49,6 +51,7 @@ app.use('/vehicles', vehicleRoutes);
 app.use('/schedules', scheduleRoutes);
 app.use('/customers', customerRoutes);
 app.use('/rental-history', rentalHistoryRoutes);
+app.use('/rentals', rentalRoutes);
 app.use('/admin', adminRoutes);
 
 app.use(notFound);
