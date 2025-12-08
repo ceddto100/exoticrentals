@@ -36,19 +36,14 @@ export const Login: React.FC<LoginProps> = ({ tokenKey }) => {
 
         <button
           onClick={handleGoogleSignIn}
-          className="relative w-full flex items-center justify-center gap-3 py-3 rounded-lg overflow-hidden border border-transparent shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4285F4] focus:ring-offset-gray-950"
-          style={{
-            background:
-              'linear-gradient(#0f172a, #0f172a) padding-box, linear-gradient(90deg, #4285F4 0%, #34A853 33%, #FBBC05 66%, #EA4335 100%) border-box',
-          }}
+          className="group relative w-full flex items-center justify-center gap-3 rounded-2xl bg-gradient-to-br from-[#4C8BF5] via-[#4BA2F8] to-[#49B1FA] px-5 py-4 shadow-lg transition duration-150 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4C8BF5] focus:ring-offset-gray-950"
         >
-          <div
-            className="absolute inset-0 opacity-90 pointer-events-none"
-            style={{ background: 'linear-gradient(90deg, #4285F4 0%, #34A853 33%, #FBBC05 66%, #EA4335 100%)' }}
-          />
-          <div className="relative flex items-center gap-3 w-full px-4 py-[10px] bg-white/95 text-gray-900 rounded-md font-semibold shadow-inner">
-            <img src="/google-logo.svg" alt="Google" className="h-6 w-6" />
-            <span className="flex-1 text-center">Sign in with Google</span>
+          <span className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/15 via-white/10 to-transparent opacity-0 transition group-hover:opacity-100" />
+          <div className="relative flex items-center gap-3 text-white font-semibold tracking-wide">
+            <span className="grid place-items-center h-10 w-10 rounded-full bg-white/95">
+              <img src="/google-logo.svg" alt="Google" className="h-6 w-6" />
+            </span>
+            <span>Sign in with Google</span>
           </div>
         </button>
       </div>
