@@ -25,11 +25,7 @@ export const VehicleDetails: React.FC<VehicleDetailsProps> = ({ user }) => {
       if (!id) return;
       try {
         const response = await fetchVehicle(id);
-        const normalized: Car = {
-          ...response,
-          id: (response as any).id || (response as any)._id || id,
-        };
-        setCar(normalized);
+        setCar(response);
         setError(null);
       } catch (err) {
         console.error('Unable to fetch vehicle from API', err);
@@ -85,7 +81,7 @@ export const VehicleDetails: React.FC<VehicleDetailsProps> = ({ user }) => {
       {/* Hero Image */}
       <div className="h-[400px] md:h-[60vh] relative w-full overflow-hidden">
         <img
-          src={car.imageUrl}
+          src={car.imageUrl || car.images?.[0] || FALLBACK_CAR_IMAGE}
           alt={car.model}
           onError={(e) => {
             e.currentTarget.onerror = null;
@@ -117,12 +113,16 @@ export const VehicleDetails: React.FC<VehicleDetailsProps> = ({ user }) => {
           <section>
             <h2 className="text-2xl font-bold text-white mb-6">Vehicle Features</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {car.features.map((feature, idx) => (
-                <div key={idx} className="flex items-center p-3 bg-gray-900 rounded-lg border border-gray-800">
-                  <Check className="h-5 w-5 text-amber-300 mr-2 flex-shrink-0" />
-                  <span className="text-sm font-medium text-gray-200">{feature}</span>
-                </div>
-              ))}
+              {car.features && car.features.length > 0 ? (
+                car.features.map((feature, idx) => (
+                  <div key={idx} className="flex items-center p-3 bg-gray-900 rounded-lg border border-gray-800">
+                    <Check className="h-5 w-5 text-amber-300 mr-2 flex-shrink-0" />
+                    <span className="text-sm font-medium text-gray-200">{feature}</span>
+                  </div>
+                ))
+              ) : (
+                <div className="col-span-4 text-sm text-gray-400">No features provided for this vehicle.</div>
+              )}
               {/* Default features inferred from types */}
               <div className="flex items-center p-3 bg-gray-900 rounded-lg border border-gray-800">
                 <Check className="h-5 w-5 text-amber-300 mr-2 flex-shrink-0" />
@@ -138,10 +138,9 @@ export const VehicleDetails: React.FC<VehicleDetailsProps> = ({ user }) => {
           <section>
             <h2 className="text-2xl font-bold text-white mb-6">Description</h2>
             <p className="text-gray-300 leading-relaxed">
-              Experience the ultimate driving machine with this {car.year} {car.make} {car.model}.
-              Whether you are planning a weekend getaway or a business trip, this {car.category.toLowerCase()}
-              offers the perfect blend of performance, comfort, and style. Meticulously maintained
-              and sanitized before every trip.
+              {car.description
+                ? car.description
+                : `Experience the ${car.year} ${car.make} ${car.model}. Whether you are planning a weekend getaway or a business trip, this ${car.category.toString().toLowerCase()} offers the perfect blend of performance, comfort, and style.`}
             </p>
           </section>
 
