@@ -109,7 +109,7 @@ const App: React.FC = () => {
             <Route path="/auth/success" element={<AuthSuccess tokenKey={AUTH_TOKEN_KEY} />} />
 
             <Route
-              path="/checkout"
+              path="/checkout/:vehicleId"
               element={
                 <ProtectedRoute role="customer">
                   <Checkout />

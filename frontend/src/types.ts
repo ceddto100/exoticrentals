@@ -20,11 +20,13 @@ export enum CarCategory {
 
 export interface Car {
   id: string;
+  _id?: string;
   make: string;
   model: string;
   year: number;
   category: CarCategory | string;
   pricePerDay: number;
+  dailyRate?: number;
   deposit?: number;
   transmission?: Transmission | string;
   fuelType?: FuelType | string;
@@ -36,6 +38,7 @@ export interface Car {
   mileage?: number;
   features: string[];
   isAvailable: boolean;
+  status?: string;
   rating?: number;
   tripCount?: number;
 }
