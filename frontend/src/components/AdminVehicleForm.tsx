@@ -147,7 +147,7 @@ export const AdminVehicleForm: React.FC<AdminVehicleFormProps> = ({
                 type="text"
                 value={form.make}
                 onChange={(e) => handleChange('make', e.target.value)}
-                className="mt-1 w-full bg-gray-900 border border-gray-800 rounded-lg p-3 text-white focus:border-amber-400 focus:ring-amber-400"
+                className="mt-1 w-full bg-gray-900 border border-gray-800 rounded-lg p-3 text-white focus:border-red-400 focus:ring-red-400"
                 required
               />
             </div>
@@ -157,7 +157,7 @@ export const AdminVehicleForm: React.FC<AdminVehicleFormProps> = ({
                 type="text"
                 value={form.model}
                 onChange={(e) => handleChange('model', e.target.value)}
-                className="mt-1 w-full bg-gray-900 border border-gray-800 rounded-lg p-3 text-white focus:border-amber-400 focus:ring-amber-400"
+                className="mt-1 w-full bg-gray-900 border border-gray-800 rounded-lg p-3 text-white focus:border-red-400 focus:ring-red-400"
                 required
               />
             </div>
@@ -169,7 +169,7 @@ export const AdminVehicleForm: React.FC<AdminVehicleFormProps> = ({
                   min="1900"
                   value={form.year}
                   onChange={(e) => handleChange('year', Number(e.target.value))}
-                  className="mt-1 w-full bg-gray-900 border border-gray-800 rounded-lg p-3 text-white focus:border-amber-400 focus:ring-amber-400"
+                  className="mt-1 w-full bg-gray-900 border border-gray-800 rounded-lg p-3 text-white focus:border-red-400 focus:ring-red-400"
                   required
                 />
               </div>
@@ -180,7 +180,7 @@ export const AdminVehicleForm: React.FC<AdminVehicleFormProps> = ({
                   min="0"
                   value={form.mileage}
                   onChange={(e) => handleChange('mileage', Number(e.target.value))}
-                  className="mt-1 w-full bg-gray-900 border border-gray-800 rounded-lg p-3 text-white focus:border-amber-400 focus:ring-amber-400"
+                  className="mt-1 w-full bg-gray-900 border border-gray-800 rounded-lg p-3 text-white focus:border-red-400 focus:ring-red-400"
                   required
                 />
               </div>
@@ -191,7 +191,7 @@ export const AdminVehicleForm: React.FC<AdminVehicleFormProps> = ({
                 list="vehicle-categories"
                 value={form.category}
                 onChange={(e) => handleChange('category', e.target.value)}
-                className="mt-1 w-full bg-gray-900 border border-gray-800 rounded-lg p-3 text-white focus:border-amber-400 focus:ring-amber-400"
+                className="mt-1 w-full bg-gray-900 border border-gray-800 rounded-lg p-3 text-white focus:border-red-400 focus:ring-red-400"
                 placeholder="SUV, Sports, Luxury..."
                 required
               />
@@ -206,7 +206,7 @@ export const AdminVehicleForm: React.FC<AdminVehicleFormProps> = ({
               <textarea
                 value={form.description}
                 onChange={(e) => handleChange('description', e.target.value)}
-                className="mt-1 w-full bg-gray-900 border border-gray-800 rounded-lg p-3 text-white focus:border-amber-400 focus:ring-amber-400 h-28"
+                className="mt-1 w-full bg-gray-900 border border-gray-800 rounded-lg p-3 text-white focus:border-red-400 focus:ring-red-400 h-28"
                 required
               />
             </div>
@@ -221,7 +221,7 @@ export const AdminVehicleForm: React.FC<AdminVehicleFormProps> = ({
                   min="1"
                   value={form.pricePerDay}
                   onChange={(e) => handleChange('pricePerDay', Number(e.target.value))}
-                  className="mt-1 w-full bg-gray-900 border border-gray-800 rounded-lg p-3 text-white focus:border-amber-400 focus:ring-amber-400"
+                  className="mt-1 w-full bg-gray-900 border border-gray-800 rounded-lg p-3 text-white focus:border-red-400 focus:ring-red-400"
                   required
                 />
               </div>
@@ -232,7 +232,7 @@ export const AdminVehicleForm: React.FC<AdminVehicleFormProps> = ({
                   min="0"
                   value={form.deposit}
                   onChange={(e) => handleChange('deposit', Number(e.target.value))}
-                  className="mt-1 w-full bg-gray-900 border border-gray-800 rounded-lg p-3 text-white focus:border-amber-400 focus:ring-amber-400"
+                  className="mt-1 w-full bg-gray-900 border border-gray-800 rounded-lg p-3 text-white focus:border-red-400 focus:ring-red-400"
                 />
               </div>
             </div>
@@ -242,7 +242,7 @@ export const AdminVehicleForm: React.FC<AdminVehicleFormProps> = ({
                 <select
                   value={form.isAvailable ? 'available' : 'unavailable'}
                   onChange={(e) => handleChange('isAvailable', e.target.value === 'available')}
-                  className="mt-1 w-full bg-gray-900 border border-gray-800 rounded-lg p-3 text-white focus:border-amber-400 focus:ring-amber-400"
+                  className="mt-1 w-full bg-gray-900 border border-gray-800 rounded-lg p-3 text-white focus:border-red-400 focus:ring-red-400"
                   required
                 >
                   <option value="available">Available</option>
@@ -256,7 +256,7 @@ export const AdminVehicleForm: React.FC<AdminVehicleFormProps> = ({
                   min="1"
                   value={form.seats}
                   onChange={(e) => handleChange('seats', Number(e.target.value))}
-                  className="mt-1 w-full bg-gray-900 border border-gray-800 rounded-lg p-3 text-white focus:border-amber-400 focus:ring-amber-400"
+                  className="mt-1 w-full bg-gray-900 border border-gray-800 rounded-lg p-3 text-white focus:border-red-400 focus:ring-red-400"
                 />
               </div>
             </div>
@@ -266,7 +266,7 @@ export const AdminVehicleForm: React.FC<AdminVehicleFormProps> = ({
                 <select
                   value={form.transmission}
                   onChange={(e) => handleChange('transmission', e.target.value)}
-                  className="mt-1 w-full bg-gray-900 border border-gray-800 rounded-lg p-3 text-white focus:border-amber-400 focus:ring-amber-400"
+                  className="mt-1 w-full bg-gray-900 border border-gray-800 rounded-lg p-3 text-white focus:border-red-400 focus:ring-red-400"
                 >
                   <option value="">Select</option>
                   {!Object.values(Transmission).includes(form.transmission as Transmission) && form.transmission && (
@@ -284,7 +284,7 @@ export const AdminVehicleForm: React.FC<AdminVehicleFormProps> = ({
                 <select
                   value={form.fuelType}
                   onChange={(e) => handleChange('fuelType', e.target.value)}
-                  className="mt-1 w-full bg-gray-900 border border-gray-800 rounded-lg p-3 text-white focus:border-amber-400 focus:ring-amber-400"
+                  className="mt-1 w-full bg-gray-900 border border-gray-800 rounded-lg p-3 text-white focus:border-red-400 focus:ring-red-400"
                 >
                   <option value="">Select</option>
                   {!Object.values(FuelType).includes(form.fuelType as FuelType) && form.fuelType && (
@@ -304,7 +304,7 @@ export const AdminVehicleForm: React.FC<AdminVehicleFormProps> = ({
                 type="text"
                 value={form.mpg}
                 onChange={(e) => handleChange('mpg', e.target.value)}
-                className="mt-1 w-full bg-gray-900 border border-gray-800 rounded-lg p-3 text-white focus:border-amber-400 focus:ring-amber-400"
+                className="mt-1 w-full bg-gray-900 border border-gray-800 rounded-lg p-3 text-white focus:border-red-400 focus:ring-red-400"
               />
             </div>
           </div>
@@ -319,7 +319,7 @@ export const AdminVehicleForm: React.FC<AdminVehicleFormProps> = ({
             <button
               type="button"
               onClick={() => handleAddField('images')}
-              className="flex items-center gap-2 px-3 py-2 bg-gray-800 rounded-lg text-sm text-white border border-gray-700 hover:border-amber-300 hover:text-amber-300"
+              className="flex items-center gap-2 px-3 py-2 bg-gray-800 rounded-lg text-sm text-white border border-gray-700 hover:border-red-300 hover:text-red-300"
             >
               <Plus className="h-4 w-4" /> Add Image
             </button>
@@ -343,7 +343,7 @@ export const AdminVehicleForm: React.FC<AdminVehicleFormProps> = ({
                       placeholder="https://..."
                       value={image}
                       onChange={(e) => updateArrayField('images', idx, e.target.value)}
-                      className="w-full bg-gray-900 border border-gray-800 rounded-lg p-2 text-sm text-white focus:border-amber-400 focus:ring-amber-400"
+                      className="w-full bg-gray-900 border border-gray-800 rounded-lg p-2 text-sm text-white focus:border-red-400 focus:ring-red-400"
                     />
                     <input
                       type="file"
@@ -364,7 +364,7 @@ export const AdminVehicleForm: React.FC<AdminVehicleFormProps> = ({
                     <Trash className="h-4 w-4" />
                   </button>
                 </div>
-                {idx === 0 && <p className="text-xs text-amber-300">Primary image</p>}
+                {idx === 0 && <p className="text-xs text-red-300">Primary image</p>}
               </div>
             ))}
             {form.images.length === 0 && (
@@ -379,7 +379,7 @@ export const AdminVehicleForm: React.FC<AdminVehicleFormProps> = ({
             <button
               type="button"
               onClick={() => handleAddField('features')}
-              className="flex items-center gap-2 px-3 py-2 bg-gray-800 rounded-lg text-sm text-white border border-gray-700 hover:border-amber-300 hover:text-amber-300"
+              className="flex items-center gap-2 px-3 py-2 bg-gray-800 rounded-lg text-sm text-white border border-gray-700 hover:border-red-300 hover:text-red-300"
             >
               <Plus className="h-4 w-4" /> Add Feature
             </button>
@@ -391,7 +391,7 @@ export const AdminVehicleForm: React.FC<AdminVehicleFormProps> = ({
                   type="text"
                   value={feature}
                   onChange={(e) => updateArrayField('features', idx, e.target.value)}
-                  className="flex-1 bg-gray-900 border border-gray-800 rounded-lg p-3 text-white focus:border-amber-400 focus:ring-amber-400"
+                  className="flex-1 bg-gray-900 border border-gray-800 rounded-lg p-3 text-white focus:border-red-400 focus:ring-red-400"
                   placeholder="e.g. Carbon ceramic brakes"
                 />
                 <button
@@ -421,7 +421,7 @@ export const AdminVehicleForm: React.FC<AdminVehicleFormProps> = ({
           <button
             type="submit"
             disabled={saving}
-            className="px-6 py-2 rounded-lg bg-amber-400 text-gray-900 font-semibold hover:bg-amber-300 flex items-center gap-2 disabled:opacity-70"
+            className="px-6 py-2 rounded-lg bg-red-400 text-gray-900 font-semibold hover:bg-red-300 flex items-center gap-2 disabled:opacity-70"
           >
             {saving && <Loader2 className="h-4 w-4 animate-spin" />} {submitLabel}
           </button>

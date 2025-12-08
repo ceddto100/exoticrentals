@@ -7,16 +7,64 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+      :root {
+        --accent-strong: #ef4444;
+        --accent-soft: #991b1b;
+        --surface: #000000;
+      }
+
       body {
         font-family: 'Inter', sans-serif;
         scroll-behavior: smooth;
-        background: #000000;
+        background: radial-gradient(circle at 15% 20%, rgba(248, 113, 113, 0.18), transparent 32%),
+          radial-gradient(circle at 85% 25%, rgba(239, 68, 68, 0.2), transparent 38%),
+          radial-gradient(circle at 50% 85%, rgba(127, 29, 29, 0.26), transparent 36%),
+          #000000;
+        color: #f8fafc;
+      }
+
+      /* Force all neutral surfaces to pure black so the theme is not muted dark mode */
+      .bg-gray-900,
+      .bg-gray-950,
+      .bg-gray-800,
+      .bg-gray-700,
+      .bg-gray-50 {
+        background-color: #000 !important;
+      }
+
+      .border-gray-800,
+      .border-gray-900,
+      .border-gray-700 {
+        border-color: rgba(248, 113, 113, 0.35) !important;
+      }
+
+      .text-gray-100,
+      .text-gray-200,
+      .text-gray-300,
+      .text-gray-400,
+      .text-gray-500 {
+        color: #f8fafc !important;
+      }
+
+      .hover\:bg-gray-900:hover,
+      .hover\:bg-gray-800:hover,
+      .hover\:bg-gray-700:hover,
+      .hover\:bg-gray-50:hover {
+        background-color: #1a0000 !important;
+      }
+
+      .bg-white { background-color: #050505 !important; }
+      .text-gray-900 { color: #fef2f2 !important; }
+
+      /* Red glow hover state for gradient buttons */
+      .button-glow:hover {
+        box-shadow: 0 18px 45px rgba(239, 68, 68, 0.34);
       }
       /* Custom scrollbar for cleaner look */
       ::-webkit-scrollbar { width: 8px; }
-      ::-webkit-scrollbar-track { background: #f1f1f1; }
-      ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-      ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+      ::-webkit-scrollbar-track { background: #0f0f0f; }
+      ::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
+      ::-webkit-scrollbar-thumb:hover { background: #ef4444; }
 
       /* Subtle animations */
       @keyframes fadeInUp {
@@ -25,8 +73,8 @@
       }
 
       @keyframes softGlow {
-        from { box-shadow: 0 0 0 rgba(255, 193, 7, 0); }
-        to { box-shadow: 0 18px 45px rgba(255, 193, 7, 0.16); }
+        from { box-shadow: 0 0 0 rgba(239, 68, 68, 0); }
+        to { box-shadow: 0 18px 45px rgba(239, 68, 68, 0.24); }
       }
 
       .reveal-on-scroll {

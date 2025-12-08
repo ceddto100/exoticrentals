@@ -17,7 +17,7 @@ interface LocationState {
 const LoadingSpinner: React.FC = () => (
   <div className="min-h-screen flex items-center justify-center bg-gray-950 text-gray-100">
     <div className="text-center space-y-2">
-      <div className="w-10 h-10 border-4 border-amber-400 border-t-transparent rounded-full animate-spin mx-auto" />
+      <div className="w-10 h-10 border-4 border-red-400 border-t-transparent rounded-full animate-spin mx-auto" />
       <p className="text-sm text-gray-400">Preparing checkout...</p>
     </div>
   </div>
@@ -90,7 +90,7 @@ export const Checkout: React.FC = () => {
           <p className="text-lg font-semibold">Unable to load vehicle for checkout.</p>
           <button
             onClick={() => navigate('/')}
-            className="px-4 py-2 bg-amber-400 text-gray-900 rounded-lg font-medium hover:bg-amber-300"
+            className="px-4 py-2 bg-red-400 text-gray-900 rounded-lg font-medium hover:bg-red-300"
           >
             Return to inventory
           </button>
@@ -179,7 +179,7 @@ export const Checkout: React.FC = () => {
             {/* Step 1: Add-ons */}
             <div className="bg-gray-900 rounded-xl shadow-xl border border-gray-800 p-6">
               <h2 className="text-xl font-bold text-white mb-4 flex items-center">
-                <span className="bg-amber-300 text-gray-900 w-8 h-8 rounded-full flex items-center justify-center text-sm mr-3">1</span>
+                <span className="bg-red-300 text-gray-900 w-8 h-8 rounded-full flex items-center justify-center text-sm mr-3">1</span>
                 Optional Add-ons
               </h2>
               <div className="space-y-3">
@@ -192,13 +192,13 @@ export const Checkout: React.FC = () => {
                     onClick={() => handleToggleAddOn(addon.id)}
                     className={`flex items-center justify-between p-4 rounded-lg border cursor-pointer transition ${
                       selectedAddOns.includes(addon.id)
-                        ? 'border-amber-300 bg-amber-400/10 ring-1 ring-amber-300'
+                        ? 'border-red-300 bg-red-400/10 ring-1 ring-red-300'
                         : 'border-gray-800 hover:border-gray-700 bg-gray-950'
                     }`}
                   >
                     <div className="flex items-center">
                       <div className={`w-5 h-5 rounded border mr-3 flex items-center justify-center ${
-                        selectedAddOns.includes(addon.id) ? 'bg-amber-300 border-amber-300' : 'border-gray-700'
+                        selectedAddOns.includes(addon.id) ? 'bg-red-300 border-red-300' : 'border-gray-700'
                       }`}>
                          {selectedAddOns.includes(addon.id) && <CheckCircle className="w-3.5 h-3.5 text-white" />}
                       </div>
@@ -216,7 +216,7 @@ export const Checkout: React.FC = () => {
             {/* Step 2: Driver Info (Pre-filled) */}
             <div className="bg-gray-900 rounded-xl shadow-xl border border-gray-800 p-6">
               <h2 className="text-xl font-bold text-white mb-4 flex items-center">
-                <span className="bg-amber-300 text-gray-900 w-8 h-8 rounded-full flex items-center justify-center text-sm mr-3">2</span>
+                <span className="bg-red-300 text-gray-900 w-8 h-8 rounded-full flex items-center justify-center text-sm mr-3">2</span>
                 Driver Details
               </h2>
               <div className="grid grid-cols-2 gap-4">
@@ -234,7 +234,7 @@ export const Checkout: React.FC = () => {
                 <input
                   type="text"
                   placeholder="DL-XXXX-XXXX"
-                  className="mt-1 block w-full border border-gray-800 rounded-md py-2 px-3 focus:ring-amber-400 focus:border-amber-400 bg-gray-950 text-gray-100 placeholder-gray-500"
+                  className="mt-1 block w-full border border-gray-800 rounded-md py-2 px-3 focus:ring-red-400 focus:border-red-400 bg-gray-950 text-gray-100 placeholder-gray-500"
                 />
               </div>
             </div>
@@ -242,7 +242,7 @@ export const Checkout: React.FC = () => {
             {/* Step 3: Digital Agreement */}
             <div className="bg-gray-900 rounded-xl shadow-xl border border-gray-800 p-6">
               <h2 className="text-xl font-bold text-white mb-4 flex items-center">
-                <span className="bg-amber-300 text-gray-900 w-8 h-8 rounded-full flex items-center justify-center text-sm mr-3">3</span>
+                <span className="bg-red-300 text-gray-900 w-8 h-8 rounded-full flex items-center justify-center text-sm mr-3">3</span>
                 Rental Agreement
               </h2>
               <div className="bg-gray-950 p-4 rounded-lg h-40 overflow-y-auto text-xs text-gray-400 border border-gray-800 mb-4">
@@ -254,7 +254,7 @@ export const Checkout: React.FC = () => {
               </div>
               <div className="space-y-4">
                  <label className="flex items-center">
-                  <input type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} className="h-4 w-4 text-amber-400 border-gray-700 rounded bg-gray-900" />
+                  <input type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} className="h-4 w-4 text-red-400 border-gray-700 rounded bg-gray-900" />
                   <span className="ml-2 text-sm text-gray-200">I agree to the Terms and Conditions</span>
                 </label>
                 <div>
@@ -264,7 +264,7 @@ export const Checkout: React.FC = () => {
                     value={signature}
                     onChange={(e) => setSignature(e.target.value)}
                     placeholder={user?.name || ''}
-                    className="block w-full border-b-2 border-gray-700 py-2 px-1 focus:border-amber-400 outline-none font-serif text-lg text-amber-200 bg-transparent placeholder-gray-600"
+                    className="block w-full border-b-2 border-gray-700 py-2 px-1 focus:border-red-400 outline-none font-serif text-lg text-red-200 bg-transparent placeholder-gray-600"
                   />
                   <p className="text-xs text-gray-500 mt-1">By typing your name, you execute this agreement electronically.</p>
                 </div>
@@ -274,7 +274,7 @@ export const Checkout: React.FC = () => {
              {/* Step 4: Payment */}
             <div className="bg-gray-900 rounded-xl shadow-xl border border-gray-800 p-6">
               <h2 className="text-xl font-bold text-white mb-4 flex items-center">
-                <span className="bg-amber-300 text-gray-900 w-8 h-8 rounded-full flex items-center justify-center text-sm mr-3">4</span>
+                <span className="bg-red-300 text-gray-900 w-8 h-8 rounded-full flex items-center justify-center text-sm mr-3">4</span>
                 Payment (Deposit Only)
               </h2>
               <form onSubmit={handlePayment}>
@@ -295,18 +295,18 @@ export const Checkout: React.FC = () => {
                   <div className="relative">
                      <label className="block text-sm font-medium text-gray-200 mb-1">Card Number</label>
                      <div className="relative">
-                       <input type="text" placeholder="0000 0000 0000 0000" className="block w-full pl-10 pr-3 py-2 border border-gray-700 rounded-lg focus:ring-amber-400 focus:border-amber-400 bg-gray-950 text-gray-100" />
+                       <input type="text" placeholder="0000 0000 0000 0000" className="block w-full pl-10 pr-3 py-2 border border-gray-700 rounded-lg focus:ring-red-400 focus:border-red-400 bg-gray-950 text-gray-100" />
                        <CreditCard className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
                      </div>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-200 mb-1">Expiry</label>
-                      <input type="text" placeholder="MM/YY" className="block w-full px-3 py-2 border border-gray-700 rounded-lg focus:ring-amber-400 focus:border-amber-400 bg-gray-950 text-gray-100" />
+                      <input type="text" placeholder="MM/YY" className="block w-full px-3 py-2 border border-gray-700 rounded-lg focus:ring-red-400 focus:border-red-400 bg-gray-950 text-gray-100" />
                     </div>
                      <div>
                       <label className="block text-sm font-medium text-gray-200 mb-1">CVC</label>
-                      <input type="text" placeholder="123" className="block w-full px-3 py-2 border border-gray-700 rounded-lg focus:ring-amber-400 focus:border-amber-400 bg-gray-950 text-gray-100" />
+                      <input type="text" placeholder="123" className="block w-full px-3 py-2 border border-gray-700 rounded-lg focus:ring-red-400 focus:border-red-400 bg-gray-950 text-gray-100" />
                     </div>
                   </div>
                 </div>
@@ -314,7 +314,7 @@ export const Checkout: React.FC = () => {
                 <button
                   type="submit"
                   disabled={processing || !agreed || !signature}
-                  className="w-full mt-6 bg-amber-400 text-gray-900 py-4 rounded-xl font-bold text-lg hover:bg-amber-300 transition shadow-lg hover:shadow-amber-500/30 flex items-center justify-center gap-2 disabled:bg-gray-700 disabled:cursor-not-allowed"
+                  className="w-full mt-6 bg-red-400 text-gray-900 py-4 rounded-xl font-bold text-lg hover:bg-red-300 transition shadow-lg hover:shadow-red-500/30 flex items-center justify-center gap-2 disabled:bg-gray-700 disabled:cursor-not-allowed"
                 >
                   {processing ? (
                     <>Processing...</>
@@ -362,7 +362,7 @@ export const Checkout: React.FC = () => {
                     <span>Vehicle Rental</span>
                     <span>${baseTotal}</span>
                   </div>
-                  <div className="flex justify-between text-amber-300">
+                  <div className="flex justify-between text-red-300">
                     <span>Add-ons ({selectedAddOns.length})</span>
                     <span>${addOnsTotal}</span>
                   </div>
@@ -376,7 +376,7 @@ export const Checkout: React.FC = () => {
                   </div>
                   <div className="pt-4 border-t border-gray-800 flex justify-between items-center">
                     <span className="font-bold text-white text-lg">Trip Total</span>
-                    <span className="font-bold text-amber-300 text-xl">${tripTotal}</span>
+                    <span className="font-bold text-red-300 text-xl">${tripTotal}</span>
                   </div>
                 </div>
              </div>
