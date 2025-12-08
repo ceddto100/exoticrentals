@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Car } from 'lucide-react';
 import { AuthContext, AuthUser } from '../App';
 import { API_BASE_URL } from '../services/apiClient';
 
@@ -48,7 +47,11 @@ export const Login: React.FC<LoginProps> = ({ tokenKey }) => {
       />
       <div className="relative w-full max-w-md bg-black/80 rounded-xl shadow-2xl p-8 border border-red-900/60 backdrop-blur-sm">
         <div className="text-center mb-8">
-          <Car className="h-12 w-12 text-red-500 drop-shadow-[0_0_15px_rgba(248,113,113,0.6)] mx-auto" />
+          <img
+            src="/exotic_rentals.png"
+            alt="Exotic Rentals logo"
+            className="h-16 w-auto mx-auto drop-shadow-[0_0_15px_rgba(248,113,113,0.6)]"
+          />
           <h1 className="text-3xl font-bold text-white mt-4 drop-shadow-[0_0_10px_rgba(248,113,113,0.5)]">Welcome Back</h1>
           <p className="text-gray-300">Sign in to continue to Exotic Rentals</p>
         </div>
