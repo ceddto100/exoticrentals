@@ -1,7 +1,6 @@
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import User from '../models/User.js';
-import Admin from '../models/Admin.js';
 
 const requireEnv = (key, fallback) => {
   const value = process.env[key] || fallback;
@@ -51,16 +50,14 @@ const configurePassport = () => {
           }
         }
 
-        const adminRecord = await Admin.findOne({ email });
-
-        user.role = adminRecord ? 'admin' : 'customer';
+        if (email === 'cartercedrick35@gmail.com') {
+          user.role = 'admin';
+        } else {
+          user.role = 'customer';
+        }
+        
         user.lastLogin = new Date();
         await user.save();
-
-        if (user.role === 'admin' && adminRecord && (!adminRecord.user || adminRecord.user.toString() !== user._id.toString())) {
-          adminRecord.user = user._id;
-          await adminRecord.save();
-        }
 
         return done(null, user);
       } catch (error) {

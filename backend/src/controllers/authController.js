@@ -1,5 +1,4 @@
 import jwt from 'jsonwebtoken';
-import Admin from '../models/Admin.js';
 import User from '../models/User.js';
 
 const buildFrontendUrl = () => {
@@ -37,30 +36,14 @@ export const googleCallback = async (req, res, next) => {
       return res.redirect(`${buildFrontendUrl()}/login?error=missing_user`);
     }
 
-    // Ensure role is accurate based on Admin collection
-    const adminRecord = await Admin.findOne({ email: userFromPassport.email });
-    if (adminRecord || userFromPassport.email === 'cartercedrick35@gmail.com') {
-      userFromPassport.role = 'admin';
-      if (adminRecord && (!adminRecord.user || adminRecord.user.toString() !== userFromPassport._id.toString())) {
-        adminRecord.user = userFromPassport._id;
-        await adminRecord.save();
-      }
-    } else {
-      userFromPassport.role = 'customer';
-    }
-
-    // Persist any role/avatar changes
-    await User.findByIdAndUpdate(
-      userFromPassport._id,
-      { role: userFromPassport.role, avatarUrl: userFromPassport.avatarUrl },
-      { new: true }
-    );
+    // The user's role is now set within the Passport strategy.
+    // We just need to generate a token and complete the login flow.
 
     const token = signToken(userFromPassport);
     const redirectUrl = `${buildFrontendUrl()}/auth/success?token=${token}`;
 
     return res.redirect(redirectUrl);
-  } catch (error) => {
+  } catch (error) {
     return next(error);
   }
 };

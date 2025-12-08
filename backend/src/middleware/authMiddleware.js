@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
-import Admin from '../models/Admin.js';
 
 const getJwtSecret = () => {
   if (!process.env.JWT_SECRET) {
@@ -29,20 +28,10 @@ export const protect = async (req, res, next) => {
   }
 };
 
-export const requireAdmin = async (req, res, next) => {
-  try {
-    if (!req.user) {
-      return res.status(401).json({ message: 'Not authorized' });
-    }
-
-    if (req.user.role === 'admin') {
-      const adminProfile = await Admin.findOne({ user: req.user._id });
-      req.adminProfile = adminProfile;
-      return next();
-    }
-
-    return res.status(403).json({ message: 'Admin privileges required' });
-  } catch (err) {
-    return res.status(500).json({ message: 'Authorization error', error: err.message });
+export const requireAdmin = (req, res, next) => {
+  if (req.user && req.user.role === 'admin') {
+    next();
+  } else {
+    res.status(403).json({ message: 'Admin privileges required' });
   }
 };
