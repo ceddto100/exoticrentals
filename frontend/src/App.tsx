@@ -82,6 +82,14 @@ const App: React.FC = () => {
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
+  useEffect(() => {
+    if (auth.token) {
+      localStorage.setItem(AUTH_TOKEN_KEY, auth.token);
+    } else {
+      localStorage.removeItem(AUTH_TOKEN_KEY);
+    }
+  }, [auth]);
+
   const handleLogout = () => {
     localStorage.removeItem(AUTH_TOKEN_KEY);
     setAuth({ token: null, user: null });

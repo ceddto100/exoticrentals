@@ -10,7 +10,6 @@ import scheduleRoutes from './routes/scheduleRoutes.js';
 import customerRoutes from './routes/customerRoutes.js';
 import rentalHistoryRoutes from './routes/rentalHistoryRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
-import adminAuthRoutes from './routes/adminAuthRoutes.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
 
 const app = express();
@@ -38,7 +37,6 @@ app.use(passport.initialize());
 app.get('/health', (_req, res) => res.json({ status: 'ok' }));
 
 app.use('/auth', authRoutes);
-app.use('/auth/admin', adminAuthRoutes);
 app.use('/vehicles', vehicleRoutes);
 app.use('/schedules', scheduleRoutes);
 app.use('/customers', customerRoutes);

@@ -69,24 +69,18 @@ export const Layout: React.FC<LayoutProps> = ({ onLogout, children }) => {
                   {user.role === 'admin' ? (
                     <Link to="/admin" className="text-amber-300 font-medium hover:text-amber-200">Admin Dashboard</Link>
                   ) : (
-                    <Link to="/dashboard" className="text-amber-300 font-medium hover:text-amber-200">Dashboard</Link>
+                    <Link to="/dashboard" className="text-amber-300 font-medium hover:text-amber-200">My Dashboard</Link>
                   )}
-                  <div className="relative group">
-                    <button className="flex items-center space-x-2 text-gray-100 hover:text-amber-300 focus:outline-none">
-                      <img src={user.avatarUrl || FALLBACK_AVATAR} alt="User" className="h-8 w-8 rounded-full border border-gray-700 object-cover" />
-                      <span className="font-medium">{user.name}</span>
-                    </button>
-                    <div className="absolute right-0 w-48 mt-2 origin-top-right bg-gray-900 border border-gray-800 rounded-md shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                      <div className="py-1">
-                        {user.role === 'customer' && (
-                          <Link to="/dashboard" className="block px-4 py-2 text-sm text-gray-200 hover:bg-gray-800">My Bookings</Link>
-                        )}
-                        <button onClick={handleLogout} className="w-full text-left px-4 py-2 text-sm text-gray-200 hover:bg-gray-800 flex items-center">
-                          <LogOut className="h-4 w-4 mr-2" /> Sign out
-                        </button>
-                      </div>
-                    </div>
+                  <div className="flex items-center space-x-2 text-gray-100">
+                    <img src={user.avatarUrl || FALLBACK_AVATAR} alt="User" className="h-8 w-8 rounded-full border border-gray-700 object-cover" />
+                    <span className="font-medium">{user.name}</span>
                   </div>
+                  <button
+                    onClick={handleLogout}
+                    className="flex items-center gap-2 text-gray-200 hover:text-amber-300 font-medium"
+                  >
+                    <LogOut className="h-4 w-4" /> Logout
+                  </button>
                 </div>
               ) : (
                 <div className="flex items-center space-x-4">

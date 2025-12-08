@@ -33,25 +33,22 @@ export const AuthSuccess: React.FC<AuthSuccessProps> = ({ tokenKey }) => {
     const params = new URLSearchParams(location.search);
     const token = params.get('token');
 
-    if (token) {
-      const decodedUser = decodeJwt(token);
-
-      if (decodedUser) {
-        localStorage.setItem(tokenKey, token);
-        setAuth({ token, user: decodedUser });
-
-        if (decodedUser.role === 'admin') {
-          navigate('/admin');
-        } else {
-          navigate('/dashboard');
-        }
-      } else {
-        setError('Invalid authentication token. Please try again.');
-        setTimeout(() => navigate('/login'), 3000);
-      }
-    } else {
+    if (!token) {
       setError('Authentication failed. No token provided.');
-      setTimeout(() => navigate('/login'), 3000);
+      setTimeout(() => navigate('/login', { replace: true }), 2000);
+      return;
+    }
+
+    const decodedUser = decodeJwt(token);
+
+    if (decodedUser) {
+      localStorage.setItem(tokenKey, token);
+      setAuth({ token, user: decodedUser });
+
+      navigate(decodedUser.role === 'admin' ? '/admin' : '/dashboard', { replace: true });
+    } else {
+      setError('Invalid authentication token. Please try again.');
+      setTimeout(() => navigate('/login', { replace: true }), 2000);
     }
   }, [location, navigate, setAuth, tokenKey]);
 
