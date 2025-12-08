@@ -17,11 +17,7 @@ export const Home: React.FC = () => {
       try {
         setLoading(true);
         const response = await fetchVehicles();
-        const normalized = response.map((vehicle: any) => ({
-          ...vehicle,
-          id: vehicle.id || vehicle._id,
-        }));
-        setCars(normalized);
+        setCars(response);
         setError(null);
       } catch (err) {
         console.error('Unable to load vehicles', err);
@@ -127,8 +123,8 @@ export const Home: React.FC = () => {
             <Link to={`/vehicle/${car.id}`} key={car.id} className="group">
               <div className="bg-gray-900 rounded-2xl overflow-hidden border border-gray-800 shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-1 h-full flex flex-col reveal-on-scroll">
                 <div className="relative h-56 overflow-hidden">
-                  <img
-                    src={car.imageUrl}
+                    <img
+                    src={car.imageUrl || car.images?.[0] || FALLBACK_CAR_IMAGE}
                     alt={`${car.make} ${car.model}`}
                     onError={(e) => {
                       e.currentTarget.onerror = null;

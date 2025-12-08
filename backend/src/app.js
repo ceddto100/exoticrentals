@@ -36,6 +36,14 @@ app.use(passport.initialize());
 
 app.get('/health', (_req, res) => res.json({ status: 'ok' }));
 
+app.use('/api/auth', authRoutes);
+app.use('/api/vehicles', vehicleRoutes);
+app.use('/api/schedules', scheduleRoutes);
+app.use('/api/customers', customerRoutes);
+app.use('/api/rental-history', rentalHistoryRoutes);
+app.use('/api/admin', adminRoutes);
+
+// Legacy paths kept for backward compatibility
 app.use('/auth', authRoutes);
 app.use('/vehicles', vehicleRoutes);
 app.use('/schedules', scheduleRoutes);

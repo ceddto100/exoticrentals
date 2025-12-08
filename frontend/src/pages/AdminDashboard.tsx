@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
 import { FALLBACK_CAR_IMAGE } from '../constants';
 import { DollarSign, Calendar, AlertCircle, Car as CarIcon, TrendingUp } from 'lucide-react';
@@ -32,14 +33,23 @@ export const AdminDashboard: React.FC = () => {
     historyCount: 0,
   });
   const [error, setError] = useState<string | null>(null);
+  const [toast, setToast] = useState<string | null>(null);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state && (location.state as any).message) {
+      setToast((location.state as any).message);
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location, navigate]);
 
   useEffect(() => {
     const loadDashboard = async () => {
       try {
         const [dashboard, vehicles] = await Promise.all([fetchAdminDashboard(), fetchVehicles()]);
-        const normalized = vehicles.map((vehicle: any) => ({ ...vehicle, id: vehicle.id || vehicle._id }));
         setStats(dashboard);
-        setFleet(normalized);
+        setFleet(vehicles);
         setError(null);
       } catch (error) {
         console.error('Admin API unavailable', error);
@@ -60,6 +70,12 @@ export const AdminDashboard: React.FC = () => {
         {error && (
           <div className="mb-6 p-4 rounded-lg border border-red-800 bg-red-900/20 text-red-200">
             {error}
+          </div>
+        )}
+
+        {toast && (
+          <div className="mb-6 p-4 rounded-lg border border-green-900 bg-green-900/20 text-green-200">
+            {toast}
           </div>
         )}
 
@@ -171,7 +187,7 @@ export const AdminDashboard: React.FC = () => {
                     <td className="px-6 py-4">
                       <div className="flex items-center">
                         <img
-                          src={car.imageUrl}
+                          src={car.imageUrl || car.images?.[0] || FALLBACK_CAR_IMAGE}
                           alt=""
                           onError={(e) => {
                             e.currentTarget.onerror = null;
@@ -195,7 +211,12 @@ export const AdminDashboard: React.FC = () => {
                     </td>
                     <td className="px-6 py-4 text-sm text-white font-medium">${car.pricePerDay}/day</td>
                     <td className="px-6 py-4 text-right">
-                      <button className="text-amber-300 hover:text-amber-200 text-sm font-medium">Edit</button>
+                      <button
+                        className="text-amber-300 hover:text-amber-200 text-sm font-medium"
+                        onClick={() => navigate(`/admin/vehicles/${car.id}/edit`)}
+                      >
+                        Edit
+                      </button>
                     </td>
                   </tr>
                 ))}
