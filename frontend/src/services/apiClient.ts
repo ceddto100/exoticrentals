@@ -43,6 +43,10 @@ export const normalizeVehicle = (vehicle: any): Car => {
       ? vehicle.dailyRate
       : 0;
 
+  const dailyRate = typeof vehicle?.dailyRate === 'number'
+    ? vehicle.dailyRate
+    : price;
+
   const isAvailable = typeof vehicle?.isAvailable === 'boolean'
     ? vehicle.isAvailable
     : vehicle?.status
@@ -52,17 +56,20 @@ export const normalizeVehicle = (vehicle: any): Car => {
   return {
     ...vehicle,
     id: vehicle.id || vehicle._id,
+    _id: vehicle._id || vehicle.id,
     make: vehicle.make || 'Unknown Make',
     model: vehicle.model || 'Vehicle',
     year: vehicle.year || new Date().getFullYear(),
     category: vehicle.category || 'Uncategorized',
     pricePerDay: price,
+    dailyRate,
     images,
     imageUrl: vehicle.imageUrl || images[0],
     description: vehicle.description || '',
     mileage: vehicle.mileage ?? 0,
     features: Array.isArray(vehicle.features) ? vehicle.features : [],
     isAvailable,
+    status: vehicle.status || (isAvailable ? 'available' : 'unavailable'),
     rating: vehicle.rating ?? 5,
     tripCount: vehicle.tripCount ?? 0,
   } as Car;
@@ -119,6 +126,15 @@ export const fetchSchedules = () => request(`${API_PREFIX}/schedules`);
 export const fetchCustomers = () => request(`${API_PREFIX}/customers`);
 export const fetchAdminDashboard = () => request(`${API_PREFIX}/admin/dashboard`);
 export const fetchRentalHistory = () => request(`${API_PREFIX}/rental-history`);
+export const fetchRentals = () => request(`${API_PREFIX}/rentals`);
+export const createRental = (payload: {
+  vehicle: string;
+  startDate: string;
+  endDate: string;
+  totalCost: number;
+  addOns?: string[];
+  notes?: string;
+}) => request(`${API_PREFIX}/rentals`, { method: 'POST', body: JSON.stringify(payload) });
 
 export const clearSession = () => localStorage.removeItem(AUTH_TOKEN_KEY);
 export const storeSession = (token: string) => localStorage.setItem(AUTH_TOKEN_KEY, token);

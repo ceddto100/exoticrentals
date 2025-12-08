@@ -64,13 +64,16 @@ export const VehicleDetails: React.FC<VehicleDetailsProps> = ({ user }) => {
       return;
     }
     // Navigate to checkout with state
-    navigate('/checkout', { 
-      state: { 
-        car, 
-        pickupDate, 
-        returnDate, 
-        totalPrice 
-      } 
+    const vehicleId = car.id || car._id;
+
+    navigate(`/checkout/${vehicleId}`, {
+      state: {
+        car,
+        carId: vehicleId,
+        pickupDate,
+        returnDate,
+        totalPrice
+      }
     });
   };
 
