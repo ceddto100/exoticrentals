@@ -2,7 +2,7 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react';
 import { AuthContext } from '../App';
 import { Clock, FileText, CreditCard, ShieldCheck } from 'lucide-react';
-import { fetchCustomerSchedules } from '../services/apiClient';
+import { fetchSchedules } from '../services/apiClient';
 
 const DEFAULT_AVATAR = '/assets/car-placeholder.svg';
 
@@ -15,6 +15,10 @@ interface ScheduleRecord {
     year: number;
     images: string[];
     dailyRate: number;
+  };
+  customerId: {
+    _id: string;
+    name: string;
   };
   startDate: string;
   endDate: string;
@@ -35,8 +39,9 @@ export const UserDashboard: React.FC = () => {
     const loadSchedules = async () => {
       setLoading(true);
       try {
-        const data = await fetchCustomerSchedules(auth.user._id);
-        setSchedules(data || []);
+        const data = await fetchSchedules();
+        const userSchedules = data.filter((schedule: ScheduleRecord) => schedule.customerId?._id === auth.user?._id);
+        setSchedules(userSchedules || []);
       } catch (err) {
         const message = err instanceof Error ? err.message : 'Unable to load your reservations';
         setError(message);

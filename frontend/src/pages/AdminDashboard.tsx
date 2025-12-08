@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
 import { FALLBACK_CAR_IMAGE } from '../constants';
 import { DollarSign, Calendar, AlertCircle, Car as CarIcon, TrendingUp } from 'lucide-react';
-import { fetchAdminDashboard, fetchVehicles } from '../services/apiClient';
+import { fetchSchedules, fetchVehicles } from '../services/apiClient';
 import { Car } from '../types';
 
 const revenueData = [
@@ -47,8 +47,13 @@ export const AdminDashboard: React.FC = () => {
   useEffect(() => {
     const loadDashboard = async () => {
       try {
-        const [dashboard, vehicles] = await Promise.all([fetchAdminDashboard(), fetchVehicles()]);
-        setStats(dashboard);
+        const [schedules, vehicles] = await Promise.all([fetchSchedules(), fetchVehicles()]);
+        setStats({
+          userCount: 0,
+          vehicleCount: vehicles.length,
+          activeRentals: schedules.length,
+          historyCount: 0,
+        });
         setFleet(vehicles);
         setError(null);
       } catch (error) {
