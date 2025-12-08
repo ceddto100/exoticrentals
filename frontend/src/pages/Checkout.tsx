@@ -27,6 +27,7 @@ export const Checkout: React.FC<{ user: any }> = ({ user }) => {
   }
 
   const { car, pickupDate, returnDate, totalPrice } = state as LocationState;
+  const primaryImage = car.imageUrl || car.images?.[0] || FALLBACK_CAR_IMAGE;
 
   const handleToggleAddOn = (id: string) => {
     setSelectedAddOns(prev => 
@@ -39,7 +40,8 @@ export const Checkout: React.FC<{ user: any }> = ({ user }) => {
     return sum + (addon ? addon.price : 0);
   }, 0);
 
-  const finalTotal = totalPrice + car.deposit + addOnsTotal;
+  const securityDeposit = car.deposit ?? 0;
+  const finalTotal = totalPrice + securityDeposit + addOnsTotal;
 
   const handlePayment = (e: React.FormEvent) => {
     e.preventDefault();
@@ -213,7 +215,7 @@ export const Checkout: React.FC<{ user: any }> = ({ user }) => {
                 <h3 className="text-lg font-bold text-white mb-4">Booking Summary</h3>
                 <div className="flex items-center gap-4 mb-4 pb-4 border-b border-gray-800">
                   <img
-                    src={car.imageUrl}
+                    src={primaryImage}
                     alt="Car"
                     onError={(e) => {
                       e.currentTarget.onerror = null;
@@ -242,7 +244,7 @@ export const Checkout: React.FC<{ user: any }> = ({ user }) => {
                   </div>
                   <div className="flex justify-between">
                     <span>Security Deposit</span>
-                    <span>${car.deposit}</span>
+                    <span>${securityDeposit}</span>
                   </div>
                   <div className="pt-4 border-t border-gray-800 flex justify-between items-center">
                     <span className="font-bold text-white text-lg">Total</span>

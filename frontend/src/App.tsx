@@ -4,6 +4,8 @@ import { Layout } from './components/Layout';
 import { Home } from './pages/Home';
 import { Login } from './pages/Login';
 import { AdminDashboard } from './pages/AdminDashboard';
+import { AdminVehicleEdit } from './pages/AdminVehicleEdit';
+import { AdminVehicleAdd } from './pages/AdminVehicleAdd';
 import { UserDashboard } from './pages/UserDashboard';
 import { HowItWorks } from './pages/HowItWorks';
 import { VehicleDetails } from './pages/VehicleDetails';
@@ -118,7 +120,31 @@ const App: React.FC = () => {
               path="/admin"
               element={
                 <ProtectedRoute role="admin">
+                  <Navigate to="/admin/fleet" replace />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/fleet"
+              element={
+                <ProtectedRoute role="admin">
                   <AdminDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/vehicles/:id/edit"
+              element={
+                <ProtectedRoute role="admin">
+                  <AdminVehicleEdit />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/vehicles/add"
+              element={
+                <ProtectedRoute role="admin">
+                  <AdminVehicleAdd />
                 </ProtectedRoute>
               }
             />

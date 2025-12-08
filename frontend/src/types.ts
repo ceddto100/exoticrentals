@@ -23,18 +23,21 @@ export interface Car {
   make: string;
   model: string;
   year: number;
-  category: CarCategory;
+  category: CarCategory | string;
   pricePerDay: number;
-  deposit: number;
-  transmission: Transmission;
-  fuelType: FuelType;
-  seats: number;
-  mpg: string; // or range for EV
-  imageUrl: string;
+  deposit?: number;
+  transmission?: Transmission | string;
+  fuelType?: FuelType | string;
+  seats?: number;
+  mpg?: string; // or range for EV
+  imageUrl?: string;
+  images: string[];
+  description?: string;
+  mileage?: number;
   features: string[];
   isAvailable: boolean;
-  rating: number;
-  tripCount: number;
+  rating?: number;
+  tripCount?: number;
 }
 
 export interface Booking {
