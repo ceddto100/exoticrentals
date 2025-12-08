@@ -67,15 +67,23 @@ export const AdminVehicleEdit: React.FC = () => {
             <h1 className="text-3xl font-bold text-white">Edit Vehicle</h1>
             <p className="text-gray-400">Update details and publish changes to the live fleet.</p>
           </div>
-          {initialValues && (
-            <span
-              className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                initialValues.isAvailable ? 'bg-green-900/40 text-green-200' : 'bg-red-900/40 text-red-200'
-              }`}
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => navigate('/admin/fleet')}
+              className="px-3 py-1 rounded-lg border border-gray-800 text-sm text-gray-200 hover:border-gray-600"
             >
-              {initialValues.isAvailable ? 'Available' : 'Unavailable'}
-            </span>
-          )}
+              Cancel
+            </button>
+            {initialValues && (
+              <span
+                className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                  initialValues.isAvailable ? 'bg-green-900/40 text-green-200' : 'bg-red-900/40 text-red-200'
+                }`}
+              >
+                {initialValues.isAvailable ? 'Available' : 'Unavailable'}
+              </span>
+            )}
+          </div>
         </div>
 
         {loadError && !loading ? (
