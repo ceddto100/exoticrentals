@@ -60,24 +60,18 @@ export const Layout: React.FC<LayoutProps> = ({ onLogout, children }) => {
     navigate('/');
   };
 
-    return (
-      <div className="relative min-h-screen bg-black text-gray-100 overflow-hidden">
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              'radial-gradient(circle at 18% 18%, rgba(248, 113, 113, 0.25), transparent 34%), radial-gradient(circle at 82% 28%, rgba(239, 68, 68, 0.28), transparent 42%), radial-gradient(circle at 50% 82%, rgba(127, 29, 29, 0.28), transparent 38%)',
-          }}
-        />
-
-        <div className="relative flex flex-col min-h-screen">
-          <header className="bg-gradient-to-r from-black via-red-950/50 to-black backdrop-blur-md border-b border-red-900/70 sticky top-0 z-40 shadow-[0_10px_30px_rgba(248,113,113,0.22)]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between h-16">
-              <div className="flex items-center cursor-pointer" onClick={() => navigate('/')}>
-                <Car className="h-8 w-8 text-red-400 drop-shadow-[0_0_12px_rgba(248,113,113,0.5)]" />
-                <span className="ml-2 text-xl font-bold text-white tracking-tight">Exotic Rentals</span>
-              </div>
+  return (
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950 text-gray-100">
+      <header className="bg-gray-950/90 backdrop-blur-md border-b border-gray-800 sticky top-0 z-40">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between h-16">
+            <div className="flex items-center cursor-pointer" onClick={() => navigate('/')}>
+              <img
+                src="/exotic_rentals.png"
+                alt="Exotic Rentals logo"
+                className="h-10 w-auto drop-shadow-sm"
+              />
+            </div>
 
               <nav className="hidden md:flex items-center space-x-8">
                 <Link to="/" className="text-gray-200 hover:text-red-300 font-medium transition">Inventory</Link>
