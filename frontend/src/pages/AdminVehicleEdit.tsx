@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { AdminVehicleForm, VehicleFormValues } from '../components/AdminVehicleForm';
-import { fetchVehicle, updateVehicle } from '../services/apiClient';
+import { deleteVehicle, fetchVehicle, updateVehicle } from '../services/apiClient';
 
 export const AdminVehicleEdit: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -11,6 +11,8 @@ export const AdminVehicleEdit: React.FC = () => {
   const [initialValues, setInitialValues] = useState<VehicleFormValues | null>(null);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState(false);
+  const [actionError, setActionError] = useState<string | null>(null);
 
   useEffect(() => {
     const loadVehicle = async () => {
@@ -55,6 +57,26 @@ export const AdminVehicleEdit: React.FC = () => {
     navigate('/admin/fleet', { state: { message: 'Vehicle updated successfully.' } });
   };
 
+  const handleDelete = async () => {
+    if (!id || deleting) return;
+
+    const confirmed = window.confirm('Are you sure you want to delete this vehicle?');
+    if (!confirmed) return;
+
+    setDeleting(true);
+    setActionError(null);
+
+    try {
+      await deleteVehicle(id);
+      navigate('/admin/fleet', { state: { message: 'Vehicle deleted successfully.' } });
+    } catch (err: any) {
+      console.error('Unable to delete vehicle', err);
+      setActionError(err?.message || 'Failed to delete vehicle.');
+    } finally {
+      setDeleting(false);
+    }
+  };
+
   return (
     <div className="bg-gray-950 min-h-screen text-gray-100 p-8">
       <div className="max-w-5xl mx-auto">
@@ -68,6 +90,13 @@ export const AdminVehicleEdit: React.FC = () => {
             <p className="text-gray-400">Update details and publish changes to the live fleet.</p>
           </div>
           <div className="flex items-center gap-3">
+            <button
+              onClick={handleDelete}
+              disabled={deleting || loading}
+              className="px-3 py-1 rounded-lg border border-red-700/70 text-sm text-red-300 hover:bg-red-900/30 disabled:opacity-50"
+            >
+              {deleting ? 'Deleting...' : 'Delete'}
+            </button>
             <button
               onClick={() => navigate('/admin/fleet')}
               className="px-3 py-1 rounded-lg border border-gray-800 text-sm text-gray-200 hover:border-gray-600"
@@ -85,6 +114,10 @@ export const AdminVehicleEdit: React.FC = () => {
             )}
           </div>
         </div>
+
+        {actionError && (
+          <div className="mb-4 p-4 rounded-lg border border-red-800 bg-red-900/30 text-red-200">{actionError}</div>
+        )}
 
         {loadError && !loading ? (
           <div className="mb-6 p-4 rounded-lg border border-red-800 bg-red-900/20 text-red-200">{loadError}</div>
