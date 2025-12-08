@@ -81,7 +81,7 @@ export const UserDashboard: React.FC = () => {
             <img
               src={avatarUrl || DEFAULT_AVATAR}
               alt={name || 'User'}
-              className="w-24 h-24 rounded-full mx-auto mb-4 border-4 border-amber-200/40"
+              className="w-24 h-24 rounded-full mx-auto mb-4 border-4 border-red-200/40"
             />
             <h2 className="text-xl font-bold text-white">{name || 'Customer'}</h2>
             <p className="text-gray-400 text-sm mb-6">{email}</p>
@@ -97,7 +97,7 @@ export const UserDashboard: React.FC = () => {
           <div className="bg-gray-900 rounded-xl shadow-lg border border-gray-800 p-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-                <Clock className="w-4 h-4 text-amber-300" /> Upcoming Reservations
+                <Clock className="w-4 h-4 text-red-300" /> Upcoming Reservations
               </h3>
               {loading && <span className="text-xs text-gray-500">Loading...</span>}
             </div>
@@ -135,7 +135,7 @@ export const UserDashboard: React.FC = () => {
           <div className="bg-gray-900 rounded-xl shadow-lg border border-gray-800 p-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-                <CreditCard className="w-4 h-4 text-amber-300" /> Payment Methods
+                <CreditCard className="w-4 h-4 text-red-300" /> Payment Methods
               </h3>
             </div>
             <div className="text-sm text-gray-400">
@@ -146,7 +146,7 @@ export const UserDashboard: React.FC = () => {
           <div className="bg-gray-900 rounded-xl shadow-lg border border-gray-800 p-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-amber-300" /> Rental History
+                <ShieldCheck className="w-4 h-4 text-red-300" /> Rental History
               </h3>
             </div>
             {history.length === 0 && !loading ? (

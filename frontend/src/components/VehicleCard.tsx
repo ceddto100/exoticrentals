@@ -34,7 +34,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({ car }) => {
             }}
             className="w-full h-full object-cover transition duration-500 group-hover:scale-105"
           />
-          <div className="absolute top-4 right-4 bg-black/70 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-amber-300 shadow-sm border border-amber-300/40">
+          <div className="absolute top-4 right-4 bg-black/70 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-red-300 shadow-sm border border-red-300/40">
             {category}
           </div>
           {!isAvailable && (
@@ -47,7 +47,7 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({ car }) => {
         <div className="p-6 flex-grow flex flex-col">
           <div className="flex justify-between items-start mb-2">
             <h3 className="text-xl font-bold text-white">{make} {model}</h3>
-            <div className="flex items-center text-amber-300" aria-label={`Rating ${rating}`}>
+            <div className="flex items-center text-red-300" aria-label={`Rating ${rating}`}>
               <Star className="h-4 w-4 fill-current" />
               <span className="text-gray-300 text-sm ml-1 font-medium">{rating}</span>
             </div>
@@ -68,10 +68,10 @@ export const VehicleCard: React.FC<VehicleCardProps> = ({ car }) => {
 
           <div className="mt-auto flex items-center justify-between border-t border-gray-800 pt-4">
             <div>
-              <span className="text-2xl font-bold text-amber-300">${price}</span>
+              <span className="text-2xl font-bold text-red-300">${price}</span>
               <span className="text-gray-400 text-sm"> / day</span>
             </div>
-            <span className="text-amber-300 font-semibold group-hover:translate-x-1 transition flex items-center">
+            <span className="text-red-300 font-semibold group-hover:translate-x-1 transition flex items-center">
               Details →
             </span>
           </div>

@@ -119,7 +119,7 @@ export const VehicleDetails: React.FC<VehicleDetailsProps> = ({ user }) => {
               {car.features && car.features.length > 0 ? (
                 car.features.map((feature, idx) => (
                   <div key={idx} className="flex items-center p-3 bg-gray-900 rounded-lg border border-gray-800">
-                    <Check className="h-5 w-5 text-amber-300 mr-2 flex-shrink-0" />
+                    <Check className="h-5 w-5 text-red-300 mr-2 flex-shrink-0" />
                     <span className="text-sm font-medium text-gray-200">{feature}</span>
                   </div>
                 ))
@@ -128,11 +128,11 @@ export const VehicleDetails: React.FC<VehicleDetailsProps> = ({ user }) => {
               )}
               {/* Default features inferred from types */}
               <div className="flex items-center p-3 bg-gray-900 rounded-lg border border-gray-800">
-                <Check className="h-5 w-5 text-amber-300 mr-2 flex-shrink-0" />
+                <Check className="h-5 w-5 text-red-300 mr-2 flex-shrink-0" />
                 <span className="text-sm font-medium text-gray-200">{car.transmission}</span>
               </div>
               <div className="flex items-center p-3 bg-gray-900 rounded-lg border border-gray-800">
-                <Check className="h-5 w-5 text-amber-300 mr-2 flex-shrink-0" />
+                <Check className="h-5 w-5 text-red-300 mr-2 flex-shrink-0" />
                 <span className="text-sm font-medium text-gray-200">{car.fuelType}</span>
               </div>
             </div>
@@ -149,14 +149,14 @@ export const VehicleDetails: React.FC<VehicleDetailsProps> = ({ user }) => {
 
           <section className="bg-gray-900 p-6 rounded-xl border border-gray-800">
             <h3 className="flex items-center text-lg font-bold text-white mb-2">
-              <Shield className="h-5 w-5 mr-2 text-amber-300" /> Insurance & Protection
+              <Shield className="h-5 w-5 mr-2 text-red-300" /> Insurance & Protection
             </h3>
             <p className="text-gray-300 text-sm mb-4">
               Basic insurance is included with all rentals. You can upgrade to Premium Protection during checkout for zero liability.
             </p>
             <div className="flex gap-4 text-sm text-gray-200">
-              <span className="flex items-center"><Check className="h-4 w-4 mr-1 text-amber-300" /> 24/7 Roadside Assist</span>
-              <span className="flex items-center"><Check className="h-4 w-4 mr-1 text-amber-300" /> Theft Protection</span>
+              <span className="flex items-center"><Check className="h-4 w-4 mr-1 text-red-300" /> 24/7 Roadside Assist</span>
+              <span className="flex items-center"><Check className="h-4 w-4 mr-1 text-red-300" /> Theft Protection</span>
             </div>
           </section>
 
@@ -185,7 +185,7 @@ export const VehicleDetails: React.FC<VehicleDetailsProps> = ({ user }) => {
                     min={today}
                     value={pickupDate}
                     onChange={(e) => setPickupDate(e.target.value)}
-                    className="block w-full pl-10 pr-3 py-2 border border-gray-700 bg-gray-950 rounded-lg focus:ring-amber-400 focus:border-amber-400 text-gray-100"
+                    className="block w-full pl-10 pr-3 py-2 border border-gray-700 bg-gray-950 rounded-lg focus:ring-red-400 focus:border-red-400 text-gray-100"
                   />
                   <Calendar className="h-5 w-5 text-gray-400 absolute left-3 top-2.5" />
                 </div>
@@ -198,7 +198,7 @@ export const VehicleDetails: React.FC<VehicleDetailsProps> = ({ user }) => {
                     min={pickupDate || today}
                     value={returnDate}
                     onChange={(e) => setReturnDate(e.target.value)}
-                    className="block w-full pl-10 pr-3 py-2 border border-gray-700 bg-gray-950 rounded-lg focus:ring-amber-400 focus:border-amber-400 text-gray-100"
+                    className="block w-full pl-10 pr-3 py-2 border border-gray-700 bg-gray-950 rounded-lg focus:ring-red-400 focus:border-red-400 text-gray-100"
                   />
                   <Calendar className="h-5 w-5 text-gray-400 absolute left-3 top-2.5" />
                 </div>
@@ -206,7 +206,7 @@ export const VehicleDetails: React.FC<VehicleDetailsProps> = ({ user }) => {
                <div>
                 <label className="block text-sm font-medium text-gray-200 mb-1">Location</label>
                 <div className="relative">
-                  <select className="block w-full pl-10 pr-3 py-2 border border-gray-700 rounded-lg focus:ring-amber-400 focus:border-amber-400 bg-gray-950 text-gray-100">
+                  <select className="block w-full pl-10 pr-3 py-2 border border-gray-700 rounded-lg focus:ring-red-400 focus:border-red-400 bg-gray-950 text-gray-100">
                     <option>Los Angeles International Airport (LAX)</option>
                     <option>Downtown LA Office</option>
                     <option>Beverly Hills Hotel Delivery</option>
@@ -236,7 +236,7 @@ export const VehicleDetails: React.FC<VehicleDetailsProps> = ({ user }) => {
             <button
               onClick={handleBookNow}
               disabled={!car.isAvailable}
-              className="w-full bg-amber-400 text-gray-900 py-3 px-4 rounded-xl font-bold hover:bg-amber-300 transition shadow-lg hover:shadow-amber-500/30 disabled:bg-gray-700 disabled:cursor-not-allowed"
+              className="w-full bg-red-400 text-gray-900 py-3 px-4 rounded-xl font-bold hover:bg-red-300 transition shadow-lg hover:shadow-red-500/30 disabled:bg-gray-700 disabled:cursor-not-allowed"
             >
               {car.isAvailable ? 'Continue to Booking' : 'Not Available'}
             </button>

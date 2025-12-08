@@ -67,7 +67,7 @@ export const HowItWorks: React.FC = () => {
       <section className="relative overflow-hidden border-b border-gray-900 bg-gradient-to-b from-black via-gray-950 to-black">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
           <div className="reveal-on-scroll animate-fade-up">
-            <p className="text-amber-300 uppercase tracking-[0.3em] text-xs mb-3">How it works</p>
+            <p className="text-red-300 uppercase tracking-[0.3em] text-xs mb-3">How it works</p>
             <h1 className="text-3xl md:text-5xl font-extrabold text-white leading-tight mb-4">
               From search to ignition, every step stays concierge-smooth.
             </h1>
@@ -77,7 +77,7 @@ export const HowItWorks: React.FC = () => {
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 to="/#inventory"
-                className="bg-amber-400 text-black px-6 py-3 rounded-full font-semibold shadow-lg transition transform hover:-translate-y-0.5 button-glow"
+                className="bg-red-400 text-black px-6 py-3 rounded-full font-semibold shadow-lg transition transform hover:-translate-y-0.5 button-glow"
               >
                 Browse the fleet
               </Link>
@@ -100,7 +100,7 @@ export const HowItWorks: React.FC = () => {
               >
                 <div className="flex items-center gap-3 mb-4">
                   <span className="h-12 w-12 rounded-full bg-black border border-gray-800 flex items-center justify-center">
-                    <Icon className="h-6 w-6 text-amber-300" />
+                    <Icon className="h-6 w-6 text-red-300" />
                   </span>
                   <span className="text-xs uppercase tracking-wide text-gray-400">Step {index + 1}</span>
                 </div>
@@ -109,12 +109,12 @@ export const HowItWorks: React.FC = () => {
                 <ul className="space-y-2 text-sm text-gray-300 mb-4">
                   {step.checklist.map((item) => (
                     <li key={item} className="flex items-start gap-2">
-                      <span className="h-2 w-2 rounded-full bg-amber-300 mt-2" />
+                      <span className="h-2 w-2 rounded-full bg-red-300 mt-2" />
                       <span className="leading-relaxed">{item}</span>
                     </li>
                   ))}
                 </ul>
-                <Link to={step.link} className="inline-flex items-center text-amber-300 text-sm font-semibold hover:text-amber-200">
+                <Link to={step.link} className="inline-flex items-center text-red-300 text-sm font-semibold hover:text-red-200">
                   {step.cta}
                   <span className="ml-2">→</span>
                 </Link>
@@ -144,10 +144,10 @@ export const HowItWorks: React.FC = () => {
                 return (
                   <div key={item.title} className="flex gap-4">
                     <div className="h-11 w-11 rounded-xl bg-black border border-gray-800 flex items-center justify-center shrink-0">
-                      <Icon className="h-5 w-5 text-amber-300" />
+                      <Icon className="h-5 w-5 text-red-300" />
                     </div>
                     <div>
-                      <p className="text-sm text-amber-200 font-semibold">{item.title}</p>
+                      <p className="text-sm text-red-200 font-semibold">{item.title}</p>
                       <p className="text-gray-400 text-sm leading-relaxed">{item.detail}</p>
                     </div>
                   </div>
@@ -180,7 +180,7 @@ export const HowItWorks: React.FC = () => {
                 return (
                   <div key={item.label} className="flex items-start gap-3 bg-black/40 border border-gray-900 rounded-xl p-4">
                     <div className="h-10 w-10 rounded-lg bg-gray-950 border border-gray-800 flex items-center justify-center mt-1">
-                      <Icon className="h-5 w-5 text-amber-300" />
+                      <Icon className="h-5 w-5 text-red-300" />
                     </div>
                     <div>
                       <p className="text-sm font-semibold text-white">{item.label}</p>
@@ -191,7 +191,7 @@ export const HowItWorks: React.FC = () => {
               })}
             </div>
             <div className="bg-black/50 border border-gray-900 rounded-xl p-4 flex items-start gap-3">
-              <ShieldCheck className="h-5 w-5 text-amber-300 mt-1" />
+              <ShieldCheck className="h-5 w-5 text-red-300 mt-1" />
               <p className="text-gray-300 text-sm leading-relaxed">
                 Need to adjust timing? Use the dashboard to reschedule or message your concierge—buffers update automatically and you will always see the revised pickup ETA.
               </p>
@@ -202,7 +202,7 @@ export const HowItWorks: React.FC = () => {
         <div className="reveal-on-scroll bg-gradient-to-r from-gray-950 via-black to-gray-950 border border-gray-900 rounded-3xl p-8 shadow-2xl">
           <div className="flex flex-col md:flex-row justify-between gap-8 items-start">
             <div className="max-w-xl space-y-3">
-              <p className="text-amber-300 text-xs uppercase tracking-[0.25em]">Pro tips</p>
+              <p className="text-red-300 text-xs uppercase tracking-[0.25em]">Pro tips</p>
               <h3 className="text-2xl font-bold text-white">How to get the smoothest rental</h3>
               <p className="text-gray-400 text-sm leading-relaxed">
                 Share your flight, hotel, or event details and we align your drop-off with those milestones. You will also see live prep status (detailing, charging, fueling) inside your dashboard.
