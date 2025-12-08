@@ -1,9 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Filter, Star, Fuel, Settings, Users } from 'lucide-react';
-import { FALLBACK_CAR_IMAGE } from '../constants';
 import { Car, CarCategory, FuelType } from '../types';
 import { fetchVehicles } from '../services/apiClient';
+import { VehicleCard } from '../components/VehicleCard';
 
 export const Home: React.FC = () => {
   const [cars, setCars] = useState<Car[]>([]);
@@ -33,7 +32,8 @@ export const Home: React.FC = () => {
   const filteredCars = useMemo(() => {
     return cars.filter(car => {
       const categoryMatch = selectedCategory === 'All' || car.category === selectedCategory;
-      const priceMatch = car.pricePerDay <= priceRange;
+      const price = typeof car.pricePerDay === 'number' ? car.pricePerDay : 0;
+      const priceMatch = price <= priceRange;
       return categoryMatch && priceMatch;
     });
   }, [selectedCategory, priceRange, cars]);
@@ -120,61 +120,7 @@ export const Home: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredCars.map((car) => (
-            <Link to={`/vehicle/${car.id}`} key={car.id} className="group">
-              <div className="bg-gray-900 rounded-2xl overflow-hidden border border-gray-800 shadow-lg hover:shadow-2xl transition duration-300 transform hover:-translate-y-1 h-full flex flex-col reveal-on-scroll">
-                <div className="relative h-56 overflow-hidden">
-                    <img
-                    src={car.imageUrl || car.images?.[0] || FALLBACK_CAR_IMAGE}
-                    alt={`${car.make} ${car.model}`}
-                    onError={(e) => {
-                      e.currentTarget.onerror = null;
-                      e.currentTarget.src = FALLBACK_CAR_IMAGE;
-                    }}
-                    className="w-full h-full object-cover transition duration-500 group-hover:scale-105"
-                  />
-                  <div className="absolute top-4 right-4 bg-black/70 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-amber-300 shadow-sm border border-amber-300/40">
-                    {car.category}
-                  </div>
-                  {!car.isAvailable && (
-                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                      <span className="bg-red-600 text-white px-4 py-2 rounded-lg font-bold uppercase tracking-wider">Booked</span>
-                    </div>
-                  )}
-                </div>
-                
-                <div className="p-6 flex-grow flex flex-col">
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="text-xl font-bold text-white">{car.make} {car.model}</h3>
-                    <div className="flex items-center text-amber-300">
-                      <Star className="h-4 w-4 fill-current" />
-                      <span className="text-gray-300 text-sm ml-1 font-medium">{car.rating}</span>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-4 text-sm text-gray-300 mb-6 mt-2">
-                    <div className="flex items-center gap-1.5 bg-gray-800 px-2 py-1 rounded">
-                      <Users className="h-4 w-4" /> {car.seats}
-                    </div>
-                    <div className="flex items-center gap-1.5 bg-gray-800 px-2 py-1 rounded">
-                      <Settings className="h-4 w-4" /> {car.transmission === 'Automatic' ? 'Auto' : 'Manual'}
-                    </div>
-                    <div className="flex items-center gap-1.5 bg-gray-800 px-2 py-1 rounded">
-                      <Fuel className="h-4 w-4" /> {car.fuelType}
-                    </div>
-                  </div>
-
-                  <div className="mt-auto flex items-center justify-between border-t border-gray-800 pt-4">
-                    <div>
-                      <span className="text-2xl font-bold text-amber-300">${car.pricePerDay}</span>
-                      <span className="text-gray-400 text-sm"> / day</span>
-                    </div>
-                    <span className="text-amber-300 font-semibold group-hover:translate-x-1 transition flex items-center">
-                      Details →
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </Link>
+            <VehicleCard key={car.id} car={car} />
           ))}
         </div>
       </div>

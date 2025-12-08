@@ -37,15 +37,32 @@ export const normalizeVehicle = (vehicle: any): Car => {
       ? [vehicle.imageUrl]
       : [];
 
+  const price = typeof vehicle?.pricePerDay === 'number'
+    ? vehicle.pricePerDay
+    : typeof vehicle?.dailyRate === 'number'
+      ? vehicle.dailyRate
+      : 0;
+
+  const isAvailable = typeof vehicle?.isAvailable === 'boolean'
+    ? vehicle.isAvailable
+    : vehicle?.status
+      ? vehicle.status === 'available'
+      : true;
+
   return {
     ...vehicle,
     id: vehicle.id || vehicle._id,
+    make: vehicle.make || 'Unknown Make',
+    model: vehicle.model || 'Vehicle',
+    year: vehicle.year || new Date().getFullYear(),
+    category: vehicle.category || 'Uncategorized',
+    pricePerDay: price,
     images,
     imageUrl: vehicle.imageUrl || images[0],
     description: vehicle.description || '',
     mileage: vehicle.mileage ?? 0,
     features: Array.isArray(vehicle.features) ? vehicle.features : [],
-    isAvailable: typeof vehicle.isAvailable === 'boolean' ? vehicle.isAvailable : true,
+    isAvailable,
     rating: vehicle.rating ?? 5,
     tripCount: vehicle.tripCount ?? 0,
   } as Car;
