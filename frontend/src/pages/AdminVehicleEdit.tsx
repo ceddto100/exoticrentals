@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Trash2 } from 'lucide-react';
 import { AdminVehicleForm, VehicleFormValues } from '../components/AdminVehicleForm';
 import { deleteVehicle, fetchVehicle, updateVehicle } from '../services/apiClient';
 
@@ -93,9 +93,10 @@ export const AdminVehicleEdit: React.FC = () => {
             <button
               onClick={handleDelete}
               disabled={deleting || loading}
-              className="px-3 py-1 rounded-lg border border-red-700/70 text-sm text-red-300 hover:bg-red-900/30 disabled:opacity-50"
+              className="px-3 py-2 rounded-lg border border-red-700/70 bg-red-900/30 text-sm text-red-200 hover:bg-red-900/50 disabled:opacity-50 flex items-center gap-2"
             >
-              {deleting ? 'Deleting...' : 'Delete'}
+              <Trash2 className="h-4 w-4" />
+              {deleting ? 'Deleting...' : 'Delete Car'}
             </button>
             <button
               onClick={() => navigate('/admin/fleet')}
