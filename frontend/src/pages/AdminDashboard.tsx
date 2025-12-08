@@ -187,44 +187,55 @@ export const AdminDashboard: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-800">
-                {fleet.map((car) => (
-                  <tr key={car.id} className="hover:bg-gray-800/60 transition">
-                    <td className="px-6 py-4">
-                      <div className="flex items-center">
-                        <img
-                          src={car.imageUrl || car.images?.[0] || FALLBACK_CAR_IMAGE}
-                          alt=""
-                          onError={(e) => {
-                            e.currentTarget.onerror = null;
-                            e.currentTarget.src = FALLBACK_CAR_IMAGE;
-                          }}
-                          className="w-10 h-10 rounded-md object-cover mr-3"
-                        />
-                        <div>
-                          <div className="font-medium text-white">{car.make} {car.model}</div>
-                          <div className="text-xs text-gray-400">{car.year} • {car.tripCount} trips</div>
+                {fleet.map((car) => {
+                  const imageSrc = car.imageUrl || car.images?.[0] || FALLBACK_CAR_IMAGE;
+                  const make = car.make || 'Unknown Make';
+                  const model = car.model || 'Vehicle';
+                  const category = car.category || 'Uncategorized';
+                  const year = car.year || '—';
+                  const trips = car.tripCount ?? 0;
+                  const price = typeof car.pricePerDay === 'number' ? car.pricePerDay : 0;
+                  const isAvailable = typeof car.isAvailable === 'boolean' ? car.isAvailable : true;
+
+                  return (
+                    <tr key={car.id} className="hover:bg-gray-800/60 transition">
+                      <td className="px-6 py-4">
+                        <div className="flex items-center">
+                          <img
+                            src={imageSrc}
+                            alt={`${make} ${model}`}
+                            onError={(e) => {
+                              e.currentTarget.onerror = null;
+                              e.currentTarget.src = FALLBACK_CAR_IMAGE;
+                            }}
+                            className="w-10 h-10 rounded-md object-cover mr-3"
+                          />
+                          <div>
+                            <div className="font-medium text-white">{make} {model}</div>
+                            <div className="text-xs text-gray-400">{year} • {trips} trips</div>
+                          </div>
                         </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-300">{car.category}</td>
-                    <td className="px-6 py-4">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        car.isAvailable ? 'bg-green-900/30 text-green-200' : 'bg-red-900/30 text-red-200'
-                      }`}>
-                        {car.isAvailable ? 'Available' : 'Booked/Service'}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-sm text-white font-medium">${car.pricePerDay}/day</td>
-                    <td className="px-6 py-4 text-right">
-                      <button
-                        className="text-amber-300 hover:text-amber-200 text-sm font-medium"
-                        onClick={() => navigate(`/admin/vehicles/${car.id}/edit`)}
-                      >
-                        Edit
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-300">{category}</td>
+                      <td className="px-6 py-4">
+                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                          isAvailable ? 'bg-green-900/30 text-green-200' : 'bg-red-900/30 text-red-200'
+                        }`}>
+                          {isAvailable ? 'Available' : 'Booked/Service'}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-sm text-white font-medium">${price}/day</td>
+                      <td className="px-6 py-4 text-right">
+                        <button
+                          className="text-amber-300 hover:text-amber-200 text-sm font-medium"
+                          onClick={() => navigate(`/admin/vehicles/${car.id}/edit`)}
+                        >
+                          Edit
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

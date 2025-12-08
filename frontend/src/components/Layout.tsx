@@ -20,7 +20,6 @@ export const Layout: React.FC<LayoutProps> = ({ onLogout, children }) => {
   const user = auth.user;
 
   useEffect(() => {
-    const revealElements = document.querySelectorAll('.reveal-on-scroll');
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
@@ -33,15 +32,26 @@ export const Layout: React.FC<LayoutProps> = ({ onLogout, children }) => {
       rootMargin: '150px 0px',
     });
 
-    revealElements.forEach((el) => {
-      observer.observe(el);
-      const rect = el.getBoundingClientRect();
-      if (rect.top < window.innerHeight * 0.9) {
-        (el as HTMLElement).classList.add('visible');
-      }
-    });
+    const observeNewElements = () => {
+      const revealElements = document.querySelectorAll('.reveal-on-scroll:not(.visible)');
+      revealElements.forEach((el) => {
+        observer.observe(el);
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight * 0.9) {
+          (el as HTMLElement).classList.add('visible');
+        }
+      });
+    };
 
-    return () => observer.disconnect();
+    const mutationObserver = new MutationObserver(() => observeNewElements());
+    mutationObserver.observe(document.body, { childList: true, subtree: true });
+
+    observeNewElements();
+
+    return () => {
+      observer.disconnect();
+      mutationObserver.disconnect();
+    };
   }, [location.pathname]);
 
   const handleLogout = () => {
