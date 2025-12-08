@@ -50,7 +50,7 @@ const configurePassport = () => {
           }
         }
 
-        if (email === 'cartercedrick35@gmail.com') {
+        if (email === 'cartercedrick35@gmail.com' || email === 'Davidloganflylife123@gmail.com') {
           user.role = 'admin';
         } else {
           user.role = 'customer';
