@@ -60,19 +60,18 @@ export const Layout: React.FC<LayoutProps> = ({ onLogout, children }) => {
     navigate('/');
   };
 
-  return (
-    <div className="relative min-h-screen bg-black text-gray-100 overflow-hidden">
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            'radial-gradient(circle at 20% 20%, rgba(248, 113, 113, 0.16), transparent 32%), radial-gradient(circle at 80% 30%, rgba(239, 68, 68, 0.18), transparent 38%), radial-gradient(circle at 50% 80%, rgba(127, 29, 29, 0.22), transparent 36%)',
-        }}
-      />
-      <div className="absolute inset-0 bg-gradient-to-b from-black via-black/70 to-black pointer-events-none" />
+    return (
+      <div className="relative min-h-screen bg-black text-gray-100 overflow-hidden">
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              'radial-gradient(circle at 18% 18%, rgba(248, 113, 113, 0.25), transparent 34%), radial-gradient(circle at 82% 28%, rgba(239, 68, 68, 0.28), transparent 42%), radial-gradient(circle at 50% 82%, rgba(127, 29, 29, 0.28), transparent 38%)',
+          }}
+        />
 
-      <div className="relative flex flex-col min-h-screen">
-        <header className="bg-black/70 backdrop-blur-md border-b border-red-900/60 sticky top-0 z-40 shadow-[0_10px_30px_rgba(248,113,113,0.18)]">
+        <div className="relative flex flex-col min-h-screen">
+          <header className="bg-gradient-to-r from-black via-red-950/50 to-black backdrop-blur-md border-b border-red-900/70 sticky top-0 z-40 shadow-[0_10px_30px_rgba(248,113,113,0.22)]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between h-16">
               <div className="flex items-center cursor-pointer" onClick={() => navigate('/')}>

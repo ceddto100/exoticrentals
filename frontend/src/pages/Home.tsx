@@ -39,15 +39,16 @@ export const Home: React.FC = () => {
   }, [selectedCategory, priceRange, cars]);
 
   return (
-    <div className="bg-gray-950 text-gray-100 min-h-screen pb-12">
+    <div className="bg-black text-gray-100 min-h-screen pb-12">
       {/* Hero Section */}
-      <div className="relative bg-gray-900 h-[520px] overflow-hidden">
+      <div className="relative bg-black h-[520px] overflow-hidden">
         <img
           src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&q=80&w=2000"
           alt="Luxury Car"
-          className="absolute inset-0 w-full h-full object-cover opacity-60"
+          className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/40" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/10" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-center reveal-on-scroll">
           <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-6 tracking-tight animate-fade-up">
             Drive Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-300 via-red-500 to-red-400">Dream</span>
@@ -56,10 +57,13 @@ export const Home: React.FC = () => {
             Experience the thrill of the open road with our premium fleet. Flexible booking, transparent pricing, and unforgettable journeys.
           </p>
           <div className="flex gap-4 animate-fade-up" style={{ animationDelay: '0.16s', opacity: 0 }}>
-             <button onClick={() => document.getElementById('inventory')?.scrollIntoView({ behavior: 'smooth' })} className="bg-red-400 text-gray-900 px-8 py-3 rounded-full font-semibold hover:bg-red-300 transition shadow-lg hover:shadow-red-500/30 button-glow">
+             <button
+               onClick={() => document.getElementById('inventory')?.scrollIntoView({ behavior: 'smooth' })}
+               className="bg-gradient-to-r from-black via-red-800 to-red-500 text-white px-8 py-3 rounded-full font-semibold transition shadow-[0_0_22px_rgba(248,113,113,0.35)] hover:shadow-[0_0_32px_rgba(248,113,113,0.55)] button-glow"
+             >
                Browse Fleet
              </button>
-             <Link to="/how-it-works" className="px-8 py-3 rounded-full border border-gray-800 text-white hover:bg-gray-900 transition">
+             <Link to="/how-it-works" className="px-8 py-3 rounded-full border border-red-900 text-white hover:bg-red-950/50 transition">
                How it Works
              </Link>
           </div>
@@ -68,7 +72,7 @@ export const Home: React.FC = () => {
 
       {/* Filters */}
       <div id="inventory" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-10">
-        <div className="bg-gray-900/90 backdrop-blur-lg rounded-xl shadow-xl p-6 border border-gray-800">
+        <div className="bg-black/85 backdrop-blur-lg rounded-xl shadow-xl p-6 border border-red-900/50">
           <div className="flex flex-col md:flex-row gap-6 items-end">
             <div className="flex-1 w-full">
               <label className="block text-sm font-medium text-gray-300 mb-2">Category</label>
@@ -79,8 +83,8 @@ export const Home: React.FC = () => {
                     onClick={() => setSelectedCategory(cat)}
                     className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
                       selectedCategory === cat
-                        ? 'bg-red-400 text-gray-900 shadow-md'
-                        : 'bg-gray-800 text-gray-200 hover:bg-gray-700'
+                        ? 'bg-gradient-to-r from-black via-red-800 to-red-500 text-white shadow-[0_0_18px_rgba(248,113,113,0.4)]'
+                        : 'bg-black text-gray-200 hover:bg-red-950/50 border border-red-900/40'
                     }`}
                   >
                     {cat}
@@ -99,7 +103,7 @@ export const Home: React.FC = () => {
                 step="10"
                 value={priceRange}
                 onChange={(e) => setPriceRange(Number(e.target.value))}
-                className="w-full h-2 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-red-400"
+                className="w-full h-2 bg-black rounded-lg appearance-none cursor-pointer accent-red-400 border border-red-900/50"
               />
             </div>
           </div>
@@ -127,14 +131,14 @@ export const Home: React.FC = () => {
 
       {/* How It Works */}
       <div id="how-it-works" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
-        <div className="bg-gray-900/70 border border-gray-800 rounded-3xl p-10 shadow-2xl">
+        <div className="bg-black/80 border border-red-900/50 rounded-3xl p-10 shadow-2xl">
           <div className="flex flex-col md:flex-row justify-between items-start gap-6 mb-8">
             <div>
               <p className="uppercase text-sm tracking-[0.2em] text-red-300 mb-2">How it works</p>
               <h2 className="text-3xl md:text-4xl font-extrabold text-white">Luxury rentals without the friction</h2>
               <p className="text-gray-400 mt-3 max-w-2xl">Exotic Rentals makes it effortless to go from idea to ignition with concierge-style support, transparent pricing, and cars that arrive detailed and ready to impress.</p>
             </div>
-            <div className="flex items-center gap-3 bg-black/40 border border-gray-800 px-4 py-3 rounded-2xl text-gray-200">
+              <div className="flex items-center gap-3 bg-black/60 border border-red-900/40 px-4 py-3 rounded-2xl text-gray-200">
               <div className="h-10 w-10 rounded-full bg-red-400 text-gray-900 flex items-center justify-center font-bold">24/7</div>
               <div>
                 <p className="text-sm font-semibold text-white">Concierge On Call</p>
@@ -145,7 +149,7 @@ export const Home: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[{ title: 'Choose your exotic', copy: 'Filter by style, seats, or budget and lock in verified vehicles with real-time availability.', badge: 'Step 1' }, { title: 'Customize delivery', copy: 'Select airport, hotel, or curbside delivery. We confirm drop-off and pickup windows instantly.', badge: 'Step 2' }, { title: 'Drive with confidence', copy: 'Digital check-in, premium coverage options, and live chat support keep your trip on track.', badge: 'Step 3' }].map((step, idx) => (
-              <div key={idx} className="relative overflow-hidden rounded-2xl border border-gray-800 bg-black/40 p-6 shadow-xl">
+              <div key={idx} className="relative overflow-hidden rounded-2xl border border-red-900/50 bg-black/70 p-6 shadow-xl">
                 <span className="inline-flex items-center text-xs font-semibold px-3 py-1 rounded-full bg-red-400 text-gray-900 mb-4">{step.badge}</span>
                 <h3 className="text-xl font-bold text-white mb-2">{step.title}</h3>
                 <p className="text-gray-400 text-sm leading-relaxed">{step.copy}</p>
