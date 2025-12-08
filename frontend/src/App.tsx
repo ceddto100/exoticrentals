@@ -1,4 +1,3 @@
-
 import React, { useState, createContext, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Layout } from './components/Layout';
@@ -10,29 +9,26 @@ import { HowItWorks } from './pages/HowItWorks';
 import { VehicleDetails } from './pages/VehicleDetails';
 import { Checkout } from './pages/Checkout';
 import { AuthSuccess } from './pages/AuthSuccess';
+import { AUTH_TOKEN_KEY } from './services/apiClient';
 
-// Define a structured user object. This improves type safety.
 export interface AuthUser {
   id: string;
   role: 'admin' | 'customer';
   email: string;
   name: string;
-  avatarUrl?: string; // Avatar is optional
+  avatarUrl?: string | null;
 }
 
-// Define the shape of the authentication context.
 interface Auth {
   token: string | null;
-  user: AuthUser | null; // Use the structured user type
+  user: AuthUser | null;
 }
 
-// Create the context with a safe, null-based initial value.
 export const AuthContext = createContext<{
   auth: Auth;
   setAuth: React.Dispatch<React.SetStateAction<Auth>>;
 }>({ auth: { token: null, user: null }, setAuth: () => {} });
 
-// Helper to decode JWT. In a real app, use a library like jwt-decode.
 const decodeJwt = (token: string): AuthUser | null => {
   try {
     const base64Url = token.split('.')[1];
@@ -43,17 +39,14 @@ const decodeJwt = (token: string): AuthUser | null => {
   }
 };
 
-// Custom hook to simplify role-based route protection.
 const ProtectedRoute: React.FC<{ role: 'admin' | 'customer'; children: React.ReactElement }> = ({ role, children }) => {
   const { auth } = React.useContext(AuthContext);
-  
+
   if (!auth.token || !auth.user) {
-    // If not authenticated, redirect to login.
     return <Navigate to="/login" />;
   }
-  
+
   if (auth.user.role !== role) {
-    // If authenticated but wrong role, redirect to a safe page (e.g., their own dashboard).
     return <Navigate to={auth.user.role === 'admin' ? '/admin' : '/dashboard'} />;
   }
 
@@ -61,9 +54,8 @@ const ProtectedRoute: React.FC<{ role: 'admin' | 'customer'; children: React.Rea
 };
 
 const App: React.FC = () => {
-  // Initialize state with a check for a token in local storage.
   const [auth, setAuth] = useState<Auth>(() => {
-    const token = localStorage.getItem('jwt');
+    const token = localStorage.getItem(AUTH_TOKEN_KEY);
     if (token) {
       const user = decodeJwt(token);
       if (user) {
@@ -73,18 +65,13 @@ const App: React.FC = () => {
     return { token: null, user: null };
   });
 
-  // This effect synchronizes the auth state across browser tabs.
   useEffect(() => {
     const handleStorageChange = (event: StorageEvent) => {
-      if (event.key === 'jwt') {
+      if (event.key === AUTH_TOKEN_KEY) {
         const token = event.newValue;
         if (token) {
           const user = decodeJwt(token);
-          if (user) {
-            setAuth({ token, user });
-          } else {
-            setAuth({ token: null, user: null });
-          }
+          setAuth(user ? { token, user } : { token: null, user: null });
         } else {
           setAuth({ token: null, user: null });
         }
@@ -95,37 +82,40 @@ const App: React.FC = () => {
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
+  const handleLogout = () => {
+    localStorage.removeItem(AUTH_TOKEN_KEY);
+    setAuth({ token: null, user: null });
+  };
+
   return (
     <AuthContext.Provider value={{ auth, setAuth }}>
       <Router>
-        <Layout>
+        <Layout onLogout={handleLogout}>
           <Routes>
-            {/* Public Routes */}
             <Route path="/" element={<Home />} />
             <Route path="/how-it-works" element={<HowItWorks />} />
             <Route path="/vehicle/:id" element={<VehicleDetails />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/auth/success" element={<AuthSuccess />} />
+            <Route path="/login" element={<Login tokenKey={AUTH_TOKEN_KEY} />} />
+            <Route path="/auth/success" element={<AuthSuccess tokenKey={AUTH_TOKEN_KEY} />} />
 
-            {/* Protected Routes */}
-            <Route 
-              path="/checkout" 
+            <Route
+              path="/checkout"
               element={
                 <ProtectedRoute role="customer">
                   <Checkout />
                 </ProtectedRoute>
-              } 
+              }
             />
-            <Route 
-              path="/admin" 
+            <Route
+              path="/admin"
               element={
                 <ProtectedRoute role="admin">
                   <AdminDashboard />
                 </ProtectedRoute>
               }
             />
-            <Route 
-              path="/dashboard" 
+            <Route
+              path="/dashboard"
               element={
                 <ProtectedRoute role="customer">
                   <UserDashboard />
@@ -133,7 +123,6 @@ const App: React.FC = () => {
               }
             />
 
-            {/* Fallback for unknown routes */}
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </Layout>
