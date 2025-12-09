@@ -126,7 +126,7 @@ export const AdminDashboard: React.FC = () => {
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-gray-400 font-medium">Active Bookings</h3>
             <div className="p-2 bg-black/70 border border-gray-800 rounded-lg">
-              <Calendar className="w-5 h-5 text-amber-300" />
+              <Calendar className="w-5 h-5 text-red-300" />
             </div>
           </div>
           <p className="text-2xl font-bold text-white">{stats.activeRentals}</p>
@@ -137,7 +137,7 @@ export const AdminDashboard: React.FC = () => {
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-gray-400 font-medium">Fleet Status</h3>
             <div className="p-2 bg-black/70 border border-gray-800 rounded-lg">
-              <CarIcon className="w-5 h-5 text-amber-300" />
+              <CarIcon className="w-5 h-5 text-red-300" />
             </div>
           </div>
           <p className="text-2xl font-bold text-white">{stats.vehicleCount} vehicles</p>
@@ -147,8 +147,8 @@ export const AdminDashboard: React.FC = () => {
           <div className="bg-gray-900 p-6 rounded-xl shadow-lg border border-gray-800">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-gray-400 font-medium">Maintenance</h3>
-              <div className="p-2 bg-amber-900/40 rounded-lg">
-                <AlertCircle className="w-5 h-5 text-amber-300" />
+              <div className="p-2 bg-red-900/40 rounded-lg">
+                <AlertCircle className="w-5 h-5 text-red-300" />
               </div>
             </div>
             <p className="text-2xl font-bold text-white">3</p>
@@ -197,7 +197,7 @@ export const AdminDashboard: React.FC = () => {
           <div className="p-6 border-b border-gray-800 flex justify-between items-center">
             <h3 className="text-lg font-bold text-white">Fleet Management</h3>
             <button
-              className="bg-amber-300 text-gray-900 px-4 py-2 rounded-lg text-sm font-medium hover:bg-amber-200"
+              className="bg-red-300 text-gray-900 px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-200"
               onClick={() => navigate('/admin/vehicles/add')}
             >
               Add New Vehicle
