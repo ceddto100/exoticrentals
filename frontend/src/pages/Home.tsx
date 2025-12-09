@@ -9,7 +9,6 @@ export const Home: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
-  const [priceRange, setPriceRange] = useState<number>(300);
 
   useEffect(() => {
     const loadVehicles = async () => {
@@ -32,11 +31,9 @@ export const Home: React.FC = () => {
   const filteredCars = useMemo(() => {
     return cars.filter(car => {
       const categoryMatch = selectedCategory === 'All' || car.category === selectedCategory;
-      const price = typeof car.pricePerDay === 'number' ? car.pricePerDay : 0;
-      const priceMatch = price <= priceRange;
-      return categoryMatch && priceMatch;
+      return categoryMatch;
     });
-  }, [selectedCategory, priceRange, cars]);
+  }, [selectedCategory, cars]);
 
   return (
     <div className="bg-black text-gray-100 min-h-screen pb-12">
@@ -73,7 +70,7 @@ export const Home: React.FC = () => {
       {/* Filters */}
       <div id="inventory" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-10">
         <div className="bg-black/85 backdrop-blur-lg rounded-xl shadow-xl p-6 border border-red-900/50">
-          <div className="flex flex-col md:flex-row gap-6 items-end">
+          <div className="flex flex-col gap-6">
             <div className="flex-1 w-full">
               <label className="block text-sm font-medium text-gray-300 mb-2">Category</label>
               <div className="flex flex-wrap gap-2">
@@ -91,20 +88,6 @@ export const Home: React.FC = () => {
                   </button>
                 ))}
               </div>
-            </div>
-            <div className="w-full md:w-64">
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                Max Price: <span className="text-red-300 font-bold">${priceRange}/day</span>
-              </label>
-              <input
-                type="range"
-                min="50"
-                max="300"
-                step="10"
-                value={priceRange}
-                onChange={(e) => setPriceRange(Number(e.target.value))}
-                className="w-full h-2 bg-black rounded-lg appearance-none cursor-pointer accent-red-400 border border-red-900/50"
-              />
             </div>
           </div>
           {error && (
