@@ -132,6 +132,7 @@ export const Layout: React.FC<LayoutProps> = ({ onLogout, children }) => {
           )}
         </header>
 
+      
         <main className="flex-grow relative z-10">
           {children}
         </main>
