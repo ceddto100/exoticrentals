@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
 import { FALLBACK_CAR_IMAGE } from '../constants';
-import { DollarSign, Calendar, AlertCircle, Car as CarIcon, TrendingUp } from 'lucide-react';
-import { fetchSchedules, fetchVehicles } from '../services/apiClient';
+import { DollarSign, Calendar, AlertCircle, Car as CarIcon, TrendingUp, Trash2 } from 'lucide-react';
+import { deleteVehicle, fetchSchedules, fetchVehicles } from '../services/apiClient';
 import { Car } from '../types';
 
 const revenueData = [
@@ -34,6 +34,7 @@ export const AdminDashboard: React.FC = () => {
   });
   const [error, setError] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -66,6 +67,28 @@ export const AdminDashboard: React.FC = () => {
 
     loadDashboard();
   }, []);
+
+  const handleDelete = async (vehicleId: string) => {
+    if (deletingId) return;
+
+    const confirmed = window.confirm('Are you sure you want to delete this vehicle?');
+    if (!confirmed) return;
+
+    setDeletingId(vehicleId);
+    setError(null);
+
+    try {
+      await deleteVehicle(vehicleId);
+      setFleet((current) => current.filter((car) => car.id !== vehicleId));
+      setStats((prev) => ({ ...prev, vehicleCount: Math.max(0, prev.vehicleCount - 1) }));
+      setToast('Vehicle deleted successfully.');
+    } catch (err: any) {
+      console.error('Unable to delete vehicle', err);
+      setError(err?.message || 'Failed to delete vehicle.');
+    } finally {
+      setDeletingId(null);
+    }
+  };
 
   return (
     <div className="bg-gray-950 text-gray-100 min-h-screen p-8">
@@ -231,12 +254,22 @@ export const AdminDashboard: React.FC = () => {
                       </td>
                       <td className="px-6 py-4 text-sm text-white font-medium">${price}/day</td>
                       <td className="px-6 py-4 text-right">
-                        <button
-                          className="text-red-300 hover:text-red-200 text-sm font-medium"
-                          onClick={() => navigate(`/admin/vehicles/${car.id}/edit`)}
-                        >
-                          Edit
-                        </button>
+                        <div className="flex items-center justify-end gap-3">
+                          <button
+                            className="text-amber-300 hover:text-amber-200 text-sm font-medium"
+                            onClick={() => navigate(`/admin/vehicles/${car.id}/edit`)}
+                          >
+                            Edit
+                          </button>
+                          <button
+                            className="text-red-400 hover:text-red-300 text-sm font-medium flex items-center gap-1 disabled:opacity-50"
+                            onClick={() => handleDelete(car.id)}
+                            disabled={deletingId === car.id}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                            {deletingId === car.id ? 'Deleting...' : 'Delete'}
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   );
