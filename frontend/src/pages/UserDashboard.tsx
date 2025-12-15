@@ -34,12 +34,12 @@ export const UserDashboard: React.FC = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    if (!auth.user?._id) return;
+    if (!auth.user?.id) return;
 
     const loadSchedules = async () => {
       setLoading(true);
       try {
-        const data = await fetchCustomerSchedules(auth.user._id);
+        const data = await fetchCustomerSchedules(auth.user.id);
         setSchedules(data || []);
       } catch (err) {
         const message = err instanceof Error ? err.message : 'Unable to load your reservations';
@@ -50,7 +50,7 @@ export const UserDashboard: React.FC = () => {
     };
 
     loadSchedules();
-  }, [auth.user?._id]);
+  }, [auth.user?.id]);
 
   if (!auth.user) {
     return (
