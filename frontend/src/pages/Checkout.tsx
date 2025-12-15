@@ -137,7 +137,7 @@ export const Checkout: React.FC = () => {
       return;
     }
 
-    if (!user?._id) {
+    if (!user?.id) {
       setError('You must be logged in to book a vehicle.');
       navigate('/login', { replace: true });
       return;
@@ -148,7 +148,7 @@ export const Checkout: React.FC = () => {
     try {
       await createSchedule({
         vehicleId: vehicle._id,
-        customerId: user._id,
+        customerId: user.id,
         startDate: pickupDate,
         endDate: returnDate,
         depositAmount: dueToday,
