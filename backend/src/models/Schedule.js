@@ -8,7 +8,8 @@ const ScheduleSchema = new mongoose.Schema(
     endDate: { type: Date, required: true },
     depositAmount: { type: Number, default: 0 },
     totalPrice: { type: Number, default: 0 },
-    status: { type: String, default: "pending" }
+    status: { type: String, default: "pending" },
+    rentalId: { type: mongoose.Schema.Types.ObjectId, ref: "Rental" }
   },
   { timestamps: true }
 );
