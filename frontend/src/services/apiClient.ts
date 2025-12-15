@@ -133,6 +133,8 @@ export const createSchedule = (payload: {
   totalPrice: number;
   status: string;
 }) => request(`${API_PREFIX}/schedules`, { method: 'POST', body: JSON.stringify(payload) });
+export const cancelSchedule = (scheduleId: string) =>
+  request(`${API_PREFIX}/schedules/${scheduleId}/cancel`, { method: 'PUT' });
 
 export const fetchCustomers = () => request(`${API_PREFIX}/customers`);
 export const fetchAdminDashboard = () => request(`${API_PREFIX}/admin/dashboard`);

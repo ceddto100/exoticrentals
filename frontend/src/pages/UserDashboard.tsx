@@ -1,8 +1,8 @@
 
 import React, { useState, useContext, useEffect, useMemo } from 'react';
 import { AuthContext } from '../App';
-import { Clock, FileText, CreditCard, ShieldCheck } from 'lucide-react';
-import { fetchCustomerSchedules } from '../services/apiClient';
+import { Clock, FileText, CreditCard, ShieldCheck, XCircle } from 'lucide-react';
+import { fetchCustomerSchedules, cancelSchedule } from '../services/apiClient';
 
 const DEFAULT_AVATAR = '/assets/car-placeholder.svg';
 
@@ -32,6 +32,7 @@ export const UserDashboard: React.FC = () => {
   const [schedules, setSchedules] = useState<ScheduleRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [cancellingId, setCancellingId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!auth.user?.id) return;
@@ -52,6 +53,29 @@ export const UserDashboard: React.FC = () => {
     loadSchedules();
   }, [auth.user?.id]);
 
+  const handleCancelReservation = async (scheduleId: string) => {
+    if (cancellingId) return;
+
+    const confirmed = window.confirm('Are you sure you want to cancel this reservation?');
+    if (!confirmed) return;
+
+    setCancellingId(scheduleId);
+    setError('');
+
+    try {
+      await cancelSchedule(scheduleId);
+      // Update the local state to reflect the cancellation
+      setSchedules(prev =>
+        prev.map(s => s._id === scheduleId ? { ...s, status: 'cancelled' } : s)
+      );
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Unable to cancel reservation';
+      setError(message);
+    } finally {
+      setCancellingId(null);
+    }
+  };
+
   if (!auth.user) {
     return (
       <div className="min-h-screen flex items-center justify-center text-white">
@@ -62,14 +86,20 @@ export const UserDashboard: React.FC = () => {
 
   const { name, email, avatarUrl } = auth.user;
 
+  // Upcoming: future reservations that are not cancelled
   const upcoming = useMemo(() => {
     const now = new Date();
-    return schedules.filter(schedule => new Date(schedule.endDate) >= now);
+    return schedules
+      .filter(schedule => new Date(schedule.endDate) >= now && schedule.status !== 'cancelled')
+      .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
   }, [schedules]);
 
+  // History: past reservations OR cancelled reservations
   const history = useMemo(() => {
     const now = new Date();
-    return schedules.filter(schedule => new Date(schedule.endDate) < now);
+    return schedules
+      .filter(schedule => new Date(schedule.endDate) < now || schedule.status === 'cancelled')
+      .sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime());
   }, [schedules]);
 
   return (
@@ -108,23 +138,43 @@ export const UserDashboard: React.FC = () => {
                 {upcoming.map(schedule => (
                   <div
                     key={schedule._id}
-                    className="p-4 rounded-lg border border-gray-800 bg-gray-950 flex items-center justify-between"
+                    className="p-4 rounded-lg border border-gray-800 bg-gray-950"
                   >
-                    <div>
-                      <p className="font-semibold text-white">
-                        {schedule.vehicleId?.make} {schedule.vehicleId?.model}
-                      </p>
-                      <p className="text-sm text-gray-400">
-                        {new Date(schedule.startDate).toLocaleDateString()} - {new Date(schedule.endDate).toLocaleDateString()}
-                      </p>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="font-semibold text-white">
+                          {schedule.vehicleId?.make} {schedule.vehicleId?.model}
+                        </p>
+                        <p className="text-sm text-gray-400">
+                          {new Date(schedule.startDate).toLocaleDateString()} - {new Date(schedule.endDate).toLocaleDateString()}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
+                          schedule.status === 'active' ? 'bg-green-900/30 text-green-200' :
+                          schedule.status === 'pending' ? 'bg-yellow-900/30 text-yellow-200' :
+                          'bg-gray-800 text-gray-300'
+                        }`}>
+                          {schedule.status || 'pending'}
+                        </span>
+                        {schedule.depositAmount ? (
+                          <p className="text-xs text-gray-400 mt-1">Deposit: ${schedule.depositAmount.toFixed(2)}</p>
+                        ) : null}
+                        {schedule.totalPrice && <p className="text-sm font-semibold mt-1">Total: ${schedule.totalPrice.toFixed(2)}</p>}
+                      </div>
                     </div>
-                    <div className="text-right">
-                      <span className="text-xs text-gray-400 block capitalize">{schedule.status || 'booked'}</span>
-                      {schedule.depositAmount ? (
-                        <span className="text-xs text-gray-400 block">Deposit: ${schedule.depositAmount.toFixed(2)}</span>
-                      ) : null}
-                      {schedule.totalPrice && <span className="text-sm font-semibold">Total: ${schedule.totalPrice.toFixed(2)}</span>}
-                    </div>
+                    {(schedule.status === 'pending' || !schedule.status) && (
+                      <div className="mt-3 pt-3 border-t border-gray-800 flex justify-end">
+                        <button
+                          onClick={() => handleCancelReservation(schedule._id)}
+                          disabled={cancellingId === schedule._id}
+                          className="flex items-center gap-1 text-sm text-red-400 hover:text-red-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          <XCircle className="w-4 h-4" />
+                          {cancellingId === schedule._id ? 'Cancelling...' : 'Cancel Reservation'}
+                        </button>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -164,8 +214,14 @@ export const UserDashboard: React.FC = () => {
                         </p>
                       </div>
                       <div className="text-right">
-                        <span className="text-xs text-gray-400 block capitalize">{item.status || 'completed'}</span>
-                        {item.totalPrice && <span className="text-sm font-semibold">${item.totalPrice.toFixed(2)}</span>}
+                        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
+                          item.status === 'completed' ? 'bg-green-900/30 text-green-200' :
+                          item.status === 'cancelled' ? 'bg-red-900/30 text-red-200' :
+                          'bg-gray-800 text-gray-300'
+                        }`}>
+                          {item.status || 'completed'}
+                        </span>
+                        {item.totalPrice && <p className="text-sm font-semibold mt-1">${item.totalPrice.toFixed(2)}</p>}
                       </div>
                     </div>
                   </div>
