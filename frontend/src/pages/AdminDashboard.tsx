@@ -1,10 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
+import { CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, XAxis, YAxis } from 'recharts';
 import { FALLBACK_CAR_IMAGE } from '../constants';
-import { DollarSign, Calendar, AlertCircle, Car as CarIcon, TrendingUp, Trash2 } from 'lucide-react';
+import { DollarSign, Calendar, AlertCircle, Car as CarIcon, TrendingUp, Trash2, Clock } from 'lucide-react';
 import { deleteVehicle, fetchSchedules, fetchVehicles } from '../services/apiClient';
 import { Car } from '../types';
+
+interface ScheduleRecord {
+  _id: string;
+  vehicleId: {
+    _id: string;
+    make: string;
+    model: string;
+    year: number;
+    images?: string[];
+  } | null;
+  customerId: {
+    _id: string;
+    name: string;
+    email?: string;
+  } | null;
+  startDate: string;
+  endDate: string;
+  status: string;
+  totalPrice: number;
+  depositAmount: number;
+}
 
 const revenueData = [
   { name: 'Mon', revenue: 4000 },
@@ -16,15 +37,9 @@ const revenueData = [
   { name: 'Sun', revenue: 3490 },
 ];
 
-const availabilityData = [
-  { name: 'Sedan', available: 12, booked: 4 },
-  { name: 'SUV', available: 8, booked: 10 },
-  { name: 'Luxury', available: 3, booked: 5 },
-  { name: 'Sports', available: 5, booked: 2 },
-];
-
 export const AdminDashboard: React.FC = () => {
   const [fleet, setFleet] = useState<Car[]>([]);
+  const [schedules, setSchedules] = useState<ScheduleRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
     userCount: 0,
@@ -48,11 +63,12 @@ export const AdminDashboard: React.FC = () => {
   useEffect(() => {
     const loadDashboard = async () => {
       try {
-        const [schedules, vehicles] = await Promise.all([fetchSchedules(), fetchVehicles()]);
+        const [schedulesData, vehicles] = await Promise.all([fetchSchedules(), fetchVehicles()]);
+        setSchedules(schedulesData || []);
         setStats({
           userCount: 0,
           vehicleCount: vehicles.length,
-          activeRentals: schedules.length,
+          activeRentals: schedulesData.length,
           historyCount: 0,
         });
         setFleet(vehicles);
@@ -67,6 +83,12 @@ export const AdminDashboard: React.FC = () => {
 
     loadDashboard();
   }, []);
+
+  // Filter upcoming reservations (end date >= today)
+  const upcomingReservations = schedules.filter(schedule => {
+    const endDate = new Date(schedule.endDate);
+    return endDate >= new Date();
+  }).sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
 
   const handleDelete = async (vehicleId: string) => {
     if (deletingId) return;
@@ -176,18 +198,54 @@ export const AdminDashboard: React.FC = () => {
           </div>
 
           <div className="bg-gray-900 p-6 rounded-xl shadow-lg border border-gray-800">
-            <h3 className="text-lg font-bold text-white mb-6">Fleet Availability by Category</h3>
-            <div className="h-80">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={availabilityData}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
-                  <XAxis dataKey="name" axisLine={false} tickLine={false} />
-                  <YAxis axisLine={false} tickLine={false} />
-                  <Tooltip cursor={{fill: '#f3f4f6'}} contentStyle={{ borderRadius: '8px', border: 'none' }}/>
-                  <Bar dataKey="available" fill="#4f46e5" radius={[4, 4, 0, 0]} name="Available" />
-                  <Bar dataKey="booked" fill="#cbd5e1" radius={[4, 4, 0, 0]} name="Booked" />
-                </BarChart>
-              </ResponsiveContainer>
+            <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
+              <Clock className="w-5 h-5 text-red-300" /> Upcoming Reservations
+            </h3>
+            <div className="h-80 overflow-y-auto">
+              {loading ? (
+                <div className="flex items-center justify-center h-full text-gray-400">
+                  Loading reservations...
+                </div>
+              ) : upcomingReservations.length === 0 ? (
+                <div className="flex items-center justify-center h-full text-gray-400">
+                  No upcoming reservations
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {upcomingReservations.map((reservation) => (
+                    <div
+                      key={reservation._id}
+                      className="p-4 rounded-lg border border-gray-800 bg-gray-950 hover:border-gray-700 transition"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <p className="font-semibold text-white">
+                            {reservation.vehicleId?.make || 'Unknown'} {reservation.vehicleId?.model || 'Vehicle'}
+                          </p>
+                          <p className="text-sm text-gray-400">
+                            Customer: {reservation.customerId?.name || 'Unknown'}
+                          </p>
+                          <p className="text-xs text-gray-500 mt-1">
+                            {new Date(reservation.startDate).toLocaleDateString()} - {new Date(reservation.endDate).toLocaleDateString()}
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
+                            reservation.status === 'active' ? 'bg-green-900/30 text-green-200' :
+                            reservation.status === 'pending' ? 'bg-yellow-900/30 text-yellow-200' :
+                            'bg-gray-800 text-gray-300'
+                          }`}>
+                            {reservation.status || 'pending'}
+                          </span>
+                          <p className="text-sm font-semibold text-white mt-1">
+                            ${reservation.totalPrice?.toFixed(2) || '0.00'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>
