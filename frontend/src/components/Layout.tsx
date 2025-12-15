@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { Car, LogOut, Menu, X, Shield, Phone, Mail, Bot } from "lucide-react";
+import { LogOut, Menu, X, Shield, Phone, Mail, Bot } from "lucide-react";
 import { AIChatModal } from "./AIChatModal";
 import { AuthContext } from "../App";
 
@@ -217,7 +217,11 @@ export const Layout: React.FC<LayoutProps> = ({ onLogout, children }) => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center mb-4">
-                <Car className="h-8 w-8 text-red-400 drop-shadow-[0_0_12px_rgba(248,113,113,0.5)]" />
+                <img
+                  src="/exotic_rentals.png"
+                  alt="Exotic Rentals logo"
+                  className="h-8 w-auto drop-shadow-[0_0_12px_rgba(248,113,113,0.5)]"
+                />
                 <span className="ml-2 text-xl font-bold">Exotic Rentals</span>
               </div>
               <p className="text-gray-400 text-sm">
