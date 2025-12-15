@@ -112,3 +112,48 @@ export const getVehicleSchedule = async (req, res) => {
     res.status(500).json({ message: 'Unable to fetch vehicle schedule', error: err.message });
   }
 };
+
+export const cancelSchedule = async (req, res) => {
+  try {
+    const schedule = await Schedule.findById(req.params.id);
+
+    if (!schedule) {
+      return res.status(404).json({ message: 'Schedule not found' });
+    }
+
+    // Check if the user owns this schedule
+    if (schedule.customerId.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'Not authorized to cancel this reservation' });
+    }
+
+    // Only allow canceling pending or active schedules
+    if (schedule.status === 'cancelled') {
+      return res.status(400).json({ message: 'This reservation is already cancelled' });
+    }
+
+    if (schedule.status === 'completed') {
+      return res.status(400).json({ message: 'Cannot cancel a completed reservation' });
+    }
+
+    // Update the schedule status to cancelled
+    schedule.status = 'cancelled';
+    await schedule.save();
+
+    // Sync with the linked Rental record
+    if (schedule.rentalId) {
+      await Rental.findByIdAndUpdate(schedule.rentalId, { status: 'cancelled' });
+
+      // Log the cancellation in rental history
+      await RentalHistory.create({
+        rental: schedule.rentalId,
+        user: schedule.customerId,
+        action: 'cancelled',
+        notes: 'Reservation cancelled by customer',
+      });
+    }
+
+    res.json({ success: true, message: 'Reservation cancelled successfully', schedule });
+  } catch (err) {
+    res.status(500).json({ message: 'Unable to cancel schedule', error: err.message });
+  }
+};
