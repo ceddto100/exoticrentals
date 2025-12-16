@@ -1,5 +1,5 @@
 import React, { useState, createContext, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Layout } from './components/Layout';
 import { Home } from './pages/Home';
 import { Login } from './pages/Login';
@@ -12,6 +12,17 @@ import { VehicleDetails } from './pages/VehicleDetails';
 import { Checkout } from './pages/Checkout';
 import { AuthSuccess } from './pages/AuthSuccess';
 import { AUTH_TOKEN_KEY } from './services/apiClient';
+
+// ScrollToTop component - scrolls to top on route change
+const ScrollToTop: React.FC = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+};
 
 export interface AuthUser {
   id: string;
@@ -100,6 +111,7 @@ const App: React.FC = () => {
   return (
     <AuthContext.Provider value={{ auth, setAuth }}>
       <Router>
+        <ScrollToTop />
         <Layout onLogout={handleLogout}>
           <Routes>
             <Route path="/" element={<Home />} />
