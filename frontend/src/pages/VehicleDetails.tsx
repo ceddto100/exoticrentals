@@ -267,9 +267,11 @@ export const VehicleDetails: React.FC<VehicleDetailsProps> = ({ user }) => {
                 <label className="block text-sm font-medium text-gray-200 mb-1">Location</label>
                 <div className="relative">
                   <select className="block w-full pl-10 pr-3 py-2 border border-gray-700 rounded-lg focus:ring-red-400 focus:border-red-400 bg-gray-950 text-gray-100">
-                    <option>Los Angeles International Airport (LAX)</option>
-                    <option>Downtown LA Office</option>
-                    <option>Beverly Hills Hotel Delivery</option>
+                    <option>Hartsfield-Jackson Atlanta International Airport (ATL)</option>
+                    <option>Buckhead - North Atlanta</option>
+                    <option>Midtown Atlanta Office</option>
+                    <option>Downtown Atlanta Location</option>
+                    <option>Perimeter Center - Sandy Springs</option>
                   </select>
                   <MapPin className="h-5 w-5 text-gray-400 absolute left-3 top-2.5" />
                 </div>
