@@ -90,37 +90,59 @@ export const HowItWorks: React.FC = () => {
       </section>
 
       <section id="steps" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 space-y-16">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 reveal-on-scroll stagger-children">
-          {steps.map((step, index) => {
-            const Icon = step.icon;
-            return (
-              <div
-                key={step.title}
-                className="glass-card rounded-2xl p-6 hover:-translate-y-1 transition transform duration-300 neon-border group"
-              >
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="h-12 w-12 rounded-xl bg-red-500/20 flex items-center justify-center group-hover:bg-red-500/30 transition-colors">
-                    <Icon className="h-6 w-6 text-red-400" />
-                  </span>
-                  <span className="text-xs uppercase tracking-wider text-gray-500 font-bold">Step {String(index + 1).padStart(2, '0')}</span>
+        {/* Timeline Section */}
+        <div className="relative">
+          {/* Vertical Timeline Line - hidden on mobile */}
+          <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-red-500/50 via-red-500/30 to-red-500/50 -translate-x-1/2"></div>
+
+          {/* Timeline Steps */}
+          <div className="space-y-16 md:space-y-24">
+            {steps.map((step, index) => {
+              const Icon = step.icon;
+              const isEven = index % 2 === 0;
+
+              return (
+                <div key={step.title} className="relative reveal-on-scroll">
+                  {/* Timeline Circle - centered on the line */}
+                  <div className="hidden md:flex absolute left-1/2 top-8 -translate-x-1/2 z-10">
+                    <div className="relative">
+                      {/* Outer ring with glow */}
+                      <div className="w-12 h-12 rounded-full border-2 border-red-500/50 bg-black/80 flex items-center justify-center animate-pulse-glow">
+                        {/* Inner filled dot */}
+                        <div className="w-4 h-4 rounded-full bg-red-500 shadow-[0_0_15px_rgba(239,68,68,0.8)]"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Card Container - alternates sides */}
+                  <div className={`md:w-[45%] ${isEven ? 'md:mr-auto md:pr-8' : 'md:ml-auto md:pl-8'}`}>
+                    <div className="glass-card rounded-2xl p-6 hover:-translate-y-1 transition transform duration-300 neon-border group">
+                      <div className="flex items-center gap-3 mb-4">
+                        <span className="h-12 w-12 rounded-xl bg-red-500/20 flex items-center justify-center group-hover:bg-red-500/30 transition-colors">
+                          <Icon className="h-6 w-6 text-red-400" />
+                        </span>
+                        <span className="text-xs uppercase tracking-wider text-gray-500 font-bold">Step {String(index + 1).padStart(2, '0')}</span>
+                      </div>
+                      <h3 className="text-xl font-bold text-white mb-2">{step.title}</h3>
+                      <p className="text-gray-400 text-sm leading-relaxed mb-4">{step.description}</p>
+                      <ul className="space-y-2 text-sm text-gray-300 mb-4">
+                        {step.checklist.map((item) => (
+                          <li key={item} className="flex items-start gap-2">
+                            <span className="h-2 w-2 rounded-full bg-red-400 mt-2 flex-shrink-0" />
+                            <span className="leading-relaxed">{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                      <Link to={step.link} className="inline-flex items-center text-red-400 text-sm font-semibold hover:text-red-300 transition-colors group/link">
+                        {step.cta}
+                        <span className="ml-2 group-hover/link:translate-x-1 transition-transform">→</span>
+                      </Link>
+                    </div>
+                  </div>
                 </div>
-                <h3 className="text-xl font-bold text-white mb-2">{step.title}</h3>
-                <p className="text-gray-400 text-sm leading-relaxed mb-4">{step.description}</p>
-                <ul className="space-y-2 text-sm text-gray-300 mb-4">
-                  {step.checklist.map((item) => (
-                    <li key={item} className="flex items-start gap-2">
-                      <span className="h-2 w-2 rounded-full bg-red-400 mt-2 flex-shrink-0" />
-                      <span className="leading-relaxed">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-                <Link to={step.link} className="inline-flex items-center text-red-400 text-sm font-semibold hover:text-red-300 transition-colors group/link">
-                  {step.cta}
-                  <span className="ml-2 group-hover/link:translate-x-1 transition-transform">→</span>
-                </Link>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start reveal-on-scroll">
