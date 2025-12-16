@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Calendar, Shield, MapPin, Gauge, Check, Info } from 'lucide-react';
+import { Calendar, Shield, MapPin, Gauge, Check, Info, ChevronLeft, ChevronRight } from 'lucide-react';
 import { FALLBACK_CAR_IMAGE } from '../constants';
 import { Car, User } from '../types';
 import { fetchVehicle } from '../services/apiClient';
@@ -19,6 +19,7 @@ export const VehicleDetails: React.FC<VehicleDetailsProps> = ({ user }) => {
   const [pickupDate, setPickupDate] = useState('');
   const [returnDate, setReturnDate] = useState('');
   const [totalPrice, setTotalPrice] = useState(0);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
     const loadVehicle = async () => {
@@ -79,19 +80,78 @@ export const VehicleDetails: React.FC<VehicleDetailsProps> = ({ user }) => {
 
   const today = new Date().toISOString().split('T')[0];
 
+  // Get all available images
+  const allImages = car.images && car.images.length > 0
+    ? car.images.filter(img => img && img.trim())
+    : car.imageUrl
+      ? [car.imageUrl]
+      : [FALLBACK_CAR_IMAGE];
+
+  const totalImages = allImages.length;
+
+  const handlePrevImage = () => {
+    setCurrentImageIndex((prev) => (prev === 0 ? totalImages - 1 : prev - 1));
+  };
+
+  const handleNextImage = () => {
+    setCurrentImageIndex((prev) => (prev === totalImages - 1 ? 0 : prev + 1));
+  };
+
   return (
     <div className="bg-gray-950 text-gray-100 min-h-screen pb-12">
-      {/* Hero Image */}
+      {/* Hero Image Gallery */}
       <div className="h-[400px] md:h-[60vh] relative w-full overflow-hidden">
         <img
-          src={car.imageUrl || car.images?.[0] || FALLBACK_CAR_IMAGE}
-          alt={car.model}
+          src={allImages[currentImageIndex]}
+          alt={`${car.model} - Image ${currentImageIndex + 1}`}
           onError={(e) => {
             e.currentTarget.onerror = null;
             e.currentTarget.src = FALLBACK_CAR_IMAGE;
           }}
           className="w-full h-full object-cover"
         />
+
+        {/* Navigation Buttons (only show if multiple images) */}
+        {totalImages > 1 && (
+          <>
+            <button
+              onClick={handlePrevImage}
+              className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 text-white p-3 rounded-full transition backdrop-blur-sm border border-white/20 shadow-lg"
+              aria-label="Previous image"
+            >
+              <ChevronLeft className="h-6 w-6" />
+            </button>
+            <button
+              onClick={handleNextImage}
+              className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 text-white p-3 rounded-full transition backdrop-blur-sm border border-white/20 shadow-lg"
+              aria-label="Next image"
+            >
+              <ChevronRight className="h-6 w-6" />
+            </button>
+
+            {/* Image Counter */}
+            <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-sm px-3 py-1.5 rounded-full text-white text-sm font-medium border border-white/20">
+              {currentImageIndex + 1} / {totalImages}
+            </div>
+
+            {/* Thumbnail Indicators */}
+            <div className="absolute bottom-24 left-0 right-0 flex justify-center gap-2 px-4">
+              {allImages.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentImageIndex(index)}
+                  className={`h-1.5 rounded-full transition-all ${
+                    index === currentImageIndex
+                      ? 'bg-white w-8'
+                      : 'bg-white/40 w-1.5 hover:bg-white/60'
+                  }`}
+                  aria-label={`View image ${index + 1}`}
+                />
+              ))}
+            </div>
+          </>
+        )}
+
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 p-8 max-w-7xl mx-auto">
           <div className="bg-white/10 backdrop-blur-md inline-block px-4 py-1 rounded-full text-white text-sm font-semibold mb-4 border border-white/20">
