@@ -48,10 +48,10 @@ export const Home: React.FC = () => {
             className="w-full h-full object-cover"
           />
           {/* Gradient overlays */}
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/70 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-slate-950/50" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/70 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/50" />
           {/* Animated color overlay */}
-          <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-transparent to-purple-500/10 animate-pulse" style={{ animationDuration: '4s' }} />
+          <div className="absolute inset-0 bg-gradient-to-br from-red-500/10 via-transparent to-red-500/10 animate-pulse" style={{ animationDuration: '4s' }} />
         </div>
 
         {/* Floating particles */}
@@ -73,7 +73,7 @@ export const Home: React.FC = () => {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="max-w-3xl">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card text-cyan-400 text-sm font-medium mb-8 animate-fade-up">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card text-red-400 text-sm font-medium mb-8 animate-fade-up">
               <Sparkles className="h-4 w-4" />
               <span>AI-Powered Luxury Experience</span>
             </div>
@@ -124,8 +124,8 @@ export const Home: React.FC = () => {
 
         {/* Scroll indicator */}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-          <div className="w-6 h-10 rounded-full border-2 border-cyan-500/50 flex items-start justify-center p-2">
-            <div className="w-1 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
+          <div className="w-6 h-10 rounded-full border-2 border-red-500/50 flex items-start justify-center p-2">
+            <div className="w-1 h-2 bg-red-400 rounded-full animate-pulse"></div>
           </div>
         </div>
       </div>
@@ -148,7 +148,7 @@ export const Home: React.FC = () => {
                     className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 ${
                       selectedCategory === cat
                         ? 'primary-gradient-btn text-white'
-                        : 'glass-card text-gray-300 hover:text-cyan-400 hover:border-cyan-500/30'
+                        : 'glass-card text-gray-300 hover:text-red-400 hover:border-red-500/30'
                     }`}
                   >
                     {cat}
@@ -164,14 +164,14 @@ export const Home: React.FC = () => {
                 <div className="text-sm text-gray-400">vehicles available</div>
               </div>
               {loading && (
-                <div className="h-8 w-8 rounded-full border-2 border-cyan-500 border-t-transparent animate-spin"></div>
+                <div className="h-8 w-8 rounded-full border-2 border-red-500 border-t-transparent animate-spin"></div>
               )}
             </div>
           </div>
 
           {error && (
-            <div className="mt-6 text-sm text-pink-300 bg-pink-500/10 border border-pink-500/30 rounded-xl p-4 flex items-center gap-3">
-              <div className="h-2 w-2 rounded-full bg-pink-400 animate-pulse"></div>
+            <div className="mt-6 text-sm text-red-300 bg-red-500/10 border border-red-500/30 rounded-xl p-4 flex items-center gap-3">
+              <div className="h-2 w-2 rounded-full bg-red-400 animate-pulse"></div>
               {error}
             </div>
           )}
@@ -210,14 +210,14 @@ export const Home: React.FC = () => {
       <div id="how-it-works" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-32">
         <div className="glass-card rounded-[2rem] p-8 md:p-12 relative overflow-hidden">
           {/* Background decoration */}
-          <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-cyan-500/20 to-purple-500/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-pink-500/20 to-cyan-500/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
+          <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-red-500/20 to-red-500/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-red-500/20 to-red-500/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
 
           <div className="relative">
             {/* Header */}
             <div className="flex flex-col lg:flex-row justify-between items-start gap-8 mb-12 reveal-on-scroll">
               <div>
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card text-purple-400 text-sm font-medium mb-4">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card text-red-400 text-sm font-medium mb-4">
                   <Zap className="h-4 w-4" />
                   <span>Seamless Experience</span>
                 </div>
@@ -268,13 +268,13 @@ export const Home: React.FC = () => {
               ].map((item, idx) => (
                 <div
                   key={idx}
-                  className="group relative glass-card rounded-2xl p-8 transition-all duration-500 hover:border-cyan-500/30 neon-border"
+                  className="group relative glass-card rounded-2xl p-8 transition-all duration-500 hover:border-red-500/30 neon-border"
                 >
                   {/* Step number */}
                   <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl mb-6 ${
-                    item.color === 'cyan' ? 'bg-cyan-500/20 text-cyan-400' :
-                    item.color === 'purple' ? 'bg-purple-500/20 text-purple-400' :
-                    'bg-pink-500/20 text-pink-400'
+                    item.color === 'cyan' ? 'bg-red-500/20 text-red-400' :
+                    item.color === 'purple' ? 'bg-red-500/20 text-red-400' :
+                    'bg-red-500/20 text-red-400'
                   }`}>
                     <item.icon className="h-6 w-6" />
                   </div>
@@ -286,9 +286,9 @@ export const Home: React.FC = () => {
 
                   {/* Decorative gradient */}
                   <div className={`absolute bottom-0 right-0 w-32 h-32 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 ${
-                    item.color === 'cyan' ? 'bg-cyan-500/20' :
-                    item.color === 'purple' ? 'bg-purple-500/20' :
-                    'bg-pink-500/20'
+                    item.color === 'cyan' ? 'bg-red-500/20' :
+                    item.color === 'purple' ? 'bg-red-500/20' :
+                    'bg-red-500/20'
                   }`}></div>
                 </div>
               ))}
@@ -298,7 +298,7 @@ export const Home: React.FC = () => {
             <div className="mt-12 text-center reveal-on-scroll">
               <Link
                 to="/how-it-works"
-                className="inline-flex items-center gap-2 text-cyan-400 font-semibold hover:text-cyan-300 transition-colors group"
+                className="inline-flex items-center gap-2 text-red-400 font-semibold hover:text-cyan-300 transition-colors group"
               >
                 Learn more about our process
                 <ChevronRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
@@ -326,11 +326,11 @@ export const Home: React.FC = () => {
             { icon: Zap, title: 'Instant Booking', desc: 'Reserve your dream car in seconds', color: 'pink' },
             { icon: Clock, title: '24/7 Support', desc: 'Always available when you need us', color: 'cyan' },
           ].map((feature, idx) => (
-            <div key={idx} className="glass-card rounded-2xl p-6 text-center group hover:border-cyan-500/30 transition-all duration-300">
+            <div key={idx} className="glass-card rounded-2xl p-6 text-center group hover:border-red-500/30 transition-all duration-300">
               <div className={`inline-flex items-center justify-center w-14 h-14 rounded-xl mb-4 ${
-                feature.color === 'cyan' ? 'bg-cyan-500/20 text-cyan-400' :
-                feature.color === 'purple' ? 'bg-purple-500/20 text-purple-400' :
-                'bg-pink-500/20 text-pink-400'
+                feature.color === 'cyan' ? 'bg-red-500/20 text-red-400' :
+                feature.color === 'purple' ? 'bg-red-500/20 text-red-400' :
+                'bg-red-500/20 text-red-400'
               }`}>
                 <feature.icon className="h-7 w-7" />
               </div>

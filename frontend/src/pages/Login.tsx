@@ -40,9 +40,9 @@ export const Login: React.FC<LoginProps> = ({ tokenKey }) => {
   return (
     <div className="relative min-h-screen flex items-center justify-center p-4 overflow-hidden">
       {/* Decorative elements */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl"></div>
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-pink-500/10 rounded-full blur-3xl"></div>
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-red-500/20 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-red-500/20 rounded-full blur-3xl"></div>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-red-500/10 rounded-full blur-3xl"></div>
 
       <div className="relative w-full max-w-md">
         {/* Main Card */}
@@ -56,7 +56,7 @@ export const Login: React.FC<LoginProps> = ({ tokenKey }) => {
                 className="h-16 w-auto mx-auto"
               />
               <div className="absolute -top-2 -right-2">
-                <Sparkles className="h-6 w-6 text-cyan-400 animate-pulse" />
+                <Sparkles className="h-6 w-6 text-red-400 animate-pulse" />
               </div>
             </div>
             <h1 className="text-4xl font-black text-white mb-3">
@@ -93,23 +93,23 @@ export const Login: React.FC<LoginProps> = ({ tokenKey }) => {
 
           {/* Divider */}
           <div className="flex items-center gap-4 mb-6">
-            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent"></div>
+            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-red-500/30 to-transparent"></div>
             <span className="text-gray-500 text-sm">Secure Authentication</span>
-            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent"></div>
+            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-red-500/30 to-transparent"></div>
           </div>
 
           {/* Features */}
           <div className="grid grid-cols-3 gap-4">
-            <div className="text-center p-3 rounded-xl bg-cyan-500/10 border border-cyan-500/20">
-              <Shield className="h-5 w-5 text-cyan-400 mx-auto mb-2" />
+            <div className="text-center p-3 rounded-xl bg-red-500/10 border border-red-500/20">
+              <Shield className="h-5 w-5 text-red-400 mx-auto mb-2" />
               <span className="text-xs text-gray-400">Secure</span>
             </div>
-            <div className="text-center p-3 rounded-xl bg-purple-500/10 border border-purple-500/20">
-              <Zap className="h-5 w-5 text-purple-400 mx-auto mb-2" />
+            <div className="text-center p-3 rounded-xl bg-red-500/10 border border-red-500/20">
+              <Zap className="h-5 w-5 text-red-400 mx-auto mb-2" />
               <span className="text-xs text-gray-400">Fast</span>
             </div>
-            <div className="text-center p-3 rounded-xl bg-pink-500/10 border border-pink-500/20">
-              <Sparkles className="h-5 w-5 text-pink-400 mx-auto mb-2" />
+            <div className="text-center p-3 rounded-xl bg-red-500/10 border border-red-500/20">
+              <Sparkles className="h-5 w-5 text-red-400 mx-auto mb-2" />
               <span className="text-xs text-gray-400">AI-Powered</span>
             </div>
           </div>

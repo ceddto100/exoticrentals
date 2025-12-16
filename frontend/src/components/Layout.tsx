@@ -77,7 +77,7 @@ export const Layout: React.FC<LayoutProps> = ({ onLogout, children }) => {
       {/* Header */}
       <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
-          ? 'glass-card border-b border-cyan-500/20'
+          ? 'glass-card border-b border-red-500/20'
           : 'bg-transparent'
       }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -92,7 +92,7 @@ export const Layout: React.FC<LayoutProps> = ({ onLogout, children }) => {
                 <img
                   src="/exotic_rentals.png"
                   alt="Exotic Rentals logo"
-                  className="h-10 w-auto transition-all duration-300 group-hover:drop-shadow-[0_0_15px_rgba(6,182,212,0.5)]"
+                  className="h-10 w-auto transition-all duration-300 group-hover:drop-shadow-[0_0_15px_rgba(239,68,68,0.5)]"
                 />
               </div>
               <span className="ml-3 text-lg font-bold hidden sm:block gradient-text">
@@ -104,14 +104,14 @@ export const Layout: React.FC<LayoutProps> = ({ onLogout, children }) => {
             <nav className="hidden md:flex items-center space-x-1">
               <Link
                 to="/"
-                className="px-4 py-2 rounded-lg text-gray-300 hover:text-cyan-400 font-medium transition-all duration-300 hover:bg-cyan-500/10"
+                className="px-4 py-2 rounded-lg text-gray-300 hover:text-red-400 font-medium transition-all duration-300 hover:bg-red-500/10"
               >
                 Inventory
               </Link>
 
               <Link
                 to="/how-it-works"
-                className="px-4 py-2 rounded-lg text-gray-300 hover:text-cyan-400 font-medium transition-all duration-300 hover:bg-cyan-500/10"
+                className="px-4 py-2 rounded-lg text-gray-300 hover:text-red-400 font-medium transition-all duration-300 hover:bg-red-500/10"
               >
                 How it Works
               </Link>
@@ -121,7 +121,7 @@ export const Layout: React.FC<LayoutProps> = ({ onLogout, children }) => {
                   {user.role === "admin" ? (
                     <Link
                       to="/admin"
-                      className="px-4 py-2 rounded-lg text-purple-400 font-medium transition-all duration-300 hover:bg-purple-500/10 flex items-center gap-2"
+                      className="px-4 py-2 rounded-lg text-red-400 font-medium transition-all duration-300 hover:bg-red-500/10 flex items-center gap-2"
                     >
                       <Shield className="h-4 w-4" />
                       Admin
@@ -129,7 +129,7 @@ export const Layout: React.FC<LayoutProps> = ({ onLogout, children }) => {
                   ) : (
                     <Link
                       to="/dashboard"
-                      className="px-4 py-2 rounded-lg text-cyan-400 font-medium transition-all duration-300 hover:bg-cyan-500/10"
+                      className="px-4 py-2 rounded-lg text-red-400 font-medium transition-all duration-300 hover:bg-red-500/10"
                     >
                       Dashboard
                     </Link>
@@ -140,7 +140,7 @@ export const Layout: React.FC<LayoutProps> = ({ onLogout, children }) => {
                       <img
                         src={user.avatarUrl || FALLBACK_AVATAR}
                         alt="User"
-                        className="h-8 w-8 rounded-full border-2 border-cyan-500/50 object-cover"
+                        className="h-8 w-8 rounded-full border-2 border-red-500/50 object-cover"
                       />
                     </div>
                     <span className="font-medium text-sm text-gray-200">{user.name}</span>
@@ -148,7 +148,7 @@ export const Layout: React.FC<LayoutProps> = ({ onLogout, children }) => {
 
                   <button
                     onClick={handleLogout}
-                    className="flex items-center gap-2 px-3 py-2 rounded-lg text-gray-400 hover:text-pink-400 font-medium transition-all duration-300 hover:bg-pink-500/10"
+                    className="flex items-center gap-2 px-3 py-2 rounded-lg text-gray-400 hover:text-red-400 font-medium transition-all duration-300 hover:bg-red-500/10"
                   >
                     <LogOut className="h-4 w-4" />
                   </button>
@@ -167,7 +167,7 @@ export const Layout: React.FC<LayoutProps> = ({ onLogout, children }) => {
             <div className="flex items-center md:hidden">
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="p-2 rounded-lg glass-card text-gray-300 hover:text-cyan-400 transition-colors"
+                className="p-2 rounded-lg glass-card text-gray-300 hover:text-red-400 transition-colors"
               >
                 {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
               </button>
@@ -177,12 +177,12 @@ export const Layout: React.FC<LayoutProps> = ({ onLogout, children }) => {
 
         {/* Mobile Dropdown */}
         {isMobileMenuOpen && (
-          <div className="md:hidden glass-card border-t border-cyan-500/20 animate-fade-up">
+          <div className="md:hidden glass-card border-t border-red-500/20 animate-fade-up">
             <div className="px-4 py-4 space-y-2">
               <Link
                 to="/"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block px-4 py-3 rounded-lg text-base font-medium text-gray-200 hover:text-cyan-400 hover:bg-cyan-500/10 transition-all"
+                className="block px-4 py-3 rounded-lg text-base font-medium text-gray-200 hover:text-red-400 hover:bg-red-500/10 transition-all"
               >
                 Inventory
               </Link>
@@ -190,7 +190,7 @@ export const Layout: React.FC<LayoutProps> = ({ onLogout, children }) => {
               <Link
                 to="/how-it-works"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block px-4 py-3 rounded-lg text-base font-medium text-gray-200 hover:text-cyan-400 hover:bg-cyan-500/10 transition-all"
+                className="block px-4 py-3 rounded-lg text-base font-medium text-gray-200 hover:text-red-400 hover:bg-red-500/10 transition-all"
               >
                 How it Works
               </Link>
@@ -201,7 +201,7 @@ export const Layout: React.FC<LayoutProps> = ({ onLogout, children }) => {
                     <Link
                       to="/admin"
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="block px-4 py-3 text-purple-400 rounded-lg text-base font-medium hover:bg-purple-500/10 transition-all"
+                      className="block px-4 py-3 text-red-400 rounded-lg text-base font-medium hover:bg-red-500/10 transition-all"
                     >
                       Admin Dashboard
                     </Link>
@@ -209,17 +209,17 @@ export const Layout: React.FC<LayoutProps> = ({ onLogout, children }) => {
                     <Link
                       to="/dashboard"
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="block px-4 py-3 text-cyan-400 rounded-lg text-base font-medium hover:bg-cyan-500/10 transition-all"
+                      className="block px-4 py-3 text-red-400 rounded-lg text-base font-medium hover:bg-red-500/10 transition-all"
                     >
                       My Dashboard
                     </Link>
                   )}
 
-                  <div className="border-t border-cyan-500/20 my-2"></div>
+                  <div className="border-t border-red-500/20 my-2"></div>
 
                   <button
                     onClick={handleLogout}
-                    className="block w-full text-left px-4 py-3 text-base font-medium text-pink-400 hover:bg-pink-500/10 rounded-lg transition-all"
+                    className="block w-full text-left px-4 py-3 text-base font-medium text-red-400 hover:bg-red-500/10 rounded-lg transition-all"
                   >
                     Sign Out
                   </button>
@@ -259,9 +259,9 @@ export const Layout: React.FC<LayoutProps> = ({ onLogout, children }) => {
       <AIChatModal isOpen={isAIChatOpen} onClose={() => setIsAIChatOpen(false)} />
 
       {/* FOOTER */}
-      <footer className="relative z-10 border-t border-cyan-500/20">
+      <footer className="relative z-10 border-t border-red-500/20">
         {/* Gradient line at top */}
-        <div className="h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent"></div>
+        <div className="h-px bg-gradient-to-r from-transparent via-red-500/50 to-transparent"></div>
 
         <div className="glass-card">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -279,7 +279,7 @@ export const Layout: React.FC<LayoutProps> = ({ onLogout, children }) => {
                 <p className="text-gray-400 text-sm leading-relaxed mb-6">
                   The future of luxury vehicle rentals. AI-powered recommendations, seamless booking, unforgettable experiences.
                 </p>
-                <div className="flex items-center gap-2 text-xs text-cyan-400">
+                <div className="flex items-center gap-2 text-xs text-red-400">
                   <Zap className="h-4 w-4" />
                   <span>Powered by Advanced AI</span>
                 </div>
@@ -288,25 +288,25 @@ export const Layout: React.FC<LayoutProps> = ({ onLogout, children }) => {
               {/* Quick Links */}
               <div>
                 <h3 className="text-sm font-semibold text-white tracking-wider uppercase mb-6 flex items-center gap-2">
-                  <span className="h-px w-4 bg-gradient-to-r from-cyan-500 to-transparent"></span>
+                  <span className="h-px w-4 bg-gradient-to-r from-red-500 to-transparent"></span>
                   Quick Links
                 </h3>
                 <ul className="space-y-4">
                   <li>
-                    <Link to="/" className="text-gray-400 hover:text-cyan-400 transition-colors text-sm flex items-center gap-2 group">
-                      <span className="h-1 w-1 rounded-full bg-cyan-500/50 group-hover:bg-cyan-400 transition-colors"></span>
+                    <Link to="/" className="text-gray-400 hover:text-red-400 transition-colors text-sm flex items-center gap-2 group">
+                      <span className="h-1 w-1 rounded-full bg-red-500/50 group-hover:bg-red-400 transition-colors"></span>
                       Browse Fleet
                     </Link>
                   </li>
                   <li>
-                    <Link to="/how-it-works" className="text-gray-400 hover:text-cyan-400 transition-colors text-sm flex items-center gap-2 group">
-                      <span className="h-1 w-1 rounded-full bg-cyan-500/50 group-hover:bg-cyan-400 transition-colors"></span>
+                    <Link to="/how-it-works" className="text-gray-400 hover:text-red-400 transition-colors text-sm flex items-center gap-2 group">
+                      <span className="h-1 w-1 rounded-full bg-red-500/50 group-hover:bg-red-400 transition-colors"></span>
                       How it Works
                     </Link>
                   </li>
                   <li>
-                    <a href="#" className="text-gray-400 hover:text-cyan-400 transition-colors text-sm flex items-center gap-2 group">
-                      <span className="h-1 w-1 rounded-full bg-cyan-500/50 group-hover:bg-cyan-400 transition-colors"></span>
+                    <a href="#" className="text-gray-400 hover:text-red-400 transition-colors text-sm flex items-center gap-2 group">
+                      <span className="h-1 w-1 rounded-full bg-red-500/50 group-hover:bg-red-400 transition-colors"></span>
                       About Us
                     </a>
                   </li>
@@ -316,25 +316,25 @@ export const Layout: React.FC<LayoutProps> = ({ onLogout, children }) => {
               {/* Support */}
               <div>
                 <h3 className="text-sm font-semibold text-white tracking-wider uppercase mb-6 flex items-center gap-2">
-                  <span className="h-px w-4 bg-gradient-to-r from-purple-500 to-transparent"></span>
+                  <span className="h-px w-4 bg-gradient-to-r from-red-600 to-transparent"></span>
                   Support
                 </h3>
                 <ul className="space-y-4">
                   <li>
-                    <a href="#" className="text-gray-400 hover:text-purple-400 transition-colors text-sm flex items-center gap-2 group">
-                      <span className="h-1 w-1 rounded-full bg-purple-500/50 group-hover:bg-purple-400 transition-colors"></span>
+                    <a href="#" className="text-gray-400 hover:text-red-400 transition-colors text-sm flex items-center gap-2 group">
+                      <span className="h-1 w-1 rounded-full bg-red-500/50 group-hover:bg-red-400 transition-colors"></span>
                       Help Center
                     </a>
                   </li>
                   <li>
-                    <a href="#" className="text-gray-400 hover:text-purple-400 transition-colors text-sm flex items-center gap-2 group">
-                      <span className="h-1 w-1 rounded-full bg-purple-500/50 group-hover:bg-purple-400 transition-colors"></span>
+                    <a href="#" className="text-gray-400 hover:text-red-400 transition-colors text-sm flex items-center gap-2 group">
+                      <span className="h-1 w-1 rounded-full bg-red-500/50 group-hover:bg-red-400 transition-colors"></span>
                       Terms of Service
                     </a>
                   </li>
                   <li>
-                    <a href="#" className="text-gray-400 hover:text-purple-400 transition-colors text-sm flex items-center gap-2 group">
-                      <span className="h-1 w-1 rounded-full bg-purple-500/50 group-hover:bg-purple-400 transition-colors"></span>
+                    <a href="#" className="text-gray-400 hover:text-red-400 transition-colors text-sm flex items-center gap-2 group">
+                      <span className="h-1 w-1 rounded-full bg-red-500/50 group-hover:bg-red-400 transition-colors"></span>
                       Privacy Policy
                     </a>
                   </li>
@@ -344,28 +344,28 @@ export const Layout: React.FC<LayoutProps> = ({ onLogout, children }) => {
               {/* Contact */}
               <div>
                 <h3 className="text-sm font-semibold text-white tracking-wider uppercase mb-6 flex items-center gap-2">
-                  <span className="h-px w-4 bg-gradient-to-r from-pink-500 to-transparent"></span>
+                  <span className="h-px w-4 bg-gradient-to-r from-red-700 to-transparent"></span>
                   Contact
                 </h3>
                 <ul className="space-y-4">
                   <li className="flex items-center text-gray-400 text-sm group">
-                    <Phone className="h-4 w-4 mr-3 text-pink-500/70" />
-                    <span className="group-hover:text-pink-400 transition-colors">+1 (555) 123-4567</span>
+                    <Phone className="h-4 w-4 mr-3 text-red-500/70" />
+                    <span className="group-hover:text-red-400 transition-colors">+1 (555) 123-4567</span>
                   </li>
                   <li className="flex items-center text-gray-400 text-sm group">
-                    <Mail className="h-4 w-4 mr-3 text-pink-500/70" />
-                    <span className="group-hover:text-pink-400 transition-colors">support@exoticrentals.com</span>
+                    <Mail className="h-4 w-4 mr-3 text-red-500/70" />
+                    <span className="group-hover:text-red-400 transition-colors">support@exoticrentals.com</span>
                   </li>
                   <li className="flex items-center text-gray-400 text-sm group">
-                    <Globe className="h-4 w-4 mr-3 text-pink-500/70" />
-                    <span className="group-hover:text-pink-400 transition-colors">Available 24/7</span>
+                    <Globe className="h-4 w-4 mr-3 text-red-500/70" />
+                    <span className="group-hover:text-red-400 transition-colors">Available 24/7</span>
                   </li>
                 </ul>
               </div>
             </div>
 
             {/* Bottom Bar */}
-            <div className="border-t border-cyan-500/10 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="border-t border-red-500/10 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
               <p className="text-gray-500 text-sm">
                 &copy; 2024 Exotic Rentals. All rights reserved.
               </p>
@@ -375,7 +375,7 @@ export const Layout: React.FC<LayoutProps> = ({ onLogout, children }) => {
                   <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse"></div>
                   <span>All Systems Operational</span>
                 </div>
-                <Shield className="h-5 w-5 text-gray-600 hover:text-cyan-400 cursor-pointer transition-colors" />
+                <Shield className="h-5 w-5 text-gray-600 hover:text-red-400 cursor-pointer transition-colors" />
               </div>
             </div>
           </div>

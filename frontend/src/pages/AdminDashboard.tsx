@@ -138,7 +138,7 @@ export const AdminDashboard: React.FC = () => {
 
         {/* Alerts */}
         {error && (
-          <div className="mb-6 p-4 rounded-xl glass-card border-l-4 border-pink-500 text-pink-300 flex items-center gap-3">
+          <div className="mb-6 p-4 rounded-xl glass-card border-l-4 border-red-500 text-red-300 flex items-center gap-3">
             <AlertCircle className="h-5 w-5 flex-shrink-0" />
             {error}
           </div>
@@ -153,7 +153,7 @@ export const AdminDashboard: React.FC = () => {
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <div className="glass-card rounded-2xl p-6 group hover:border-cyan-500/30 transition-all duration-300">
+          <div className="glass-card rounded-2xl p-6 group hover:border-red-500/30 transition-all duration-300">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-gray-400 font-medium">Total Revenue</h3>
               <div className="h-10 w-10 rounded-xl bg-green-500/20 flex items-center justify-center">
@@ -166,11 +166,11 @@ export const AdminDashboard: React.FC = () => {
             </p>
           </div>
 
-          <div className="glass-card rounded-2xl p-6 group hover:border-cyan-500/30 transition-all duration-300">
+          <div className="glass-card rounded-2xl p-6 group hover:border-red-500/30 transition-all duration-300">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-gray-400 font-medium">Active Bookings</h3>
-              <div className="h-10 w-10 rounded-xl bg-purple-500/20 flex items-center justify-center">
-                <Calendar className="w-5 h-5 text-purple-400" />
+              <div className="h-10 w-10 rounded-xl bg-red-500/20 flex items-center justify-center">
+                <Calendar className="w-5 h-5 text-red-400" />
               </div>
             </div>
             <p className="text-3xl font-black text-white">{stats.activeRentals}</p>
@@ -180,26 +180,26 @@ export const AdminDashboard: React.FC = () => {
             </p>
           </div>
 
-          <div className="glass-card rounded-2xl p-6 group hover:border-cyan-500/30 transition-all duration-300">
+          <div className="glass-card rounded-2xl p-6 group hover:border-red-500/30 transition-all duration-300">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-gray-400 font-medium">Fleet Size</h3>
-              <div className="h-10 w-10 rounded-xl bg-cyan-500/20 flex items-center justify-center">
-                <CarIcon className="w-5 h-5 text-cyan-400" />
+              <div className="h-10 w-10 rounded-xl bg-red-500/20 flex items-center justify-center">
+                <CarIcon className="w-5 h-5 text-red-400" />
               </div>
             </div>
             <p className="text-3xl font-black text-white">{stats.vehicleCount}</p>
             <p className="text-sm text-gray-400 mt-2">Total vehicles</p>
           </div>
 
-          <div className="glass-card rounded-2xl p-6 group hover:border-cyan-500/30 transition-all duration-300">
+          <div className="glass-card rounded-2xl p-6 group hover:border-red-500/30 transition-all duration-300">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-gray-400 font-medium">Maintenance</h3>
-              <div className="h-10 w-10 rounded-xl bg-pink-500/20 flex items-center justify-center">
-                <AlertCircle className="w-5 h-5 text-pink-400" />
+              <div className="h-10 w-10 rounded-xl bg-red-500/20 flex items-center justify-center">
+                <AlertCircle className="w-5 h-5 text-red-400" />
               </div>
             </div>
             <p className="text-3xl font-black text-white">3</p>
-            <p className="text-sm text-pink-400 mt-2">Requires attention</p>
+            <p className="text-sm text-red-400 mt-2">Requires attention</p>
           </div>
         </div>
 
@@ -209,7 +209,7 @@ export const AdminDashboard: React.FC = () => {
           <div className="glass-card rounded-2xl p-6">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-cyan-400" />
+                <TrendingUp className="w-5 h-5 text-red-400" />
                 Weekly Revenue
               </h3>
               <span className="text-sm text-gray-400">Last 7 days</span>
@@ -219,8 +219,8 @@ export const AdminDashboard: React.FC = () => {
                 <AreaChart data={revenueData}>
                   <defs>
                     <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.3}/>
-                      <stop offset="95%" stopColor="#06b6d4" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="#ef4444" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(148, 163, 184, 0.1)" />
@@ -229,14 +229,14 @@ export const AdminDashboard: React.FC = () => {
                   <Tooltip
                     contentStyle={{
                       backgroundColor: 'rgba(15, 23, 42, 0.9)',
-                      border: '1px solid rgba(6, 182, 212, 0.3)',
+                      border: '1px solid rgba(239, 68, 68, 0.3)',
                       borderRadius: '12px',
-                      boxShadow: '0 0 20px rgba(6, 182, 212, 0.2)'
+                      boxShadow: '0 0 20px rgba(239, 68, 68, 0.2)'
                     }}
                     labelStyle={{ color: '#fff' }}
-                    itemStyle={{ color: '#06b6d4' }}
+                    itemStyle={{ color: '#ef4444' }}
                   />
-                  <Area type="monotone" dataKey="revenue" stroke="#06b6d4" strokeWidth={3} fillOpacity={1} fill="url(#colorRevenue)" />
+                  <Area type="monotone" dataKey="revenue" stroke="#ef4444" strokeWidth={3} fillOpacity={1} fill="url(#colorRevenue)" />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
@@ -246,17 +246,17 @@ export const AdminDashboard: React.FC = () => {
           <div className="glass-card rounded-2xl p-6">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                <Clock className="w-5 h-5 text-purple-400" />
+                <Clock className="w-5 h-5 text-red-400" />
                 Upcoming Reservations
               </h3>
-              <span className="px-3 py-1 rounded-full bg-purple-500/20 text-purple-400 text-xs font-medium">
+              <span className="px-3 py-1 rounded-full bg-red-500/20 text-red-400 text-xs font-medium">
                 {upcomingReservations.length} pending
               </span>
             </div>
             <div className="h-72 overflow-y-auto pr-2 space-y-3">
               {loading ? (
                 <div className="flex items-center justify-center h-full">
-                  <div className="h-8 w-8 rounded-full border-2 border-cyan-500 border-t-transparent animate-spin"></div>
+                  <div className="h-8 w-8 rounded-full border-2 border-red-500 border-t-transparent animate-spin"></div>
                 </div>
               ) : upcomingReservations.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full text-gray-400">
@@ -267,7 +267,7 @@ export const AdminDashboard: React.FC = () => {
                 upcomingReservations.map((reservation) => (
                   <div
                     key={reservation._id}
-                    className="p-4 rounded-xl glass-card border border-slate-700/50 hover:border-cyan-500/30 transition-all duration-300"
+                    className="p-4 rounded-xl glass-card border border-slate-700/50 hover:border-red-500/30 transition-all duration-300"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex-1">
@@ -304,10 +304,10 @@ export const AdminDashboard: React.FC = () => {
 
         {/* Fleet Table */}
         <div className="glass-card rounded-2xl overflow-hidden">
-          <div className="p-6 border-b border-cyan-500/20 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div className="p-6 border-b border-red-500/20 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
               <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                <CarIcon className="w-5 h-5 text-cyan-400" />
+                <CarIcon className="w-5 h-5 text-red-400" />
                 Fleet Management
               </h3>
               <p className="text-sm text-gray-400 mt-1">Manage your vehicle inventory</p>
@@ -336,7 +336,7 @@ export const AdminDashboard: React.FC = () => {
                   const isAvailable = typeof car.isAvailable === 'boolean' ? car.isAvailable : true;
 
                   return (
-                    <tr key={car.id} className="hover:bg-cyan-500/5 transition-colors">
+                    <tr key={car.id} className="hover:bg-red-500/5 transition-colors">
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-4">
                           <img
@@ -355,7 +355,7 @@ export const AdminDashboard: React.FC = () => {
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <span className="px-3 py-1 rounded-full glass-card text-sm text-cyan-400 border border-cyan-500/30">
+                        <span className="px-3 py-1 rounded-full glass-card text-sm text-red-400 border border-red-500/30">
                           {category}
                         </span>
                       </td>
@@ -363,9 +363,9 @@ export const AdminDashboard: React.FC = () => {
                         <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold ${
                           isAvailable
                             ? 'bg-green-500/20 text-green-400 border border-green-500/30'
-                            : 'bg-pink-500/20 text-pink-400 border border-pink-500/30'
+                            : 'bg-red-500/20 text-red-400 border border-red-500/30'
                         }`}>
-                          <div className={`h-1.5 w-1.5 rounded-full ${isAvailable ? 'bg-green-400' : 'bg-pink-400'}`}></div>
+                          <div className={`h-1.5 w-1.5 rounded-full ${isAvailable ? 'bg-green-400' : 'bg-red-400'}`}></div>
                           {isAvailable ? 'Available' : 'Unavailable'}
                         </span>
                       </td>
@@ -376,14 +376,14 @@ export const AdminDashboard: React.FC = () => {
                       <td className="px-6 py-4">
                         <div className="flex items-center justify-end gap-2">
                           <button
-                            className="p-2 rounded-lg glass-card text-cyan-400 hover:text-cyan-300 hover:border-cyan-500/50 transition-all"
+                            className="p-2 rounded-lg glass-card text-red-400 hover:text-cyan-300 hover:border-red-500/50 transition-all"
                             onClick={() => navigate(`/admin/vehicles/${car.id}/edit`)}
                             title="Edit vehicle"
                           >
                             <Edit className="h-4 w-4" />
                           </button>
                           <button
-                            className="p-2 rounded-lg glass-card text-pink-400 hover:text-pink-300 hover:border-pink-500/50 transition-all disabled:opacity-50"
+                            className="p-2 rounded-lg glass-card text-red-400 hover:text-red-300 hover:border-red-500/50 transition-all disabled:opacity-50"
                             onClick={() => handleDelete(car.id)}
                             disabled={deletingId === car.id}
                             title="Delete vehicle"
