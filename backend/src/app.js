@@ -11,6 +11,7 @@ import customerRoutes from './routes/customerRoutes.js';
 import rentalHistoryRoutes from './routes/rentalHistoryRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import rentalRoutes from './routes/rentalRoutes.js';
+import geminiRoutes from './routes/geminiRoutes.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
 
 const app = express();
@@ -44,6 +45,7 @@ app.use('/api/customers', customerRoutes);
 app.use('/api/rental-history', rentalHistoryRoutes);
 app.use('/api/rentals', rentalRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/gemini', geminiRoutes);
 
 // Legacy paths kept for backward compatibility
 app.use('/auth', authRoutes);
