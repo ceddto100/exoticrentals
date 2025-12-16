@@ -6,10 +6,10 @@ import { Car, User } from '../types';
 import { fetchVehicle } from '../services/apiClient';
 
 interface VehicleDetailsProps {
-  user: User | null;
+  user?: User | null;
 }
 
-export const VehicleDetails: React.FC<VehicleDetailsProps> = ({ user }) => {
+export const VehicleDetails: React.FC<VehicleDetailsProps> = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [car, setCar] = useState<Car | undefined>(undefined);
@@ -402,9 +402,10 @@ export const VehicleDetails: React.FC<VehicleDetailsProps> = ({ user }) => {
 
               {/* Book Button */}
               <button
+                type="button"
                 onClick={handleBookNow}
                 disabled={!car.isAvailable}
-                className="w-full primary-gradient-btn text-white py-4 px-6 rounded-xl font-bold text-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                className="w-full primary-gradient-btn text-white py-4 px-6 rounded-xl font-bold text-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer relative z-20"
               >
                 {car.isAvailable ? 'Continue to Booking' : 'Currently Unavailable'}
               </button>

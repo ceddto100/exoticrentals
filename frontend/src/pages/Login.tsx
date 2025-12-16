@@ -39,10 +39,10 @@ export const Login: React.FC<LoginProps> = ({ tokenKey }) => {
 
   return (
     <div className="relative min-h-screen flex items-center justify-center p-4 overflow-hidden">
-      {/* Decorative elements */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-red-500/20 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-red-500/20 rounded-full blur-3xl"></div>
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-red-500/10 rounded-full blur-3xl"></div>
+      {/* Decorative elements - pointer-events: none ensures they don't block clicks */}
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-red-500/20 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-red-500/20 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-red-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
       <div className="relative w-full max-w-md">
         {/* Main Card */}
@@ -67,8 +67,9 @@ export const Login: React.FC<LoginProps> = ({ tokenKey }) => {
 
           {/* Google Sign In Button */}
           <button
+            type="button"
             onClick={handleGoogleSignIn}
-            className="w-full flex items-center justify-center gap-3 py-4 rounded-2xl primary-gradient-btn text-white font-bold text-lg mb-6"
+            className="w-full flex items-center justify-center gap-3 py-4 rounded-2xl primary-gradient-btn text-white font-bold text-lg mb-6 cursor-pointer relative z-10"
           >
             <svg className="h-6 w-6" viewBox="0 0 24 24">
               <path

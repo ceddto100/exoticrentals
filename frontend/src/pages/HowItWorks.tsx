@@ -63,8 +63,8 @@ export const HowItWorks: React.FC = () => {
   ];
 
   return (
-    <div className="bg-black text-gray-100 min-h-screen">
-      <section className="relative overflow-hidden border-b border-gray-900 bg-gradient-to-b from-black via-gray-950 to-black">
+    <div className="min-h-screen pb-12">
+      <section className="relative overflow-hidden border-b border-red-500/20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
           <div className="reveal-on-scroll animate-fade-up">
             <p className="text-red-300 uppercase tracking-[0.3em] text-xs mb-3">How it works</p>
@@ -74,58 +74,85 @@ export const HowItWorks: React.FC = () => {
             <p className="text-gray-400 max-w-3xl text-lg">
               Exotic Rentals pairs white-glove service with clear milestones so you always know what happens next. Follow the flow below or talk to the AI concierge any time for live assistance.
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-8 flex flex-wrap gap-4">
               <Link
                 to="/#inventory"
-                className="bg-red-400 text-black px-6 py-3 rounded-full font-semibold shadow-lg transition transform hover:-translate-y-0.5 button-glow"
+                className="primary-gradient-btn text-white px-8 py-4 rounded-2xl font-bold text-lg flex items-center gap-2"
               >
-                Browse the fleet
+                Browse the Fleet
               </Link>
-              <Link to="/checkout" className="px-6 py-3 rounded-full border border-gray-800 text-gray-100 hover:bg-gray-900 transition">
-                Start a booking
+              <Link to="/how-it-works#steps" className="holo-button px-8 py-4 rounded-2xl font-semibold text-white">
+                View All Steps
               </Link>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-14 space-y-16">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 reveal-on-scroll">
-          {steps.map((step, index) => {
-            const Icon = step.icon;
-            return (
-              <div
-                key={step.title}
-                className="bg-gray-950 border border-gray-900 rounded-2xl p-6 shadow-xl hover:-translate-y-1 transition transform duration-300"
-              >
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="h-12 w-12 rounded-full bg-black border border-gray-800 flex items-center justify-center">
-                    <Icon className="h-6 w-6 text-red-300" />
-                  </span>
-                  <span className="text-xs uppercase tracking-wide text-gray-400">Step {index + 1}</span>
+      <section id="steps" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 space-y-16">
+        {/* Timeline Section */}
+        <div className="relative">
+          {/* Vertical Timeline Line - hidden on mobile */}
+          <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-red-500/50 via-red-500/30 to-red-500/50 -translate-x-1/2"></div>
+
+          {/* Timeline Steps */}
+          <div className="space-y-16 md:space-y-24">
+            {steps.map((step, index) => {
+              const Icon = step.icon;
+              const isEven = index % 2 === 0;
+
+              return (
+                <div key={step.title} className="relative reveal-on-scroll">
+                  {/* Timeline Circle - centered on the line */}
+                  <div className="hidden md:flex absolute left-1/2 top-8 -translate-x-1/2 z-10">
+                    <div className="relative">
+                      {/* Outer ring with glow */}
+                      <div className="w-12 h-12 rounded-full border-2 border-red-500/50 bg-black/80 flex items-center justify-center animate-pulse-glow">
+                        {/* Inner filled dot */}
+                        <div className="w-4 h-4 rounded-full bg-red-500 shadow-[0_0_15px_rgba(239,68,68,0.8)]"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Card Container - alternates sides */}
+                  <div className={`md:w-[45%] ${isEven ? 'md:mr-auto md:pr-8' : 'md:ml-auto md:pl-8'}`}>
+                    <div className="glass-card rounded-2xl p-6 hover:-translate-y-1 transition transform duration-300 neon-border group">
+                      <div className="flex items-center gap-3 mb-4">
+                        <span className="h-12 w-12 rounded-xl bg-red-500/20 flex items-center justify-center group-hover:bg-red-500/30 transition-colors">
+                          <Icon className="h-6 w-6 text-red-400" />
+                        </span>
+                        <span className="text-xs uppercase tracking-wider text-gray-500 font-bold">Step {String(index + 1).padStart(2, '0')}</span>
+                      </div>
+                      <h3 className="text-xl font-bold text-white mb-2">{step.title}</h3>
+                      <p className="text-gray-400 text-sm leading-relaxed mb-4">{step.description}</p>
+                      <ul className="space-y-2 text-sm text-gray-300 mb-4">
+                        {step.checklist.map((item) => (
+                          <li key={item} className="flex items-start gap-2">
+                            <span className="h-2 w-2 rounded-full bg-red-400 mt-2 flex-shrink-0" />
+                            <span className="leading-relaxed">{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                      <Link to={step.link} className="inline-flex items-center text-red-400 text-sm font-semibold hover:text-red-300 transition-colors group/link">
+                        {step.cta}
+                        <span className="ml-2 group-hover/link:translate-x-1 transition-transform">→</span>
+                      </Link>
+                    </div>
+                  </div>
                 </div>
-                <h3 className="text-xl font-bold text-white mb-2">{step.title}</h3>
-                <p className="text-gray-400 text-sm leading-relaxed mb-4">{step.description}</p>
-                <ul className="space-y-2 text-sm text-gray-300 mb-4">
-                  {step.checklist.map((item) => (
-                    <li key={item} className="flex items-start gap-2">
-                      <span className="h-2 w-2 rounded-full bg-red-300 mt-2" />
-                      <span className="leading-relaxed">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-                <Link to={step.link} className="inline-flex items-center text-red-300 text-sm font-semibold hover:text-red-200">
-                  {step.cta}
-                  <span className="ml-2">→</span>
-                </Link>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start reveal-on-scroll">
-          <div className="bg-gradient-to-b from-gray-950 to-black border border-gray-900 rounded-2xl p-8 shadow-2xl">
-            <h2 className="text-2xl font-bold text-white mb-4">Your timeline at a glance</h2>
+          <div className="glass-card rounded-2xl p-8 neon-border">
+            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+              <span className="h-8 w-8 rounded-lg bg-red-500/20 flex items-center justify-center">
+                <Clock3 className="h-4 w-4 text-red-400" />
+              </span>
+              Your Timeline at a Glance
+            </h2>
             <div className="space-y-6">
               {[{
                 title: 'Concierge alignment',
@@ -142,12 +169,12 @@ export const HowItWorks: React.FC = () => {
               }].map((item) => {
                 const Icon = item.icon;
                 return (
-                  <div key={item.title} className="flex gap-4">
-                    <div className="h-11 w-11 rounded-xl bg-black border border-gray-800 flex items-center justify-center shrink-0">
-                      <Icon className="h-5 w-5 text-red-300" />
+                  <div key={item.title} className="flex gap-4 group">
+                    <div className="h-11 w-11 rounded-xl bg-red-500/20 flex items-center justify-center shrink-0 group-hover:bg-red-500/30 transition-colors">
+                      <Icon className="h-5 w-5 text-red-400" />
                     </div>
                     <div>
-                      <p className="text-sm text-red-200 font-semibold">{item.title}</p>
+                      <p className="text-sm text-red-400 font-semibold">{item.title}</p>
                       <p className="text-gray-400 text-sm leading-relaxed">{item.detail}</p>
                     </div>
                   </div>
@@ -156,9 +183,14 @@ export const HowItWorks: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-gray-950 border border-gray-900 rounded-2xl p-8 shadow-2xl space-y-6">
-            <h2 className="text-2xl font-bold text-white">What to expect on pickup day</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div className="glass-card rounded-2xl p-8 neon-border space-y-6">
+            <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+              <span className="h-8 w-8 rounded-lg bg-red-500/20 flex items-center justify-center">
+                <Sparkles className="h-4 w-4 text-red-400" />
+              </span>
+              What to Expect on Pickup Day
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {[{
                 icon: ClipboardCheck,
                 label: 'Digital checklist',
@@ -178,9 +210,9 @@ export const HowItWorks: React.FC = () => {
               }].map((item) => {
                 const Icon = item.icon;
                 return (
-                  <div key={item.label} className="flex items-start gap-3 bg-black/40 border border-gray-900 rounded-xl p-4">
-                    <div className="h-10 w-10 rounded-lg bg-gray-950 border border-gray-800 flex items-center justify-center mt-1">
-                      <Icon className="h-5 w-5 text-red-300" />
+                  <div key={item.label} className="flex items-start gap-3 bg-red-500/5 border border-red-500/20 rounded-xl p-4 hover:border-red-500/40 transition-colors">
+                    <div className="h-10 w-10 rounded-lg bg-red-500/20 flex items-center justify-center mt-1 flex-shrink-0">
+                      <Icon className="h-5 w-5 text-red-400" />
                     </div>
                     <div>
                       <p className="text-sm font-semibold text-white">{item.label}</p>
@@ -190,8 +222,8 @@ export const HowItWorks: React.FC = () => {
                 );
               })}
             </div>
-            <div className="bg-black/50 border border-gray-900 rounded-xl p-4 flex items-start gap-3">
-              <ShieldCheck className="h-5 w-5 text-red-300 mt-1" />
+            <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4 flex items-start gap-3">
+              <ShieldCheck className="h-5 w-5 text-red-400 mt-0.5 flex-shrink-0" />
               <p className="text-gray-300 text-sm leading-relaxed">
                 Need to adjust timing? Use the dashboard to reschedule or message your concierge—buffers update automatically and you will always see the revised pickup ETA.
               </p>
@@ -199,12 +231,19 @@ export const HowItWorks: React.FC = () => {
           </div>
         </div>
 
-        <div className="reveal-on-scroll bg-gradient-to-r from-gray-950 via-black to-gray-950 border border-gray-900 rounded-3xl p-8 shadow-2xl">
-          <div className="flex flex-col md:flex-row justify-between gap-8 items-start">
-            <div className="max-w-xl space-y-3">
-              <p className="text-red-300 text-xs uppercase tracking-[0.25em]">Pro tips</p>
-              <h3 className="text-2xl font-bold text-white">How to get the smoothest rental</h3>
-              <p className="text-gray-400 text-sm leading-relaxed">
+        <div className="reveal-on-scroll glass-card rounded-3xl p-8 md:p-12 neon-border relative overflow-hidden">
+          {/* Background decoration */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-red-500/10 rounded-full blur-3xl pointer-events-none"></div>
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-red-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+          <div className="relative flex flex-col md:flex-row justify-between gap-8 items-start">
+            <div className="max-w-xl space-y-4">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-500/10 border border-red-500/30 text-red-400 text-sm font-medium">
+                <Sparkles className="h-4 w-4" />
+                Pro Tips
+              </div>
+              <h3 className="text-2xl md:text-3xl font-bold text-white">How to Get the Smoothest Rental</h3>
+              <p className="text-gray-400 leading-relaxed">
                 Share your flight, hotel, or event details and we align your drop-off with those milestones. You will also see live prep status (detailing, charging, fueling) inside your dashboard.
               </p>
             </div>
@@ -213,8 +252,11 @@ export const HowItWorks: React.FC = () => {
                 '24/7 concierge chat for changes',
                 'Real-time rescheduling without fees inside the window',
                 'Photo proof at pickup and return for peace of mind',
-              ].map((tip) => (
-                <div key={tip} className="bg-black/50 border border-gray-900 rounded-xl p-4 text-sm text-gray-300 leading-relaxed">
+              ].map((tip, idx) => (
+                <div key={tip} className="glass-card rounded-xl p-4 text-sm text-gray-300 leading-relaxed hover:border-red-500/40 transition-colors">
+                  <div className="h-8 w-8 rounded-lg bg-red-500/20 flex items-center justify-center mb-3">
+                    <span className="text-red-400 font-bold text-sm">{idx + 1}</span>
+                  </div>
                   {tip}
                 </div>
               ))}
